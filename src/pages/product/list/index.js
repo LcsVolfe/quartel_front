@@ -1,39 +1,50 @@
 import MUIDataTable from "mui-datatables";
-
+var products = [
+    {
+        name: 'Martelo',
+        unity: 10,
+        qty: 10,
+        price: 10,
+        epi: false,
+        tool: false,
+        quartel: false,
+        puchaseDate: new Date(),
+        cost: 0,
+        description: '',
+        isSelling: false
+    },
+    {
+        name: 'Chapa',
+        unity: 12,
+        qty: 12,
+        price: 12,
+        epi: false,
+        tool: false,
+        quartel: false,
+        puchaseDate: new Date(),
+        cost: 0,
+        description: '',
+        isSelling: false
+    }
+]
 
 const ProductListPage = () => {
     let columns = [
         {
             name: "name",
-            label: "Name",
-            options: {
-                filter: true,
-                sort: true,
-            }
+            label: "Nome",
         },
         {
-            name: "company",
-            label: "Company",
-            options: {
-                filter: true,
-                sort: false,
-            }
+            name: "unity",
+            label: "Unidade",
         },
         {
-            name: "city",
-            label: "City",
-            options: {
-                filter: true,
-                sort: false,
-            }
+            name: "qty",
+            label: "Quantidade",
         },
         {
-            name: "state",
-            label: "State",
-            options: {
-                filter: true,
-                sort: false,
-            }
+            name: "price",
+            label: "Preço",
         },
     ];
 
@@ -41,17 +52,12 @@ const ProductListPage = () => {
         filterType: 'checkbox',
     };
 
-    let data = [
-        { name: "Joe James", company: "Test Corp", city: "Yonkers", state: "NY" },
-        { name: "John Walsh", company: "Test Corp", city: "Hartford", state: "CT" },
-        { name: "Bob Herm", company: "Test Corp", city: "Tampa", state: "FL" },
-        { name: "James Houston", company: "Test Corp", city: "Dallas", state: "TX" },
-    ];
+
 
     return (
         <MUIDataTable
-            title={"Employee List"}
-            data={data}
+            title={"Produto"}
+            data={products}
             columns={columns}
             options={options}
         />

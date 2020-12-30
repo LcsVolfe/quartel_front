@@ -20,7 +20,7 @@ const router = [
   },
   {
     path: '/form/product',
-    text: 'FORM Produto ok',
+    text: 'FORM Produto',
     icon: <InboxIcon />,
     component: <Template content={<ProductFormPage />} ></Template>
   }
