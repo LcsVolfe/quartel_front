@@ -7,6 +7,7 @@ import ClientFormPage from "./pages/client/form";
 import ClientListPage from "./pages/client/list";
 import OrderListPage from "./pages/order/list";
 import OrderFormPage from "./pages/order/form";
+import FormBuilderComponent from "./components/formBuilder";
 
 
 const router = [
@@ -45,6 +46,12 @@ const router = [
     text: 'Form Ordem',
     icon: <InboxIcon />,
     component: <Template content={<OrderFormPage />} ></Template>
+  },
+  {
+    path: '/formbuilder',
+    text: 'Form Builder',
+    icon: <InboxIcon />,
+    component: <Template content={<FormBuilderComponent />} ></Template>
   }
 ];
 
