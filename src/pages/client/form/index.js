@@ -1,36 +1,64 @@
 import React from 'react';
-import {Box, Button, Paper, TextField} from "@material-ui/core";
-import { useForm } from "react-hook-form";
+import typesEnum from "../../../components/formBuilder/types";
+import validators from "../../../components/formBuilder/validations";
+import FormBuilderComponent from "../../../components/formBuilder";
 
 
 const ClientFormPage = () => {
-    const { register, handleSubmit} = useForm();
-    const onSubmit = data => console.log(data);
 
+    let fields = [
+        {
+            name: 'name',
+            label: 'Nome',
+            type: typesEnum.TEXT,
+            validations: {
+                required: validators.required(),
+                minLength: validators.minLength(3),
+            },
+        },
+        {
+            name: 'zipcode',
+            label: 'CEP',
+            type: typesEnum.ZIPCODE,
+        },
+        {
+            name: 'street',
+            label: 'Rua',
+            type: typesEnum.TEXT,
+        },
+        {
+            name: 'city',
+            label: 'Cidade',
+            type: typesEnum.TEXT,
+        },
+        {
+            name: 'region',
+            label: 'Estado',
+            type: typesEnum.TEXT,
+        },
+        {
+            name: 'cpf',
+            label: 'CPF',
+            type: typesEnum.CPF,
+        },
+        {
+            name: 'cnpj',
+            label: 'CNPJ',
+            type: typesEnum.CNPJ,
+        },
+        {
+            name: 'phone',
+            label: 'Telefone',
+            type: typesEnum.PHONE,
+        },
+        {
+            name: 'email',
+            label: 'Email',
+            type: typesEnum.EMAIL,
+        }
+    ];
 
-    return (
-      <Paper>
-          <Box p={4}>
-              <h1>Formulário do Cliente</h1>
-
-              <form onSubmit={handleSubmit(onSubmit)}>
-                  <TextField name={'name'} label="Nome" inputRef={register}/>
-                  <TextField name={'zipcode'} type={'text'} label="Cep" inputRef={register}/>
-                  <TextField name={'street'} type={'text'} label="Rua" inputRef={register}/>
-                  <TextField name={'city'} type={'text'} label="Cidade" inputRef={register}/>
-                  <TextField name={'region'} type={'text'} label="Estado" inputRef={register}/>
-                  <TextField name={'cpf'} type={'text'} label="Cpf" inputRef={register}/>
-                  <TextField name={'cnpj'} type={'text'} label="Cnpj" inputRef={register}/>
-                  <TextField name={'phone'} type={'text'} label="Telefone" inputRef={register}/>
-                  <TextField name={'email'} type={'email'} label="Email" inputRef={register}/>
-
-                  <Button variant="contained" type={'submit'}>Salvar</Button>
-              </form>
-
-          </Box>
-
-      </Paper>
-    );
+    return (<FormBuilderComponent fields={fields}  />);
 }
 
 export default ClientFormPage;

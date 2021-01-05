@@ -63,15 +63,20 @@ const fields = [
         type: typesEnum.MASK,
         mask: '99999-999'
     },
+    // {
+    //     name: 'multiSelect',
+    //     label: 'multi select',
+    //     type: typesEnum.MULTISELECT,
+    // },
+    // {
+    //     name: 'multiSelect2',
+    //     label: 'multi select2',
+    //     type: typesEnum.MULTISELECT,
+    // },
     {
-        name: 'multiSelect',
-        label: 'multi select',
-        type: typesEnum.MULTISELECT,
-    },
-    {
-        name: 'multiSelect2',
-        label: 'multi select2',
-        type: typesEnum.MULTISELECT,
+        name: 'datepicker',
+        label: 'Date picker',
+        type: typesEnum.DATE,
     },
 ];
 

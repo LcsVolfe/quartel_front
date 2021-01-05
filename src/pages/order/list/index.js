@@ -1,4 +1,4 @@
-import MUIDataTable from "mui-datatables";
+import TableRenderComponent from "../../../components/tableRender";
 
 var orders = [
     {
@@ -39,20 +39,7 @@ const OrderListPage = () => {
         },
     ];
 
-    let options = {
-        filterType: 'checkbox',
-    };
-
-
-
-    return (
-        <MUIDataTable
-            title={"Ordem"}
-            data={orders}
-            columns={columns}
-            options={options}
-        />
-    );
+    return (<TableRenderComponent title={'Serviço'} data={orders} columns={columns}/>);
 }
 
 export default OrderListPage;

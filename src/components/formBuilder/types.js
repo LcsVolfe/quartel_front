@@ -10,6 +10,9 @@ const typesEnum = {
     BOOLEAN: 'bool',
     MULTISELECT: 'multiselect',
     MASK: 'mask',
+    DATE: 'date',
+    PHONE: 'phone',
+    ZIPCODE: 'zipcode',
 };
 
 export default typesEnum;

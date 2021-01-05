@@ -13,46 +13,47 @@ import FormBuilderComponent from "./components/formBuilder";
 const router = [
   {
     path: '/list/client',
-    text: 'Cliente',
+    text: 'Clientes',
     icon: <PersonIcon />,
     component: <Template content={<ClientListPage />} />
   },
   {
-    path: '/list/product',
-    text: 'Produto',
-    icon: <InboxIcon />,
-    component: <Template content={<ProductListPage />} />
-  },
-  {
-    path: '/list/order',
-    text: 'Ordem',
-    icon: <InboxIcon />,
-    component: <Template content={<OrderListPage />} />
-  },
-  {
-    path: '/form/product',
-    text: 'FORM Produto',
-    icon: <InboxIcon />,
-    component: <Template content={<ProductFormPage />} ></Template>
-  },
-  {
     path: '/form/client',
     text: 'Form Cliente',
-    icon: <InboxIcon />,
-    component: <Template content={<ClientFormPage />} ></Template>
+    component: <Template content={<ClientFormPage />} />
   },
-  {
-    path: '/form/order',
-    text: 'Form Ordem',
-    icon: <InboxIcon />,
-    component: <Template content={<OrderFormPage />} ></Template>
-  },
-  {
-    path: '/formbuilder',
-    text: 'Form Builder',
-    icon: <InboxIcon />,
-    component: <Template content={<FormBuilderComponent />} ></Template>
-  }
+
+  // {
+  //   path: '/list/product',
+  //   text: 'Produto',
+  //   icon: <InboxIcon />,
+  //   component: <Template content={<ProductListPage />} />
+  // },
+  // {
+  //   path: '/list/order',
+  //   text: 'Ordem',
+  //   icon: <InboxIcon />,
+  //   component: <Template content={<OrderListPage />} />
+  // },
+  // {
+  //   path: '/form/product',
+  //   text: 'FORM Produto',
+  //   icon: <InboxIcon />,
+  //   component: <Template content={<ProductFormPage />} ></Template>
+  // },
+
+  // {
+  //   path: '/form/order',
+  //   text: 'Form Ordem',
+  //   icon: <InboxIcon />,
+  //   component: <Template content={<OrderFormPage />} ></Template>
+  // },
+  // {
+  //   path: '/formbuilder',
+  //   text: 'Form Builder',
+  //   icon: <InboxIcon />,
+  //   component: <Template content={<FormBuilderComponent />} ></Template>
+  // }
 ];
 
 export default router;

@@ -1,61 +1,80 @@
 import React from 'react';
 import {
+    AppBar,
     Box,
-    Button,
+    Button, Grid, IconButton,
     makeStyles,
     MenuItem,
     Paper,
     Select,
-    TextField
+    TextField, Toolbar
 } from "@material-ui/core";
 import { useForm, Controller } from "react-hook-form";
 import Switch from '@material-ui/core/Switch';
 import InputMask from 'react-input-mask';
+import DateFnsUtils from '@date-io/date-fns';
+import { ptBR } from "date-fns/locale";
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
+import SaveIcon from '@material-ui/icons/Save';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
+import {Link, useLocation} from "react-router-dom";
 import typesEnum from "./types";
 import MultiSelectComponent from "./multiSelect";
-import fields from "./fields";
-// import {
-//     MuiPickersUtilsProvider,
-//     KeyboardDatePicker,
-// } from '@material-ui/pickers';
-// import DateFnsUtils from '@date-io/date-fns';
+import axios from "axios";
 
 
 
-const FormBuilderComponent = () => {
+const FormBuilderComponent = (props) => {
+    let location = useLocation();
     const classes = useStyles();
     let fieldsState = {};
 
-    fields.forEach(field => {
+    props.fields.forEach(field => {
         if(
             field.type === typesEnum.BOOLEAN ||
             field.type === typesEnum.SELECT ||
             field.type === typesEnum.MULTISELECT ||
             field.defaultValue
-        ){
+        )
             fieldsState[field.name] = field.defaultValue ? field.defaultValue : false;
-        }
+
+        if(field.type === typesEnum.DATE)
+            fieldsState[field.name] = field.defaultValue ? field.defaultValue : new Date();
     });
 
-    const { register, handleSubmit, control, errors } = useForm({defaultValues: fieldsState});
+    const { register, handleSubmit, control, errors, watch } = useForm({defaultValues: fieldsState});
     const [state, setState] = React.useState(fieldsState);
 
 
-    // continuar incremento dinamico do component multiselct no estado do form
-    const onSubmit = data => {
-        console.log(state);
-        console.log(data);
+    const onSubmit = async data => {
+        let fullForm = {...state, ...data}
+        fetch('http://127.0.0.1:8000/clients',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                }
+            })
+            .then(result=>result.json())
+            .then(result=> {
+                console.log(result)
+            })
+
+        // let re = await axios.get('http://127.0.0.1:8000/clients', {
+        //     // headers: {
+        //     //     'Access-Control-Allow-Origin': '*'
+        //     // }
+        // });
+        // console.log(re)
     }
     const multiListUpdate = (data, name) => setState({...state, [name]: data});
-
     const handleChangeSwitch = (event) => setState({ ...state, [event.target.name]: event.target.checked });
     const handleChangeSelect = (event) => setState({ ...state, [event.target.name]: event.target.value });
-
-    // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
-    //
-    // const handleDateChange = (date) => {
-    //     setSelectedDate(date);
-    // };
+    const handleDateChange = (date, value, name) => setState({ ...state, [name]: date });
 
 
     return (
@@ -63,9 +82,20 @@ const FormBuilderComponent = () => {
             <Box p={4} className={classes.box}>
                 <h1>Formulário de Produto</h1>
 
+                <AppBar position="relative" >
+                    <Toolbar className={classes.toolBarForm}>
+                        <IconButton color="inherit" component={Link} to={location.pathname.replace('form', 'list')}>
+                            <ArrowBackIcon />
+                        </IconButton>
+                        <IconButton color="inherit" onClick={handleSubmit(onSubmit)}>
+                            <SaveIcon />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+
                 <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
 
-                    {fields.map((field, index)=>{
+                    {props.fields.map((field, index)=>{
                         switch (field.type) {
                             case typesEnum.TEXT:
                             case typesEnum.NUMBER:
@@ -80,9 +110,9 @@ const FormBuilderComponent = () => {
                                         type={field.type}
                                         inputRef={register(field.validations)}
                                         helperText={errors[field.name]?.message}
-                                        onChange={(e) => {
-                                            console.log(e.target.value);
-                                        }}
+                                        // onChange={(e) => {
+                                        //     console.log(e.target.value);
+                                        // }}
                                     />
                                 );
 
@@ -106,7 +136,7 @@ const FormBuilderComponent = () => {
 
                             case typesEnum.BOOLEAN:
                                 return (
-                                    <Box key={index}>
+                                    <Box key={index} className={classes.boolean}>
                                         <Switch
                                             inputRef={register}
                                             checked={state[field.name]}
@@ -121,12 +151,40 @@ const FormBuilderComponent = () => {
                             case typesEnum.MULTISELECT:
                                 return (<MultiSelectComponent {...field} key={index} onResult={multiListUpdate}  />);
 
+                            case typesEnum.DATE:
+                                return (
+                                    <MuiPickersUtilsProvider key={index} utils={DateFnsUtils} locale={ptBR}>
+                                        <Grid container justify="space-around">
+                                            <KeyboardDatePicker
+                                                format="dd/MM/yyyy"
+                                                label={field.label || field.name}
+                                                value={state[field.name]}
+                                                onChange={(date, value) => handleDateChange(date, value, field.name)}
+                                            />
+                                            {/*<KeyboardTimePicker*/}
+                                            {/*    margin="normal"*/}
+                                            {/*    id="time-picker"*/}
+                                            {/*    label="Time picker"*/}
+                                            {/*    value={selectedDate}*/}
+                                            {/*    onChange={handleDateChange}*/}
+                                            {/*    KeyboardButtonProps={{*/}
+                                            {/*        'aria-label': 'change time',*/}
+                                            {/*    }}*/}
+                                            {/*/>*/}
+                                        </Grid>
+                                    </MuiPickersUtilsProvider>
+                                );
+
                             case typesEnum.CPF:
                             case typesEnum.CNPJ:
+                            case typesEnum.PHONE:
+                            case typesEnum.ZIPCODE:
                             case typesEnum.MASK:
                                 let maskPatter =
                                     field.type === typesEnum.CPF ? '999.999.999-99' :
                                     field.type === typesEnum.CNPJ ? '99.999.999/9999-99':
+                                    field.type === typesEnum.PHONE ? '(99) 99999-9999':
+                                    field.type === typesEnum.ZIPCODE ? '99999-999':
                                         field?.mask
                                 return (
                                     <Controller
@@ -154,44 +212,6 @@ const FormBuilderComponent = () => {
                         }
                     })}
 
-
-
-
-
-
-
-
-
-
-
-                    {/*<TextField name={'description'} type={'textarea'} label="Descrição" inputRef={register}/>*/}
-                    {/*<TextareaAutosize name='description' placeholder="Descrição"/>*/}
-                    {/*<MuiPickersUtilsProvider utils={DateFnsUtils}>*/}
-                    {/*    <KeyboardDatePicker*/}
-                    {/*        disableToolbar*/}
-                    {/*        variant="inline"*/}
-                    {/*        format="MM/dd/yyyy"*/}
-                    {/*        margin="normal"*/}
-                    {/*        id="date-picker-inline"*/}
-                    {/*        label="Date picker inline"*/}
-                    {/*        value={selectedDate}*/}
-                    {/*        onChange={handleDateChange}*/}
-                    {/*        KeyboardButtonProps={{*/}
-                    {/*            'aria-label': 'change date',*/}
-                    {/*        }}*/}
-                    {/*    />*/}
-                    {/*</MuiPickersUtilsProvider>*/}
-                    {/*<Switch*/}
-                    {/*    inputRef={register}*/}
-                    {/*    checked={state.epi}*/}
-                    {/*    onChange={handleChange}*/}
-                    {/*    name="epi"*/}
-                    {/*    color="primary"*/}
-                    {/*/>*/}
-
-                    <Box>
-                        <Button variant="contained" type={'submit'}>Salvar</Button>
-                    </Box>
                 </form>
 
             </Box>
@@ -215,10 +235,18 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         display: 'flex',
         justifyContent: 'center',
-        maxWidth: '1080px'
+        maxWidth: '800px',
+        margin: '0 auto',
     },
     box: {
-        maxWidth: '910px',
+        maxWidth: '750px',
         justifyContent: 'center'
-    }
+    },
+    boolean: {
+        order: 1
+    },
+    toolBarForm: {
+        display: 'flex',
+        justifyContent: 'space-between'
+    },
 }));

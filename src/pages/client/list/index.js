@@ -1,30 +1,6 @@
-import MUIDataTable from "mui-datatables";
+import TableRenderComponent from "../../../components/tableRender";
 
-var clients = [
-    {
-        name: 'Gustavo',
-        zipcode: '89803270',
-        street: 'rua',
-        city: 'cidade',
-        region: 'estado',
-        cpf: '',
-        cnpj: '',
-        phone: '',
-        email: ''
-    },
-    {
-        name: 'Maria',
-        zipcode: '89803999',
-        street: 'rua',
-        city: 'cidade',
-        region: 'estado',
-        cpf: '',
-        cnpj: '',
-        phone: '',
-        email: ''
-    },
-]
-const ClientListPage = () => {
+const ClientListPage = (props) => {
     let columns = [
         {
             name: "name",
@@ -64,20 +40,33 @@ const ClientListPage = () => {
         },
     ];
 
-    let options = {
-        filterType: 'checkbox',
-    };
 
-
-
-    return (
-        <MUIDataTable
-            title={"Cliente"}
-            data={clients}
-            columns={columns}
-            options={options}
-        />
-    );
+    return (<TableRenderComponent columns={columns} data={clients} />);
 }
 
 export default ClientListPage;
+
+var clients = [
+    {
+        name: 'Gustavo',
+        zipcode: '89803270',
+        street: 'rua',
+        city: 'cidade',
+        region: 'estado',
+        cpf: '',
+        cnpj: '',
+        phone: '',
+        email: ''
+    },
+    {
+        name: 'Maria',
+        zipcode: '89803999',
+        street: 'rua',
+        city: 'cidade',
+        region: 'estado',
+        cpf: '',
+        cnpj: '',
+        phone: '',
+        email: ''
+    },
+]

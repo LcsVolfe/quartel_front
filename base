@@ -1,9 +1,9 @@
 
 var address = {
     cep: '',
-    rua: '',
-    cidade: '',
-    estado: ''
+    steet: '',
+    city: '',
+    region: ''
 }
 
 

@@ -121,14 +121,17 @@ export default function Template({content}) {
                 </div>
                 <Divider />
                 <List>
-                    {router.map((item) => (
-                        <ListItem button key={item.text} component={Link} to={item.path}>
-                            <ListItemIcon>
-                                {item.icon}
-                            </ListItemIcon>
-                            <ListItemText primary={item.text} />
-                        </ListItem>
-                    ))}
+                    {router.map((item) => {
+                        if(item.path.includes('form')) return;
+                        return (
+                            <ListItem button key={item.text} component={Link} to={item.path}>
+                                <ListItemIcon>
+                                    {item.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={item.text} />
+                            </ListItem>
+                        )
+                    })}
                 </List>
             </Drawer>
             <main className={classes.content}>
