@@ -1,14 +1,9 @@
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import PersonIcon from '@material-ui/icons/Person';
-import ProductListPage from "./pages/product/list";
-import ProductFormPage from "./pages/product/form";
-import Template from "./components/template";
 import ClientFormPage from "./pages/client/form";
 import ClientListPage from "./pages/client/list";
-import OrderListPage from "./pages/order/list";
-import OrderFormPage from "./pages/order/form";
-import FormBuilderComponent from "./components/formBuilder";
-
+import {Template} from "./components/template";
+import BuildIcon from '@material-ui/icons/Build';
+import ProductListPage from "./pages/product/list";
 
 const router = [
   {
@@ -22,13 +17,12 @@ const router = [
     text: 'Form Cliente',
     component: <Template content={<ClientFormPage />} />
   },
-
-  // {
-  //   path: '/list/product',
-  //   text: 'Produto',
-  //   icon: <InboxIcon />,
-  //   component: <Template content={<ProductListPage />} />
-  // },
+  {
+    path: '/list/product',
+    text: 'Produto',
+    icon: <BuildIcon />,
+    component: <Template content={<ProductListPage />} />
+  },
   // {
   //   path: '/list/order',
   //   text: 'Ordem',

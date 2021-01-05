@@ -1,7 +1,6 @@
 import React from 'react';
-import typesEnum from "../../../components/formBuilder/types";
-import validators from "../../../components/formBuilder/validations";
-import FormBuilderComponent from "../../../components/formBuilder";
+import {FormBuilder} from "../../../components/form-builder";
+import typesEnum from "../../../components/form-builder/enum/types.enum";
 
 
 const ClientFormPage = () => {
@@ -58,7 +57,7 @@ const ClientFormPage = () => {
         }
     ];
 
-    return (<FormBuilderComponent fields={fields}  />);
+    return (<FormBuilder controls={fields} title={'Cadastro de Cliente'}  />);
 }
 
 export default ClientFormPage;

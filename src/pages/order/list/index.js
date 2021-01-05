@@ -1,4 +1,4 @@
-import TableRenderComponent from "../../../components/tableRender";
+import {TableRender} from "../../../components/table-render";
 
 var orders = [
     {
@@ -39,7 +39,7 @@ const OrderListPage = () => {
         },
     ];
 
-    return (<TableRenderComponent title={'Serviço'} data={orders} columns={columns}/>);
+    return (<TableRender title={'Serviço'} data={orders} columns={columns}/>);
 }
 
 export default OrderListPage;

@@ -29,6 +29,7 @@ const findZipCode = (parametro) => {
 const ApiService = {
     FindZipCode: zipCode => findZipCode(zipCode),
     ListClients: () => fetchApi('clients'),
+    ListProducts: () => fetchApi('products'),
     CreateClient: client => fetchApi('clients', 'POST', client),
     AtualizarCliente: (id, cliente) => fetchApi(id, 'PUT', cliente),
     // ListaNomes: () => fetchApi('nome'),

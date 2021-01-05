@@ -1,32 +1,6 @@
-import MUIDataTable from "mui-datatables";
-var products = [
-    {
-        name: 'Martelo',
-        unity: 10,
-        qty: 10,
-        price: 10,
-        epi: false,
-        tool: false,
-        quartel: false,
-        puchaseDate: new Date(),
-        cost: 0,
-        description: '',
-        isSelling: false
-    },
-    {
-        name: 'Chapa',
-        unity: 12,
-        qty: 12,
-        price: 12,
-        epi: false,
-        tool: false,
-        quartel: false,
-        puchaseDate: new Date(),
-        cost: 0,
-        description: '',
-        isSelling: false
-    }
-]
+import React, {useEffect, useState} from 'react';
+import {TableRender} from "../../../components/table-render";
+import ApiService from "../../../service";
 
 const ProductListPage = () => {
     let columns = [
@@ -35,33 +9,16 @@ const ProductListPage = () => {
             label: "Nome",
         },
         {
-            name: "unity",
-            label: "Unidade",
+            name: "isSelling",
+            label: "isSelling",
         },
         {
-            name: "qty",
+            name: "amount",
             label: "Quantidade",
-        },
-        {
-            name: "price",
-            label: "Preço",
         },
     ];
 
-    let options = {
-        filterType: 'checkbox',
-    };
-
-
-
-    return (
-        <MUIDataTable
-            title={"Produto"}
-            data={products}
-            columns={columns}
-            options={options}
-        />
-    );
+    return (<TableRender columns={columns} callBack={ApiService.ListProducts} />);
 }
 
 export default ProductListPage;
