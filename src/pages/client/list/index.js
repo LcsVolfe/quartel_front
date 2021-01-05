@@ -1,4 +1,6 @@
+import React, {useEffect, useState} from 'react';
 import TableRenderComponent from "../../../components/tableRender";
+import ApiService from "../../../service";
 
 const ClientListPage = (props) => {
     let columns = [
@@ -39,34 +41,13 @@ const ClientListPage = (props) => {
             label: "Email",
         },
     ];
+    let [data, setData] = useState([]);
 
+    useEffect( async () => {
+        setData(await ApiService.ListClients());
+    }, []);
 
-    return (<TableRenderComponent columns={columns} data={clients} />);
+    return (<TableRenderComponent columns={columns} data={data} />);
 }
 
 export default ClientListPage;
-
-var clients = [
-    {
-        name: 'Gustavo',
-        zipcode: '89803270',
-        street: 'rua',
-        city: 'cidade',
-        region: 'estado',
-        cpf: '',
-        cnpj: '',
-        phone: '',
-        email: ''
-    },
-    {
-        name: 'Maria',
-        zipcode: '89803999',
-        street: 'rua',
-        city: 'cidade',
-        region: 'estado',
-        cpf: '',
-        cnpj: '',
-        phone: '',
-        email: ''
-    },
-]

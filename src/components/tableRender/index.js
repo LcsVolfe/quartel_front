@@ -1,11 +1,12 @@
+import React from "react";
 import MUIDataTable from "mui-datatables";
 import {AppBar, IconButton, makeStyles, Toolbar} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import React from "react";
 import {Link, useHistory, useLocation} from "react-router-dom";
 import ListItem from "@material-ui/core/ListItem";
 
 const TableRenderComponent = (props) => {
+    console.log(props)
     const classes = useStyles();
     let history = useHistory();
     let location = useLocation();

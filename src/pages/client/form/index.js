@@ -11,10 +11,10 @@ const ClientFormPage = () => {
             name: 'name',
             label: 'Nome',
             type: typesEnum.TEXT,
-            validations: {
-                required: validators.required(),
-                minLength: validators.minLength(3),
-            },
+            // validations: {
+            //     required: validators.required(),
+            //     minLength: validators.minLength(3),
+            // },
         },
         {
             name: 'zipcode',

@@ -25,6 +25,7 @@ import {Link, useLocation} from "react-router-dom";
 import typesEnum from "./types";
 import MultiSelectComponent from "./multiSelect";
 import axios from "axios";
+import ApiService from "../../service";
 
 
 
@@ -52,24 +53,8 @@ const FormBuilderComponent = (props) => {
 
     const onSubmit = async data => {
         let fullForm = {...state, ...data}
-        fetch('http://127.0.0.1:8000/clients',
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-            })
-            .then(result=>result.json())
-            .then(result=> {
-                console.log(result)
-            })
-
-        // let re = await axios.get('http://127.0.0.1:8000/clients', {
-        //     // headers: {
-        //     //     'Access-Control-Allow-Origin': '*'
-        //     // }
-        // });
-        // console.log(re)
+        let result = await ApiService.CreateClient(fullForm);
+        console.log(result);
     }
     const multiListUpdate = (data, name) => setState({...state, [name]: data});
     const handleChangeSwitch = (event) => setState({ ...state, [event.target.name]: event.target.checked });
