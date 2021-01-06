@@ -1,21 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { Controller, useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import {
 	AppBar,
-	FormControl, Grid, IconButton,
-	InputLabel,
+	Grid, IconButton,
 	MenuItem,
-	MuiThemeProvider,
 	Paper,
 	Select, Toolbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-// import { DropzoneArea } from 'material-ui-dropzone';
-import Typography from '@material-ui/core/Typography';
 import typesEnum from '../enum/types.enum';
 import Box from '@material-ui/core/Box';
 import {Link, useLocation} from "react-router-dom";
@@ -25,42 +20,53 @@ import Switch from "@material-ui/core/Switch";
 import DateFnsUtils from "@date-io/date-fns";
 import {ptBR} from "date-fns/locale";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
-import ApiService from "../../../service";
 import MultiSelectComponent from "./multi-select";
+import {finishOnPromisse} from "../../template/action-creators";
+import {reducer as onSubmitForm} from "../index";
 
 
-const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation }) => {
+const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch, onSubmitForm }) => {
 	let location = useLocation();
 	const classes = useStyles();
 	let fieldsState = {};
-	controls.forEach(field => {
-		if(
-			field.type === typesEnum.BOOLEAN ||
-			field.type === typesEnum.SELECT ||
-			field.type === typesEnum.MULTISELECT ||
-			field.defaultValue
-		)
-			fieldsState[field.name] = field.defaultValue ? field.defaultValue : false;
 
-		if(field.type === typesEnum.DATE)
-			fieldsState[field.name] = field.defaultValue ? field.defaultValue : new Date();
-	});
+	const checkControls = () => {
+		controls.forEach(field => {
+			let value;
+			if(
+				onSubmitForm?.id || (field.type === typesEnum.BOOLEAN ||
+				field.type === typesEnum.SELECT ||
+				field.type === typesEnum.MULTISELECT ||
+				field.defaultValue)
+			)
+				value = onSubmitForm?.id ? onSubmitForm[field.name] :
+					field.defaultValue ? field.defaultValue : false;
 
-	const { register, handleSubmit, control, errors, watch } = useForm({defaultValues: fieldsState});
+			if(field.type === typesEnum.DATE)
+				value = field.defaultValue ? field.defaultValue : new Date();
+
+			fieldsState[field.name] = value;
+			setValue(field.name, value)
+		});
+		setState({...state, ...fieldsState})
+	}
 	const [state, setState] = React.useState(fieldsState);
+	const { register, handleSubmit, control, errors, setValue, watch } = useForm({defaultValues: fieldsState});
 
-
-	// const onSubmit = async data => {
-	// 	let fullForm = {...state, ...data}
-	// 	let result = await ApiService.CreateClient(fullForm);
-	// 	console.log(result);
-	// }
 	const multiListUpdate = (data, name) => setState({...state, [name]: data});
 	const handleChangeSwitch = (event) => setState({ ...state, [event.target.name]: event.target.checked });
 	const handleChangeSelect = (event) => setState({ ...state, [event.target.name]: event.target.value });
 	const handleDateChange = (date, value, name) => setState({ ...state, [name]: date });
+	const defineTypeAction = (action) => {
+		let data = {...state, ...watch()};
+		if(onSubmitForm?.id)
+			data = {id: onSubmitForm.id, ...data}
+		onSubmit(data, action);
+	}
 
-
+	const onError = (errors, e) => console.log(errors, e);
+	// checkControls()
+	useEffect(checkControls, [onSubmitForm]);
 
 	return (
 		<Paper className={classes.paper}>
@@ -69,16 +75,16 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation }) => {
 
 				<AppBar position="relative" >
 					<Toolbar className={classes.toolBarForm}>
-						<IconButton color="inherit" component={Link} to={location.pathname.replace('form', 'list')}>
+						<IconButton color="inherit" onClick={()=>dispatch(finishOnPromisse())} component={Link} to={location.pathname.replace('form', 'list')}>
 							<ArrowBackIcon />
 						</IconButton>
-						<IconButton color="inherit" onClick={handleSubmit(onSubmit)}>
+						<IconButton color="inherit" onClick={() => defineTypeAction(1)}>
 							<SaveIcon />
 						</IconButton>
 					</Toolbar>
 				</AppBar>
 
-				<form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+				<form className={classes.form} onSubmit={handleSubmit(defineTypeAction, onError)}>
 
 					{controls.map((field, index)=>{
 						switch (field.type) {
@@ -212,6 +218,8 @@ FormBuilder.propTypes = {
 	title: PropTypes.string,
 	elevation: PropTypes.number,
 };
+
+
 
 export default FormBuilder;
 

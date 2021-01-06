@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {TableRender} from "../../../components/table-render";
 import ApiService from "../../../service";
 
@@ -42,7 +42,7 @@ const ClientListPage = () => {
         },
     ];
 
-    return (<TableRender columns={columns} callBack={ApiService.ListClients} />);
+    return (<TableRender columns={columns} />);
 }
 
 export default ClientListPage;

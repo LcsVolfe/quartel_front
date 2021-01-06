@@ -15,12 +15,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import {AccountCircle} from "@material-ui/icons";
-import {LinearProgress, Menu, MenuItem, Snackbar} from "@material-ui/core";
+import {LinearProgress, Menu, MenuItem} from "@material-ui/core";
 import {Link} from "react-router-dom";
-import {Alert} from "@material-ui/lab";
 
 import Logo from '../../../imgs/logo_quartel.png';
 import router from "../../../AppRouter";
+import TSnackbar from "./snackbar";
 
 const drawerWidth = 240;
 
@@ -32,33 +32,13 @@ export default function Template({content, onPromisse}) {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const openIcon = Boolean(anchorEl);
 
-
-	const [openSnackBack, setOpenSnackBack] = React.useState(false);
-	const handleClickSnackBack = () => {
-		setOpenSnackBack(true);
-	};
-	const handleCloseSnackBack = (event, reason) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-		setOpenSnackBack(false);
-	};
+	// console.log(onPromisse)
 
 
-	const handleMenu = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-	const handleDrawerOpen = () => {
-		setOpen(true);
-	};
-
-	const handleDrawerClose = () => {
-		setOpen(false);
-	};
+	const handleMenu = (event) => setAnchorEl(event.currentTarget);
+	const handleClose = () => setAnchorEl(null);
+	const handleDrawerOpen = () => setOpen(true);
+	const handleDrawerClose = () => setOpen(false);
 
 	return (
 		<div className={classes.root}>
@@ -107,13 +87,13 @@ export default function Template({content, onPromisse}) {
 							open={openIcon}
 							onClose={handleClose}
 						>
-							<MenuItem onClick={handleClickSnackBack}>Profile</MenuItem>
+							<MenuItem onClick={handleClose}>Profile</MenuItem>
 							<MenuItem onClick={handleClose}>My account</MenuItem>
 						</Menu>
 					</div>
 
 				</Toolbar>
-				{onPromisse ? <LinearProgress /> : null}
+				{onPromisse === true ? <LinearProgress /> : null}
 			</AppBar>
 
 			<Drawer
@@ -150,16 +130,7 @@ export default function Template({content, onPromisse}) {
 				</List>
 			</Drawer>
 
-			<Snackbar
-				open={openSnackBack}
-				autoHideDuration={1500}
-				anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-				onClose={handleCloseSnackBack}
-			>
-				<Alert onClose={handleCloseSnackBack} severity="success">
-					This is a success message!
-				</Alert>
-			</Snackbar>
+			<TSnackbar {...onPromisse} />
 
 			<main className={classes.content}>
 				{content}

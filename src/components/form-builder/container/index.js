@@ -1,34 +1,53 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {useHistory, useLocation} from "react-router-dom";
 import FormBuilder from '../presentation';
 import { selectFormBuilder } from '../selectors';
 import PropTypes from 'prop-types';
-import {fetchFormBuilder} from "../action-creators";
+import {fetchFormBuilder, loadDataFormBuilder, setFormBuilder} from "../action-creators";
+import {onSubmitForm} from "../reducer";
+
+
 
 const FormBuilderContainer = ({
 	controls,
-	onSubmit,
 	title,
 	isColumn,
 	elevation,
+	onSubmit
 }) => {
 	const dispatch = useDispatch();
+	const history = useHistory();
+	const query = useQuery();
 
-	const promisseFetchCpf = useCallback(
-		(data) => {
-			dispatch(fetchFormBuilder(data));
+	const promisseFetch = useCallback(
+		(data, action) => {
+			dispatch(fetchFormBuilder(data, action, history));
 		},
 		[dispatch]
 	);
+
+	const loadDataForPut = useCallback(
+		() => {
+			if(query.get('id'))
+				dispatch(loadDataFormBuilder(query.get('id'), history));
+			else
+				dispatch(setFormBuilder({}))
+		},
+		[dispatch]
+	);
+
+	useEffect(loadDataForPut, []);
 	const data = useSelector(selectFormBuilder);
 	return (
 		<FormBuilder
 			{...data}
-			onSubmit={promisseFetchCpf}
+			onSubmit={promisseFetch}
 			controls={controls}
 			title={title}
 			isColumn={isColumn}
 			elevation={elevation}
+			dispatch={dispatch}
 		/>
 	);
 };
@@ -40,5 +59,10 @@ FormBuilderContainer.propTypes = {
 	isColumn: PropTypes.bool,
 	elevation: PropTypes.number,
 };
+
+
+const useQuery = () => {
+	return new URLSearchParams(useLocation().search);
+}
 
 export default FormBuilderContainer;

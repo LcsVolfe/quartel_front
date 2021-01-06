@@ -7,7 +7,7 @@ import { reducer as onPromisse } from "../components/template";
 const rootReducer = combineReducers({
     onSubmitForm,
     onLoadTable,
-    onPromisse
+    onPromisse,
 });
 
 export const initStore = (initialState = {}) =>

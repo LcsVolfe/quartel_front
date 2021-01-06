@@ -7,18 +7,18 @@ import ProductListPage from "./pages/product/list";
 
 const router = [
   {
-    path: '/list/client',
+    path: '/list/clients',
     text: 'Clientes',
     icon: <PersonIcon />,
     component: <Template content={<ClientListPage />} />
   },
   {
-    path: '/form/client',
+    path: '/form/clients',
     text: 'Form Cliente',
     component: <Template content={<ClientFormPage />} />
   },
   {
-    path: '/list/product',
+    path: '/list/products',
     text: 'Produto',
     icon: <BuildIcon />,
     component: <Template content={<ProductListPage />} />

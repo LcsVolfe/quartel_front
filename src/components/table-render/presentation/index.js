@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {
 	AppBar,
@@ -9,12 +9,28 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Link, useLocation} from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import MUIDataTable from "mui-datatables";
+import CustomToolbarSelect from "./toolbar-select";
 
-const TableRender = ({ options, title, isColumn, columns, onLoadTable, loading }) => {
+
+const TableRender = ({ options, title, isColumn, columns, onLoadTable, loading, deleteItem, history }) => {
 	const classes = useStyles();
+	const rowsSelected = useState([]);
 	let location = useLocation();
 
-	let optionsDefalut = {...optionsLanguage, ...options}
+
+
+
+
+
+	let optionsDefalut = {
+		...optionsLanguage,
+		...options,
+		rowsSelected,
+		selectableRowsOnClick: true,
+		customToolbarSelect: (selectedRows) =>
+			<CustomToolbarSelect selectedRows={selectedRows} data={onLoadTable} deleteItem={deleteItem} history={history}/>
+	}
+
 	return (
 		<>
 			{loading ? false : <>
@@ -27,7 +43,7 @@ const TableRender = ({ options, title, isColumn, columns, onLoadTable, loading }
 				</AppBar>
 
 				<MUIDataTable
-					title={title || ''}
+					title={title}
 					data={onLoadTable || []}
 					columns={columns}
 					options={optionsDefalut}

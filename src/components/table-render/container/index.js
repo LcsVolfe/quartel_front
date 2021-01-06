@@ -1,19 +1,27 @@
 import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import { useHistory } from "react-router-dom";
 import TableRender from '../presentation';
 import { selectTableRender } from '../selectors';
 import PropTypes from 'prop-types';
-import {fetchTableRender} from "../action-creators";
+import {deleteTable, fetchTableRender} from "../action-creators";
 
 const TableRenderContainer = ({
 	title,
-	callBack,
 	columns
 }) => {
 	const dispatch = useDispatch();
+	const history = useHistory();
 	const promisseFetch = useCallback(
 		() => {
-			dispatch(fetchTableRender(callBack));
+			dispatch(fetchTableRender(history));
+		},
+		[dispatch]
+	);
+
+	const deleteItem = useCallback(
+		(listIds) => {
+			dispatch(deleteTable(listIds, history));
 		},
 		[dispatch]
 	);
@@ -30,6 +38,8 @@ const TableRenderContainer = ({
 			{...data}
 			title={title}
 			columns={columns}
+			deleteItem={deleteItem}
+			history={history}
 		/>
 	);
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import {FormBuilder} from "../../../components/form-builder";
 import typesEnum from "../../../components/form-builder/enum/types.enum";
+import ApiService from "../../../service";
 
 
 const ClientFormPage = () => {
@@ -10,6 +11,7 @@ const ClientFormPage = () => {
             name: 'name',
             label: 'Nome',
             type: typesEnum.TEXT,
+            defaultValue: 'XXXXXXX',
             // validations: {
             //     required: validators.required(),
             //     minLength: validators.minLength(3),
@@ -54,10 +56,10 @@ const ClientFormPage = () => {
             name: 'email',
             label: 'Email',
             type: typesEnum.EMAIL,
-        }
+        },
     ];
 
-    return (<FormBuilder controls={fields} title={'Cadastro de Cliente'}  />);
+    return (<FormBuilder controls={fields} title={'Cadastro de Cliente'} onSubmit={ApiService.Create}  />);
 }
 
 export default ClientFormPage;

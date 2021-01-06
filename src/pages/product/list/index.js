@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {TableRender} from "../../../components/table-render";
-import ApiService from "../../../service";
+import {Switch} from "@material-ui/core";
 
 const ProductListPage = () => {
     let columns = [
@@ -10,7 +10,14 @@ const ProductListPage = () => {
         },
         {
             name: "isSelling",
-            label: "isSelling",
+            label: "Venda",
+            options: {
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    return <div>
+                        <Switch checked={value} color={'primary'}/>
+                    </div>;
+                }
+            },
         },
         {
             name: "amount",
@@ -18,7 +25,7 @@ const ProductListPage = () => {
         },
     ];
 
-    return (<TableRender columns={columns} callBack={ApiService.ListProducts} />);
+    return (<TableRender columns={columns} />);
 }
 
 export default ProductListPage;

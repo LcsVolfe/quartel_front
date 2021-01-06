@@ -1,16 +1,6 @@
 import { combineReducers } from 'redux';
 
-export const template = (state = '', { type, payload }) => {
-	switch (type) {
-		case 'TEMPLATE_SET':
-			return payload;
-
-		default:
-			return state;
-	}
-};
-
-export const onPromisse = (state = false, { type }) => {
+export const onPromisse = (state = false, { type, payload }) => {
 	switch (type) {
 		case 'ON_PROMISSE_LOADING':
 			return true;
@@ -20,11 +10,12 @@ export const onPromisse = (state = false, { type }) => {
 
 		case 'ON_PROMISSE_SET':
 		case 'ON_PROMISSE_ERROR':
-			return false;
+			return payload;
 
 		default:
 			return state;
 	}
 };
 
-export default combineReducers({ template, onPromisse });
+
+export default combineReducers({ onPromisse });
