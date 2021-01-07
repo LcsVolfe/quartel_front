@@ -1,1 +1,4 @@
-export const selectFormBuilder = (state) => state.onSubmitForm;
+export const selectFormBuilder = (state) => {
+
+    return state.onSubmitForm;
+}

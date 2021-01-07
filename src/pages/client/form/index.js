@@ -1,8 +1,6 @@
 import React from 'react';
 import {FormBuilder} from "../../../components/form-builder";
 import typesEnum from "../../../components/form-builder/enum/types.enum";
-import ApiService from "../../../service";
-
 
 const ClientFormPage = () => {
 
@@ -59,7 +57,7 @@ const ClientFormPage = () => {
         },
     ];
 
-    return (<FormBuilder controls={fields} title={'Cadastro de Cliente'} onSubmit={ApiService.Create}  />);
+    return (<FormBuilder controls={fields} title={'Cadastro de Cliente'}  />);
 }
 
 export default ClientFormPage;

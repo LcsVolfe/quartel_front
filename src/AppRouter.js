@@ -4,6 +4,7 @@ import ClientListPage from "./pages/client/list";
 import {Template} from "./components/template";
 import BuildIcon from '@material-ui/icons/Build';
 import ProductListPage from "./pages/product/list";
+import ProductFormPage from "./pages/product/form";
 
 const router = [
   {
@@ -14,7 +15,6 @@ const router = [
   },
   {
     path: '/form/clients',
-    text: 'Form Cliente',
     component: <Template content={<ClientFormPage />} />
   },
   {
@@ -22,6 +22,10 @@ const router = [
     text: 'Produto',
     icon: <BuildIcon />,
     component: <Template content={<ProductListPage />} />
+  },
+  {
+    path: '/form/products',
+    component: <Template content={<ProductFormPage />} />
   },
   // {
   //   path: '/list/order',

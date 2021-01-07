@@ -9,6 +9,37 @@ const ProductListPage = () => {
             label: "Nome",
         },
         {
+            name: "price",
+            label: "Preço",
+        },
+        {
+            name: 'qty',
+            label: 'Quantidade',
+        },
+        {
+            name: 'unity',
+            label: 'Unidade',
+        },
+        {
+            name: 'puchaseDate',
+            label: 'Data Compra',
+        },
+        {
+            name: 'description',
+            label: 'Descrição',
+        },
+        {
+            name: 'epi',
+            label: 'EPI',
+            options: {
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    return <div>
+                        <Switch checked={value} color={'primary'}/>
+                    </div>;
+                }
+            },
+        },
+        {
             name: "isSelling",
             label: "Venda",
             options: {
@@ -20,8 +51,26 @@ const ProductListPage = () => {
             },
         },
         {
-            name: "amount",
-            label: "Quantidade",
+            name: 'quartel',
+            label: 'Quartel',
+            options: {
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    return <div>
+                        <Switch checked={value} color={'primary'}/>
+                    </div>;
+                }
+            },
+        },
+        {
+            name: 'tool',
+            label: 'Ferramenta',
+            options: {
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    return <div>
+                        <Switch checked={value} color={'primary'}/>
+                    </div>;
+                }
+            },
         },
     ];
 

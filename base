@@ -29,17 +29,19 @@ var product = {
 }
 
 var order = {
-    grandTotal: 0,
-    discount: 0,
-    lines: [line],
     client: client,
-    gateway: 0,
     dateOrdered: new Date(),
     dateFinish: new Date(),
-    status: 0,
-    tools: [product],
-    squareMeter: 0,
+    discount: 0,
+    gateway: 0,
+    grandTotal: 0,
     isPaid: false
+
+    lines: [line], >> referencia na order line
+
+    status: 0,
+    squareMeter: 0,
+    tools: [product],
 }
 
 var client = {

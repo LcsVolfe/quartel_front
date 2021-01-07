@@ -4,8 +4,8 @@ import { Controller, useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import TextField from '@material-ui/core/TextField';
 import {
-	AppBar,
-	Grid, IconButton,
+	AppBar, FormControl,
+	Grid, IconButton, InputLabel,
 	MenuItem,
 	Paper,
 	Select, Toolbar,
@@ -30,12 +30,11 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 	const classes = useStyles();
 	let fieldsState = {};
 
-	const checkControls = () => {
+	const checkControls = (onSubmitForm) => {
 		controls.forEach(field => {
 			let value;
 			if(
 				onSubmitForm?.id || (field.type === typesEnum.BOOLEAN ||
-				field.type === typesEnum.SELECT ||
 				field.type === typesEnum.MULTISELECT ||
 				field.defaultValue)
 			)
@@ -48,15 +47,23 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 			fieldsState[field.name] = value;
 			setValue(field.name, value)
 		});
-		setState({...state, ...fieldsState})
+		// setState({...state, ...fieldsState})
 	}
 	const [state, setState] = React.useState(fieldsState);
 	const { register, handleSubmit, control, errors, setValue, watch } = useForm({defaultValues: fieldsState});
 
-	const multiListUpdate = (data, name) => setState({...state, [name]: data});
-	const handleChangeSwitch = (event) => setState({ ...state, [event.target.name]: event.target.checked });
-	const handleChangeSelect = (event) => setState({ ...state, [event.target.name]: event.target.value });
-	const handleDateChange = (date, value, name) => setState({ ...state, [name]: date });
+	const multiListUpdate = (data, name) => setFormState(name, data);
+	const handleChangeSwitch = (event) => setFormState(event.target.name, event.target.checked);
+	const handleChangeSelect = (event) => setFormState(event.target.name, event.target.value)
+	const handleDateChange = (date, value, name) => setFormState(name, date);
+
+
+	const setFormState = (name, value) => {
+		setValue(name, value)
+		setState({ ...state, [name]: value });
+	}
+
+
 	const defineTypeAction = (action) => {
 		let data = {...state, ...watch()};
 		if(onSubmitForm?.id)
@@ -66,7 +73,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 
 	const onError = (errors, e) => console.log(errors, e);
 	// checkControls()
-	useEffect(checkControls, [onSubmitForm]);
+	useEffect(()=>checkControls(onSubmitForm), [onSubmitForm]);
 
 	return (
 		<Paper className={classes.paper}>
@@ -108,17 +115,24 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 								);
 
 							case typesEnum.SELECT:
+								field.options = field?.options || [{label: 'Defina as opções', value: 0}]
 								return (
 									<Controller
 										key={index}
 										as={
-											<Select
-												onChange={handleChangeSelect}
-											>
-												{field.options.map((item, i) => {
-													return (<MenuItem key={i} value={item.value}>{item.label}</MenuItem>)
-												})}
-											</Select>
+											<FormControl>
+												<InputLabel id={field.name}>{field.label}</InputLabel>
+												<Select
+													labelId={field.name}
+													label={field.label || field.name}
+													name={field.name}
+													onChange={handleChangeSelect}
+												>
+													{field.options.map((item, i) => {
+														return (<MenuItem key={i} value={item.value}>{item.label}</MenuItem>)
+													})}
+												</Select>
+											</FormControl>
 										}
 										control={control}
 										name={field.name}
@@ -130,7 +144,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 									<Box key={index} className={classes.boolean}>
 										<Switch
 											inputRef={register}
-											checked={state[field.name]}
+											checked={state[field.name] || false}
 											onChange={handleChangeSwitch}
 											name={field.name}
 											color="primary"
@@ -147,6 +161,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 									<MuiPickersUtilsProvider key={index} utils={DateFnsUtils} locale={ptBR}>
 										<Grid container justify="space-around">
 											<KeyboardDatePicker
+												variant={'inline'}
 												format="dd/MM/yyyy"
 												label={field.label || field.name}
 												value={state[field.name]}
@@ -208,7 +223,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 			</Box>
 		</Paper>
 	);
-};
+}
 
 FormBuilder.propTypes = {
 	controls: PropTypes.array,

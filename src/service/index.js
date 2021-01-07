@@ -8,8 +8,15 @@ const URL_BASE = 'http://localhost:8000'
 const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
     switch (method) {
         case 'GET':
-            let result = await axios.get(`${URL_BASE}/${path}/`);
-            return result.data
+            try {
+                let res = await axios.get(`${URL_BASE}/${path}/`);
+                if(path.includes('?id='))
+                    return res.data
+                return res.data.results
+            } catch (error) {
+                return checkErrors(error, dispatch);
+            }
+
 
         case 'POST':
             dispatch(finishOnPromisse());

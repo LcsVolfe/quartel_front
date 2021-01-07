@@ -1,60 +1,77 @@
 import React from 'react';
-import {Box, Button, makeStyles, Paper, TextField} from "@material-ui/core";
-import { useForm } from "react-hook-form";
+import typesEnum from "../../../components/form-builder/enum/types.enum";
+import {FormBuilder} from "../../../components/form-builder";
 
 
-const useStyles = makeStyles((theme) => ({
-    form: {
-        maxWidth: '1280px',
-        '& > *': {
-            margin: theme.spacing(1),
-            width: '25ch',
-        },
-    },
-    box: {
-        maxWidth: '910px',
-        justifyContent: 'center'
-    }
-}));
 
 
 const ProductFormPage = () => {
-    const classes = useStyles();
-    const { register, handleSubmit } = useForm();
-    const onSubmit = data => console.log(data);
 
+    let fields = [
+        {
+            name: 'name',
+            label: 'Nome',
+            type: typesEnum.TEXT,
+            defaultValue: '',
+            // validations: {
+            //     required: validators.required(),
+            //     minLength: validators.minLength(3),
+            // },
+        },
+        {
+            name: 'price',
+            label: 'Preço',
+            type: typesEnum.NUMBER,
+        },
+        {
+            name: 'qty',
+            label: 'Quantidade',
+            type: typesEnum.NUMBER,
+        },
+        {
+            name: 'unity',
+            label: 'Unidade',
+            type: typesEnum.SELECT,
+            options: [
+                {label: 'Unídade', value: 0},
+                {label: 'Kilo', value: 1},
+                {label: 'Metro', value: 2},
+            ]
+        },
+        {
+            name: 'puchaseDate',
+            label: 'Data Compra',
+            type: typesEnum.DATE,
+        },
+        {
+            name: 'description',
+            label: 'Descrição',
+            type: typesEnum.TEXT,
+        },
+        {
+            name: 'epi',
+            label: 'EPI',
+            type: typesEnum.BOOLEAN,
+        },
+        {
+            name: 'isSelling',
+            label: 'Venda',
+            type: typesEnum.BOOLEAN,
+            defaultValue: true
+        },
+        {
+            name: 'quartel',
+            label: 'Quartel',
+            type: typesEnum.BOOLEAN,
+        },
+        {
+            name: 'tool',
+            label: 'Ferramenta',
+            type: typesEnum.BOOLEAN,
+        },
+    ];
 
-    return (
-      <Paper>
-          <Box p={4} className={classes.box}>
-              <h1>Formulário de Produto</h1>
-
-              <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-                  <TextField name={'name'} label="Nome" inputRef={register}/>
-                  <TextField name={'unity'} type={'number'} label="Unidade" inputRef={register}/>
-                  <TextField name={'qty'} type={'number'} label="Quantidade" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <TextField name={'cost'} type={'number'} label="Custo" inputRef={register}/>
-                  <Box>
-                      <Button variant="contained" type={'submit'}>Salvar</Button>
-                  </Box>
-              </form>
-
-         </Box>
-      </Paper>
-    );
+    return (<FormBuilder controls={fields} title={'Cadastro de Produto'}  />);
 }
 
 export default ProductFormPage;

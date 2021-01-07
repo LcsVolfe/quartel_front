@@ -14,7 +14,6 @@ const FormBuilderContainer = ({
 	title,
 	isColumn,
 	elevation,
-	onSubmit
 }) => {
 	const dispatch = useDispatch();
 	const history = useHistory();
