@@ -24,4 +24,13 @@ export const loading = (state = false, { type }) => {
 	}
 };
 
-export default combineReducers({ onSubmitForm, loading });
+export const initRenderPresentationComponent = (state = false, { type, payload }) => {
+	switch (type) {
+		case 'FORM_BUILDER_INIT_PRESENTATION':
+			return payload;
+		default:
+			return state;
+	}
+};
+
+export default combineReducers({ onSubmitForm, loading, initRenderPresentationComponent });

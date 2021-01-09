@@ -13,6 +13,7 @@ const PStypesEnum = {
 	DATE: 'date',
 	PHONE: 'phone',
 	ZIPCODE: 'zipcode',
+	CURRENCY: 'currency',
 };
 
 export default PStypesEnum;

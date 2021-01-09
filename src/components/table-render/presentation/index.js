@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {
 	AppBar,
-	IconButton,
+	IconButton, Switch,
 	Toolbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,17 +10,21 @@ import {Link, useLocation} from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import MUIDataTable from "mui-datatables";
 import CustomToolbarSelect from "./toolbar-select";
+import {ToDecimal} from "../../../utils/number";
+import {FormatDate} from "../../../utils/date";
 
+
+
+export const BooleanColumn = (value) => (<Switch checked={value} color={'primary'}/>);
+export const CurrencyColumn = (value) => (<span>R$ {ToDecimal(value)}</span>);
+export const NumberColumn = (value) => ToDecimal(value);
+export const DateColumn = (value) => FormatDate(value);
+export const EnumColumn = (value, options) => (<span>{options.filter(op=>op.value === value)[0]?.label}</span>);
 
 const TableRender = ({ options, title, isColumn, columns, onLoadTable, loading, deleteItem, history }) => {
 	const classes = useStyles();
 	const rowsSelected = useState([]);
 	let location = useLocation();
-
-
-
-
-
 
 	let optionsDefalut = {
 		...optionsLanguage,
@@ -47,6 +51,9 @@ const TableRender = ({ options, title, isColumn, columns, onLoadTable, loading, 
 					data={onLoadTable || []}
 					columns={columns}
 					options={optionsDefalut}
+					components={{
+						Boolean
+					}}
 				/>
 			</>}
 		</>

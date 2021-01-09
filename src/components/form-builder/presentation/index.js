@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import { Controller, useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import TextField from '@material-ui/core/TextField';
 import {
 	AppBar, FormControl,
-	Grid, IconButton, InputLabel,
+	Grid, IconButton, InputAdornment, InputLabel,
 	MenuItem,
 	Paper,
 	Select, Toolbar,
@@ -22,13 +22,18 @@ import {ptBR} from "date-fns/locale";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import MultiSelectComponent from "./multi-select";
 import {finishOnPromisse} from "../../template/action-creators";
-import {reducer as onSubmitForm} from "../index";
+import CustomInputMask from "./custom-input-mask";
+import CurrencyTextField from '@unicef/material-ui-currency-textfield'
+import {setFormBuilder} from "../action-creators";
 
 
-const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch, onSubmitForm }) => {
+
+
+const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch, onSubmitForm, onExit }) => {
 	let location = useLocation();
 	const classes = useStyles();
 	let fieldsState = {};
+
 
 	const checkControls = (onSubmitForm) => {
 		controls.forEach(field => {
@@ -45,11 +50,11 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 				value = field.defaultValue ? field.defaultValue : new Date();
 
 			fieldsState[field.name] = value;
-			setValue(field.name, value)
+			// setFormState(field.name, value)
 		});
-		// setState({...state, ...fieldsState})
 	}
-	const [state, setState] = React.useState(fieldsState);
+	checkControls(onSubmitForm)
+	const [state, setState] = useState(fieldsState);
 	const { register, handleSubmit, control, errors, setValue, watch } = useForm({defaultValues: fieldsState});
 
 	const multiListUpdate = (data, name) => setFormState(name, data);
@@ -68,12 +73,34 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 		let data = {...state, ...watch()};
 		if(onSubmitForm?.id)
 			data = {id: onSubmitForm.id, ...data}
+
+		controls.map(control => {
+			let value;
+			switch (control.type){
+				case typesEnum.CURRENCY:
+					console.log(String(data[control.name]))
+					value = String(data[control.name]).replaceAll(' ', '').replace(',', '.');
+					console.log(value)
+
+					data[control.name] = value;
+					break;
+
+				case typesEnum.CPF:
+				case typesEnum.CNPJ:
+				case typesEnum.ZIPCODE:
+				case typesEnum.PHONE:
+					value = String(data[control.name]).replace(/[^0-9]/g, '');
+					data[control.name] = value;
+					break;
+
+				default: break;
+			}
+		});
+
 		onSubmit(data, action);
 	}
 
 	const onError = (errors, e) => console.log(errors, e);
-	// checkControls()
-	useEffect(()=>checkControls(onSubmitForm), [onSubmitForm]);
 
 	return (
 		<Paper className={classes.paper}>
@@ -82,7 +109,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 
 				<AppBar position="relative" >
 					<Toolbar className={classes.toolBarForm}>
-						<IconButton color="inherit" onClick={()=>dispatch(finishOnPromisse())} component={Link} to={location.pathname.replace('form', 'list')}>
+						<IconButton color="inherit" onClick={onExit} component={Link} to={location.pathname.replace('form', 'list')}>
 							<ArrowBackIcon />
 						</IconButton>
 						<IconButton color="inherit" onClick={() => defineTypeAction(1)}>
@@ -106,8 +133,9 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 										error={!!errors[field.name]}
 										label={field.label || field.name}
 										type={field.type}
-										inputRef={register(field.validations)}
+										inputRef={register(field?.validations)}
 										helperText={errors[field.name]?.message}
+										// value={state[field.name]}
 										// onChange={(e) => {
 										//     console.log(e.target.value);
 										// }}
@@ -117,26 +145,21 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 							case typesEnum.SELECT:
 								field.options = field?.options || [{label: 'Defina as opções', value: 0}]
 								return (
-									<Controller
-										key={index}
-										as={
-											<FormControl>
-												<InputLabel id={field.name}>{field.label}</InputLabel>
-												<Select
-													labelId={field.name}
-													label={field.label || field.name}
-													name={field.name}
-													onChange={handleChangeSelect}
-												>
-													{field.options.map((item, i) => {
-														return (<MenuItem key={i} value={item.value}>{item.label}</MenuItem>)
-													})}
-												</Select>
-											</FormControl>
-										}
-										control={control}
-										name={field.name}
-									/>
+									<FormControl key={index}>
+										<InputLabel id={field.name}>{field.label}</InputLabel>
+										<Select
+											labelId={field.name}
+											label={field.label || field.name}
+											name={field.name}
+											value={state[field.name]}
+											inputRef={register(field?.validations)}
+											onChange={handleChangeSelect}
+										>
+											{field.options.map((item, i) => {
+												return (<MenuItem key={i} value={item.value}>{item.label}</MenuItem>)
+											})}
+										</Select>
+									</FormControl>
 								);
 
 							case typesEnum.BOOLEAN:
@@ -167,19 +190,30 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 												value={state[field.name]}
 												onChange={(date, value) => handleDateChange(date, value, field.name)}
 											/>
-											{/*<KeyboardTimePicker*/}
-											{/*    margin="normal"*/}
-											{/*    id="time-picker"*/}
-											{/*    label="Time picker"*/}
-											{/*    value={selectedDate}*/}
-											{/*    onChange={handleDateChange}*/}
-											{/*    KeyboardButtonProps={{*/}
-											{/*        'aria-label': 'change time',*/}
-											{/*    }}*/}
-											{/*/>*/}
 										</Grid>
 									</MuiPickersUtilsProvider>
 								);
+
+							case typesEnum.CURRENCY:
+
+								return (
+									<Controller
+										key={index}
+										as={
+											<CurrencyTextField
+												label={field.label || field.name}
+												currencySymbol="R$ "
+												outputFormat={"number"}
+												decimalCharacter=","
+												digitGroupSeparator=" "
+												helperText={errors[field.name]?.message}
+												// onChange={(event, value)=> setValue(value)}
+											/>
+										}
+										control={control}
+										name={field.name}
+										rules={{validate: (value) => field?.validations?.rule ? field.validations.rule(value) : null}}
+									/>);
 
 							case typesEnum.CPF:
 							case typesEnum.CNPJ:
@@ -191,11 +225,14 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 										field.type === typesEnum.CNPJ ? '99.999.999/9999-99':
 											field.type === typesEnum.PHONE ? '(99) 99999-9999':
 												field.type === typesEnum.ZIPCODE ? '99999-999':
-													field?.mask
+													field?.mask ? field.mask : null;
+
+
 								return (
 									<Controller
 										key={index}
 										as={
+											// <CustomInputMask field={field} errors={errors} />
 											<InputMask mask={maskPatter}>
 												{() => (
 													<TextField
@@ -219,6 +256,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 					})}
 
 				</form>
+
 
 			</Box>
 		</Paper>

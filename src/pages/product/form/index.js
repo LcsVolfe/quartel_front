@@ -1,6 +1,7 @@
 import React from 'react';
 import typesEnum from "../../../components/form-builder/enum/types.enum";
 import {FormBuilder} from "../../../components/form-builder";
+import {UnityOptions} from "./options";
 
 
 
@@ -21,7 +22,7 @@ const ProductFormPage = () => {
         {
             name: 'price',
             label: 'Preço',
-            type: typesEnum.NUMBER,
+            type: typesEnum.CURRENCY,
         },
         {
             name: 'qty',
@@ -32,11 +33,7 @@ const ProductFormPage = () => {
             name: 'unity',
             label: 'Unidade',
             type: typesEnum.SELECT,
-            options: [
-                {label: 'Unídade', value: 0},
-                {label: 'Kilo', value: 1},
-                {label: 'Metro', value: 2},
-            ]
+            options: UnityOptions,
         },
         {
             name: 'puchaseDate',

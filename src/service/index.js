@@ -10,7 +10,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
         case 'GET':
             try {
                 let res = await axios.get(`${URL_BASE}/${path}/`);
-                if(path.includes('?id='))
+                if(path.includes('/'))
                     return res.data
                 return res.data.results
             } catch (error) {
@@ -90,7 +90,7 @@ const ApiService = {
     ListProducts: () => fetchApi('products'),
     CreateForm: (data, path, dispatch) => fetchApi(path, 'POST', data, dispatch),
     UpdateForm: (data, path, dispatch) => fetchApi(path, 'PUT', data, dispatch, data?.id),
-    LoadForm: (path) => fetchApi(path, 'GET'),
+    LoadForm: (path) => fetchApi(path),
     ListTable: (path) => fetchApi(path),
     DeleteTable: (id, path, dispatch) => fetchApi(path, 'DELETE', {}, dispatch, id),
     BatchDeleteTable: (data, path, dispatch) => fetchApi(path, 'DELETE', dispatch),

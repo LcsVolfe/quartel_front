@@ -8,9 +8,10 @@ export const setFormBuilder = (payload) => ({
 
 export const formBuilderError = () => ({ type: 'FORM_BUILDER_ERROR' });
 export const loadingFormBuilder = () => ({ type: 'FORM_BUILDER_LOADING' });
+export const initApresentataion = (payload) => ({ type: 'FORM_BUILDER_INIT_PRESENTATION', payload });
 
 
-export const fetchFormBuilder = (data, action, history) => async (dispatch) => {
+export const fetchFormBuilder = (data, action, history, onDismountComponent) => async (dispatch) => {
 	let result;
 	switch(action){
 		case 1:
@@ -19,7 +20,6 @@ export const fetchFormBuilder = (data, action, history) => async (dispatch) => {
 				await ApiService.UpdateForm(data, TakePathAPIWithId(data.id, history), dispatch);
 			if(!result?.errorRequest)
 				FormToList(history)
-
 			break;
 
 		case 2:
@@ -36,6 +36,9 @@ export const fetchFormBuilder = (data, action, history) => async (dispatch) => {
 
 export const loadDataFormBuilder = (id, history) => async (dispatch) => {
 	let result = await ApiService.LoadForm(TakePathAPIWithId(id, history));
-	if(result?.id)
+	// console.log(result)
+	if(result?.id){
 		dispatch(setFormBuilder(result));
+		dispatch(initApresentataion(true));
+	}
 };
