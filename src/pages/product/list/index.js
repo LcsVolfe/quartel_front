@@ -62,7 +62,7 @@ const ProductListPage = () => {
         },
     ];
 
-    return (<TableRender columns={columns} />);
+    return (<TableRender columns={columns} title={'Produtos'} />);
 }
 
 export default ProductListPage;

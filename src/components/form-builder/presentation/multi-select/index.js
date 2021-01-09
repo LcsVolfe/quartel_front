@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     AppBar,
     Button,
@@ -23,17 +23,22 @@ const MultiSelectComponent = (props) => {
     const loadingMultiSelect = openMultiSelect && optionsMultiSelect.length === 0;
 
     const [openDialog, setOpenDialog] = useState(false);
-    const handleClickOpenDialog = () => setOpenDialog(true);
+    const handleClickOpenDialog = () => {
+        setOpenDialog(true);
+        setAutoCompleteValue(null);
+    }
     const handleCloseDialog = () => {
-        let newList = [...listData, autoCompleteValue];
+        setOpenDialog(false);
+        if(!autoCompleteValue) return;
+
+        let newList = [...listData, autoCompleteValue?.id];
         setListData(newList);
         props.onResult(newList, props.name);
-        setOpenDialog(false);
     }
 
 
 
-    React.useEffect(() => {
+    useEffect(() => {
         let active = true;
 
         if (!loadingMultiSelect) {
@@ -143,7 +148,7 @@ const MultiSelectComponent = (props) => {
 
 
             <MUIDataTable
-                title={props?.tableTitle ? props.tableTitle : 'Items'}
+                title={props?.label || 'Items'}
                 data={listData}
                 columns={[
                     {

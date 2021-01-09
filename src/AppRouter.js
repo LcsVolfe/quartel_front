@@ -3,9 +3,14 @@ import ClientFormPage from "./pages/client/form";
 import ClientListPage from "./pages/client/list";
 import {Template} from "./components/template";
 import BuildIcon from '@material-ui/icons/Build';
+import StoreIcon from '@material-ui/icons/Store';
 import ProductListPage from "./pages/product/list";
 import ProductFormPage from "./pages/product/form";
-
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import OrderListPage from "./pages/order/list";
+import OrderFormPage from "./pages/order/form";
+import EmployeeListPage from "./pages/employee/list";
+import EmployeeFormPage from "./pages/employee/form";
 const router = [
   {
     path: '/list/clients',
@@ -19,33 +24,36 @@ const router = [
   },
   {
     path: '/list/products',
-    text: 'Produto',
-    icon: <BuildIcon />,
+    text: 'Produtos',
+    icon: <StoreIcon />,
     component: <Template content={<ProductListPage />} />
   },
   {
     path: '/form/products',
     component: <Template content={<ProductFormPage />} />
   },
-  // {
-  //   path: '/list/order',
-  //   text: 'Ordem',
-  //   icon: <InboxIcon />,
-  //   component: <Template content={<OrderListPage />} />
-  // },
-  // {
-  //   path: '/form/product',
-  //   text: 'FORM Produto',
-  //   icon: <InboxIcon />,
-  //   component: <Template content={<ProductFormPage />} ></Template>
-  // },
+  {
+    path: '/list/orders',
+    text: 'Serviços',
+    icon: <ListAltIcon />,
+    component: <Template content={<OrderListPage />} />
+  },
+  {
+    path: '/form/orders',
+    component: <Template content={<OrderFormPage />} ></Template>
+  },
+  {
+    path: '/list/employees',
+    text: 'Funcionários',
+    icon: <BuildIcon />,
+    component: <Template content={<EmployeeListPage />} />
+  },
+  {
+    path: '/form/employees',
+    component: <Template content={<EmployeeFormPage />} ></Template>
+  },
 
-  // {
-  //   path: '/form/order',
-  //   text: 'Form Ordem',
-  //   icon: <InboxIcon />,
-  //   component: <Template content={<OrderFormPage />} ></Template>
-  // },
+
   // {
   //   path: '/formbuilder',
   //   text: 'Form Builder',

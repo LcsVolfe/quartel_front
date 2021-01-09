@@ -1,20 +1,5 @@
 import {TableRender} from "../../../components/table-render";
 
-var orders = [
-    {
-        grandTotal: 100,
-        discount: 10,
-       // lines: [line],
-       // client: client,
-        gateway: 10,
-       // dateOrdered: new Date(),
-       // dateFinish: new Date(),
-        status: 10,
-       // tools: [product],
-        squareMeter: 100,
-       // isPaid: false
-    }
-]
 const OrderListPage = () => {
     let columns = [
         {
@@ -39,7 +24,7 @@ const OrderListPage = () => {
         },
     ];
 
-    return (<TableRender title={'Serviço'} data={orders} columns={columns}/>);
+    return (<TableRender title={'Serviços'} columns={columns}/>);
 }
 
 export default OrderListPage;

@@ -1,6 +1,6 @@
 import React from 'react';
 import {TableRender} from "../../../components/table-render";
-import ApiService from "../../../service";
+
 
 const ClientListPage = () => {
     let columns = [
@@ -42,7 +42,7 @@ const ClientListPage = () => {
         },
     ];
 
-    return (<TableRender columns={columns} />);
+    return (<TableRender columns={columns} title={'Clientes'} />);
 }
 
 export default ClientListPage;
