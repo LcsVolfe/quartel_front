@@ -1,6 +1,5 @@
 import React from 'react';
 import {TableRender} from "../../../components/table-render";
-import {Switch} from "@material-ui/core";
 import {
     BooleanColumn,
     CurrencyColumn,
@@ -19,6 +18,11 @@ const ProductListPage = () => {
         {
             name: "price",
             label: "Preço",
+            options: {customBodyRender: CurrencyColumn}
+        },
+        {
+            name: "cost",
+            label: "Custo",
             options: {customBodyRender: CurrencyColumn}
         },
         {

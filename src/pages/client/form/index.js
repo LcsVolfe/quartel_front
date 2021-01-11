@@ -9,7 +9,6 @@ const ClientFormPage = () => {
             name: 'name',
             label: 'Nome',
             type: typesEnum.TEXT,
-            defaultValue: 'XXXXXXX',
             // validations: {
             //     required: validators.required(),
             //     minLength: validators.minLength(3),

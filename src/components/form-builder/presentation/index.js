@@ -1,11 +1,11 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { Controller, useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import TextField from '@material-ui/core/TextField';
 import {
-	AppBar, FormControl,
-	Grid, IconButton, InputAdornment, InputLabel,
+	AppBar, CircularProgress, FormControl,
+	Grid, IconButton, InputLabel,
 	MenuItem,
 	Paper,
 	Select, Toolbar,
@@ -21,18 +21,18 @@ import DateFnsUtils from "@date-io/date-fns";
 import {ptBR} from "date-fns/locale";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import MultiSelectComponent from "./multi-select";
-import {finishOnPromisse} from "../../template/action-creators";
-import CustomInputMask from "./custom-input-mask";
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
-import {setFormBuilder} from "../action-creators";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import {setCompleteOption} from "../reducer";
 
 
 
 
-const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch, onSubmitForm, onExit }) => {
+const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, autoCompleteOption, onSubmitForm, onExit, handleAutoCompleteChange, dispatch }) => {
 	let location = useLocation();
 	const classes = useStyles();
 	let fieldsState = {};
+	let autoCompleteOpenState = {};
 
 
 	const checkControls = (onSubmitForm) => {
@@ -49,12 +49,16 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 			if(field.type === typesEnum.DATE)
 				value = field.defaultValue ? field.defaultValue : new Date();
 
+			if(field.type === typesEnum.AUTOCOMPLETE)
+				autoCompleteOpenState[field.name] = {open: false, loading: false};
+
 			fieldsState[field.name] = value;
 			// setFormState(field.name, value)
 		});
 	}
 	checkControls(onSubmitForm)
 	const [state, setState] = useState(fieldsState);
+	const [autoCompleteOpen, setAutoCompleteOpen] = useState(autoCompleteOpenState);
 	const { register, handleSubmit, control, errors, setValue, watch } = useForm({defaultValues: fieldsState});
 
 	const multiListUpdate = (data, name) => setFormState(name, data);
@@ -68,19 +72,18 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 		setState({ ...state, [name]: value });
 	}
 
-
 	const defineTypeAction = (action) => {
 		let data = {...state, ...watch()};
 		if(onSubmitForm?.id)
 			data = {id: onSubmitForm.id, ...data}
-
+		console.log(data)
 		controls.map(control => {
 			let value;
 			switch (control.type){
 				case typesEnum.CURRENCY:
-					console.log(String(data[control.name]))
+					// console.log(String(data[control.name]))
 					value = String(data[control.name]).replaceAll(' ', '').replace(',', '.');
-					console.log(value)
+					// console.log(value)
 
 					data[control.name] = value;
 					break;
@@ -99,9 +102,24 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 
 		onSubmit(data, action);
 	}
+	const updateAutoComplete = (open, loading= false, name) => setAutoCompleteOpen({
+		...autoCompleteOpen,
+		[name]:
+			{
+				open: open,
+				loading: loading,
+				// loading: autoCompleteOpen[field.name]?.loading,
+			}
+	});
+	useEffect(()=>{
+		let stateToUpdate = {...autoCompleteOpen};
+		for(let item in stateToUpdate)
+			if(stateToUpdate[item].open)
+				stateToUpdate[item].loading = autoCompleteOption.loading;
+		setAutoCompleteOpen(stateToUpdate)
+	}, [autoCompleteOption])
 
 	const onError = (errors, e) => console.log(errors, e);
-
 	return (
 		<Paper className={classes.paper}>
 			<Box p={4} className={classes.box}>
@@ -174,6 +192,46 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, dispatch,
 										/>
 										<span>{field.label}</span>
 									</Box>
+								);
+
+							case typesEnum.AUTOCOMPLETE:
+
+								// console.log(autoCompleteOpen[field.name]?.loading, autoCompleteOption)
+								return (
+									<Autocomplete
+										open={autoCompleteOpen[field.name]?.open}
+										onOpen={() => updateAutoComplete(true, false, field.name)}
+										onClose={() => updateAutoComplete(false, false, field.name)}
+										onChange={(event, value) => {
+											setFormState(field.name, value?.id);
+											dispatch(setCompleteOption({data: [], loading: true}))
+										}}
+										value={state[field.name]}
+										getOptionLabel={(option) => option.name}
+										options={autoCompleteOption.data}
+										loading={autoCompleteOpen[field.name]?.loading && autoCompleteOption.data.length==0}
+										onInputChange={((event, value) => {
+											if(event.type != 'change') return;
+											updateAutoComplete(true, true, field.name)
+											handleAutoCompleteChange(value, field.path, field.propSearch)
+										})}
+										renderInput={(params) => (
+											<TextField
+												{...params}
+												label={field?.label || field.name}
+												name={field.name}
+												InputProps={{
+													...params.InputProps,
+													endAdornment: (
+														<>
+															{autoCompleteOpen[field.name]?.loading && autoCompleteOption.data.length==0 ? <CircularProgress color="inherit" size={20} /> : null}
+															{params.InputProps.endAdornment}
+														</>
+													),
+												}}
+											/>
+										)}
+									/>
 								);
 
 							case typesEnum.MULTISELECT:
@@ -286,7 +344,6 @@ const useStyles = makeStyles((theme) => ({
 		},
 		display: 'flex',
 		flexWrap: 'wrap',
-		alignItems: 'baseline'
 	},
 	paper: {
 		display: 'flex',

@@ -1,14 +1,8 @@
 import ApiService from "../../../service";
 import {FormToList, TakePathAPIWithId, TakePathRoute} from "../../../utils/navigation";
+import {initApresentataion, setCompleteOption, setFormBuilder} from "../reducer";
 
-export const setFormBuilder = (payload) => ({
-	type: 'FORM_BUILDER_SET',
-	payload,
-});
 
-export const formBuilderError = () => ({ type: 'FORM_BUILDER_ERROR' });
-export const loadingFormBuilder = () => ({ type: 'FORM_BUILDER_LOADING' });
-export const initApresentataion = (payload) => ({ type: 'FORM_BUILDER_INIT_PRESENTATION', payload });
 
 
 export const fetchFormBuilder = (data, action, history, onDismountComponent) => async (dispatch) => {
@@ -35,10 +29,18 @@ export const fetchFormBuilder = (data, action, history, onDismountComponent) => 
 };
 
 export const loadDataFormBuilder = (id, history) => async (dispatch) => {
-	let result = await ApiService.LoadForm(TakePathAPIWithId(id, history));
+	let result = await ApiService.Fetch(TakePathAPIWithId(id, history), dispatch);
 	// console.log(result)
-	if(result?.id){
-		dispatch(setFormBuilder(result));
+	if(!result.errorRequest && result.data?.id){
+		dispatch(setFormBuilder(result.data));
 		dispatch(initApresentataion(true));
 	}
+};
+
+export const loadAutoCompleteFormBuilder = (searchTerm, path, prop) => async (dispatch) => {
+	dispatch(setCompleteOption({data: [], loading: true}))
+	let result = await ApiService.Fetch(path+'?searchTerm='+searchTerm, dispatch);
+	// console.log(result)
+	if(!result.errorRequest && result.data.length > 0)
+		dispatch(setCompleteOption({data: result.data, loading: false}))
 };

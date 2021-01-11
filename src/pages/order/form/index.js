@@ -1,6 +1,4 @@
 import React from 'react';
-import {Box, Button, Paper, TextField} from "@material-ui/core";
-import { useForm } from "react-hook-form";
 import typesEnum from "../../../components/form-builder/enum/types.enum";
 import {FormBuilder} from "../../../components/form-builder";
 
@@ -12,6 +10,18 @@ const OrderFormPage = () => {
             name: 'client',
             label: 'Cliente',
             type: typesEnum.AUTOCOMPLETE,
+            path: 'clients-search-by-name',
+            propSearch: 'name'
+            // validations: {
+            //     required: validators.required(),
+            //     minLength: validators.minLength(3),
+            // },
+        },
+        {
+            name: 'client2',
+            label: 'Cliente2',
+            type: typesEnum.AUTOCOMPLETE,
+            path: 'clients-search-by-another-thing'
             // validations: {
             //     required: validators.required(),
             //     minLength: validators.minLength(3),

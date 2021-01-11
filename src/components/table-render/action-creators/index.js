@@ -17,12 +17,13 @@ export const fetchTableRender = (history) => async (dispatch) => {
 	dispatch(loadingOnPromisse());
 	dispatch(loadingTableRender());
 	try {
-		let result = await ApiService.ListTable(TakePathRoute(history));
+		let result = await ApiService.Fetch(TakePathRoute(history), dispatch);
+		console.log(result)
 		// await delay(1000);
 
 		dispatch(finishOnPromisse());
 		dispatch(finishTableRender());
-		dispatch(setTableRender(result));
+		dispatch(setTableRender(result?.data));
 	} catch (err) {
 		dispatch(TableRenderError());
 	}
@@ -32,11 +33,10 @@ export const deleteTable = (listIds, history) => async (dispatch) => {
 	dispatch(loadingOnPromisse());
 	try {
 		for (const id of listIds) {
-			await ApiService.DeleteTable(id, TakePathRoute(history), dispatch);
+			await ApiService.Delete(id, TakePathRoute(history), dispatch);
 		}
-		let result = await ApiService.ListTable(TakePathRoute(history));
+		let result = await ApiService.Fetch(TakePathRoute(history), dispatch);
 		dispatch(setTableRender(result));
-		// await delay(1000);
 		dispatch(finishOnPromisse());
 	} catch (err) {
 		dispatch(finishOnPromisse());
@@ -44,4 +44,4 @@ export const deleteTable = (listIds, history) => async (dispatch) => {
 };
 
 
-const delay = ms => new Promise(res => setTimeout(res, ms));
+

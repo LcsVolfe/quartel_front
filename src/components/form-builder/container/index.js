@@ -4,15 +4,9 @@ import {useHistory, useLocation} from "react-router-dom";
 import FormBuilder from '../presentation';
 import { selectFormBuilder } from '../selectors';
 import PropTypes from 'prop-types';
-import {
-	fetchFormBuilder,
-	initApresentataion,
-	loadDataFormBuilder,
-	loadingFormBuilder,
-	setFormBuilder
-} from "../action-creators";
-import {onSubmitForm} from "../reducer";
+import {fetchFormBuilder, loadAutoCompleteFormBuilder, loadDataFormBuilder} from "../action-creators";
 import {finishOnPromisse} from "../../template/action-creators";
+import {initApresentataion, loadingFormBuilder, setFormBuilder} from "../reducer";
 
 
 
@@ -45,6 +39,13 @@ const FormBuilderContainer = ({
 		[dispatch]
 	);
 
+	const handleAutoCompleteChange = useCallback(
+		(searchTerm, path, prop) => {
+			dispatch(loadAutoCompleteFormBuilder(searchTerm, path, prop))
+		},
+		[dispatch]
+	);
+
 	const onDismountComponent = useCallback(
 		() => {
 			dispatch(finishOnPromisse())
@@ -60,10 +61,6 @@ const FormBuilderContainer = ({
 	}, []);
 
 	const data = useSelector(selectFormBuilder);
-	console.log(data)
-
-	// data.onSubmitForm?.id
-	// renderComponent
 	return (
 		<>
 			{ data.initRenderPresentationComponent ? <FormBuilder
@@ -75,6 +72,7 @@ const FormBuilderContainer = ({
 				elevation={elevation}
 				dispatch={dispatch}
 				onExit={onDismountComponent}
+				handleAutoCompleteChange={handleAutoCompleteChange}
 			/> : null}
 		</>
 	);

@@ -25,6 +25,11 @@ const ProductFormPage = () => {
             type: typesEnum.CURRENCY,
         },
         {
+            name: 'cost',
+            label: 'Custo',
+            type: typesEnum.CURRENCY,
+        },
+        {
             name: 'qty',
             label: 'Quantidade',
             type: typesEnum.NUMBER,
