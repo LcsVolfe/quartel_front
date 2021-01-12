@@ -11,17 +11,6 @@ const OrderFormPage = () => {
             label: 'Cliente',
             type: typesEnum.AUTOCOMPLETE,
             path: 'clients-search-by-name',
-            propSearch: 'name'
-            // validations: {
-            //     required: validators.required(),
-            //     minLength: validators.minLength(3),
-            // },
-        },
-        {
-            name: 'client2',
-            label: 'Cliente2',
-            type: typesEnum.AUTOCOMPLETE,
-            path: 'clients-search-by-another-thing'
             // validations: {
             //     required: validators.required(),
             //     minLength: validators.minLength(3),
@@ -76,16 +65,19 @@ const OrderFormPage = () => {
             name: 'orderLine',
             label: 'Produtos',
             type: typesEnum.MULTISELECT,
+            path: 'products-search-by-isselling'
         },
         {
             name: 'toolLine',
             label: 'Ferramentas',
             type: typesEnum.MULTISELECT,
+            path: 'products-search-by-tool'
         },
         {
             name: 'employeeLine',
             label: 'Funcionários',
             type: typesEnum.MULTISELECT,
+            path: 'employees-search-by-name'
         },
     ];
 

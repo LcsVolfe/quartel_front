@@ -36,7 +36,7 @@ export const deleteTable = (listIds, history) => async (dispatch) => {
 			await ApiService.Delete(id, TakePathRoute(history), dispatch);
 		}
 		let result = await ApiService.Fetch(TakePathRoute(history), dispatch);
-		dispatch(setTableRender(result));
+		dispatch(setTableRender(result.data));
 		dispatch(finishOnPromisse());
 	} catch (err) {
 		dispatch(finishOnPromisse());

@@ -6,7 +6,7 @@ import { selectFormBuilder } from '../selectors';
 import PropTypes from 'prop-types';
 import {fetchFormBuilder, loadAutoCompleteFormBuilder, loadDataFormBuilder} from "../action-creators";
 import {finishOnPromisse} from "../../template/action-creators";
-import {initApresentataion, loadingFormBuilder, setFormBuilder} from "../reducer";
+import {initApresentataion, loadingFormBuilder, setCompleteOption, setFormBuilder} from "../reducer";
 
 
 
@@ -19,7 +19,6 @@ const FormBuilderContainer = ({
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const query = useQuery();
-	const [renderComponent, setRenderComponent] = useState(false);
 
 	const promisseFetch = useCallback(
 		(data, action) => {

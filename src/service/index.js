@@ -7,7 +7,7 @@ const URL_BASE = 'http://localhost:8000'
 let cancelToken;
 
 const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
-    await delay(2000);
+    // await delay(2000);
 
     switch (method) {
         case 'GET':
@@ -25,6 +25,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
             } catch (error) {
                 return checkErrors(error, dispatch);
             }
+            break;
 
         case 'POST':
             dispatch(finishOnPromisse());
@@ -32,11 +33,13 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
                 let response = await axios.post(`${URL_BASE}/${path}/`, body);
                 if(response?.status === 201)
                     dispatch(resultOnPromisse(mountApiResult(response)))
-
                 return response;
             } catch (error) {
+                console.log(error)
                 return checkErrors(error, dispatch);
             }
+            break;
+
 
         case 'PUT':
             dispatch(finishOnPromisse());
@@ -48,6 +51,8 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
             } catch (error) {
                 return checkErrors(error, dispatch);
             }
+            break;
+
 
         case 'DELETE':
             try {
@@ -58,9 +63,11 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
             } catch (error) {
                 return checkErrors(error, dispatch);
             }
+            break;
 
         default:
-            return
+            break;
+
     }
 
 }
@@ -84,7 +91,7 @@ const findZipCode = (zipCode) =>  {
 }
 
 const mountApiResult = (res, error = false, pagination = true) => {
-    // console.log('mount result', res, pagination)
+    console.log(res)
     return ({
         errorRequest: error,
         data: pagination ? res.data?.results : res.data,

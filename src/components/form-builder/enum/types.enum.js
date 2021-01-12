@@ -15,6 +15,7 @@ const PStypesEnum = {
 	ZIPCODE: 'zipcode',
 	CURRENCY: 'currency',
 	AUTOCOMPLETE: 'autocomplete',
+	INVISIBLE: 'invisible',
 };
 
 export default PStypesEnum;

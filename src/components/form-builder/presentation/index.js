@@ -76,30 +76,35 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, autoCompl
 		let data = {...state, ...watch()};
 		if(onSubmitForm?.id)
 			data = {id: onSubmitForm.id, ...data}
-		console.log(data)
 		controls.map(control => {
-			let value;
+			let value = data[control.name];
+			let newValue;
 			switch (control.type){
 				case typesEnum.CURRENCY:
-					// console.log(String(data[control.name]))
-					value = String(data[control.name]).replaceAll(' ', '').replace(',', '.');
-					// console.log(value)
-
-					data[control.name] = value;
+					// console.log(String(value))
+					newValue = String(value).replaceAll(' ', '').replace(',', '.');
+					// console.log(newValue)
+					data[control.name] = newValue;
 					break;
 
 				case typesEnum.CPF:
 				case typesEnum.CNPJ:
 				case typesEnum.ZIPCODE:
 				case typesEnum.PHONE:
-					value = String(data[control.name]).replace(/[^0-9]/g, '');
-					data[control.name] = value;
+					newValue = String(value).replace(/[^0-9]/g, '');
+					data[control.name] = newValue;
+					break;
+
+				case typesEnum.MULTISELECT:
+					if(value.length)
+						newValue = value.map(item=>Number(item.id));
+					data[control.name] = newValue
 					break;
 
 				default: break;
 			}
 		});
-
+		console.log(data)
 		onSubmit(data, action);
 	}
 	const updateAutoComplete = (open, loading= false, name) => setAutoCompleteOpen({
@@ -123,7 +128,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, autoCompl
 	return (
 		<Paper className={classes.paper}>
 			<Box p={4} className={classes.box}>
-				<h1>Formulário de Produto</h1>
+				<h1>{title}</h1>
 
 				<AppBar position="relative" >
 					<Toolbar className={classes.toolBarForm}>
@@ -199,6 +204,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, autoCompl
 								// console.log(autoCompleteOpen[field.name]?.loading, autoCompleteOption)
 								return (
 									<Autocomplete
+										key={index}
 										open={autoCompleteOpen[field.name]?.open}
 										onOpen={() => updateAutoComplete(true, false, field.name)}
 										onClose={() => updateAutoComplete(false, false, field.name)}
@@ -213,7 +219,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, autoCompl
 										onInputChange={((event, value) => {
 											if(event.type != 'change') return;
 											updateAutoComplete(true, true, field.name)
-											handleAutoCompleteChange(value, field.path, field.propSearch)
+											handleAutoCompleteChange(value, field.path)
 										})}
 										renderInput={(params) => (
 											<TextField
@@ -235,7 +241,14 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, autoCompl
 								);
 
 							case typesEnum.MULTISELECT:
-								return (<MultiSelectComponent {...field} key={index} onResult={multiListUpdate}  />);
+								return (<MultiSelectComponent
+									{...field}
+									key={index}
+									onResult={multiListUpdate}
+									handleAutoCompleteChange={handleAutoCompleteChange}
+									autoCompleteOption={autoCompleteOption}
+									dispatch={dispatch}
+								/>);
 
 							case typesEnum.DATE:
 								return (
@@ -307,6 +320,9 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, autoCompl
 										rules={{validate: (value) => field?.validations?.rule ? field.validations.rule(value) : null}}
 									/>
 								);
+
+							case typesEnum.INVISIBLE:
+								return;
 
 							default:
 								return <span key={field.name}>Elemento não encontrado. {field.name}</span>

@@ -6,6 +6,10 @@ const ClientFormPage = () => {
 
     let fields = [
         {
+            name: 'address',
+            type: typesEnum.INVISIBLE
+        },
+        {
             name: 'name',
             label: 'Nome',
             type: typesEnum.TEXT,

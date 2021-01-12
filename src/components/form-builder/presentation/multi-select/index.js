@@ -12,78 +12,39 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import AddIcon from '@material-ui/icons/Add';
 import MUIDataTable from "mui-datatables";
 import CloseIcon from '@material-ui/icons/Close';
+import ApiService from "../../../../service";
+import {setCompleteOption} from "../../reducer";
 
-const MultiSelectComponent = (props) => {
+const MultiSelectComponent = ({name, label, handleAutoCompleteChange, onResult, dialogTitle, path, autoCompleteOption, dispatch}) => {
     const classes = useStyles();
 
     const [listData, setListData] = useState([]);
     const [autoCompleteValue, setAutoCompleteValue] = useState(null);
     const [openMultiSelect, setOpenMultiSelect] = useState(false);
-    const [optionsMultiSelect, setOptionsMultiSelect] = useState([]);
-    const loadingMultiSelect = openMultiSelect && optionsMultiSelect.length === 0;
-
     const [openDialog, setOpenDialog] = useState(false);
+
     const handleClickOpenDialog = () => {
         setOpenDialog(true);
         setAutoCompleteValue(null);
     }
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        if(!autoCompleteValue) return;
-
-        let newList = [...listData, autoCompleteValue?.id];
+        let newList = [...listData, autoCompleteValue];
         setListData(newList);
-        props.onResult(newList, props.name);
+        onResult(newList, name);
+        dispatch(setCompleteOption({data: [], loading: false}))
     }
 
+    const SearchInAPI = (event, value) => {
+        if(event.type != 'change') return;
+        handleAutoCompleteChange(value, path)
+    }
 
+    const onChange = (event, value) => {
+        if(value?.id)
+            setAutoCompleteValue(value)
 
-    useEffect(() => {
-        let active = true;
-
-        if (!loadingMultiSelect) {
-            return undefined;
-        }
-
-        (async () => {
-            const response = await fetch('https://country.register.gov.uk/records.json?page-size=5000');
-            let options = await response.json();
-            options = [
-                {
-                    id: 1,
-                    name: '11'
-                },
-                {
-                    id: 2,
-                    name: '22'
-                },
-                {
-                    id: 3,
-                    name: '33'
-                },
-                {
-                    id: 4,
-                    name: '44'
-                },
-                {
-                    id: 5,
-                    name: '55'
-                },
-                {
-                    id: 6,
-                    name: '66'
-                }
-            ]
-
-            if (active) {
-                setOptionsMultiSelect(Object.keys(options).map((key) => options[key]));
-            }
-        })();
-
-        return () => {
-            active = false;
-        };
-    }, [loadingMultiSelect]);
+    }
 
 
     return (
@@ -102,7 +63,7 @@ const MultiSelectComponent = (props) => {
             >
                 <DialogTitle>
                     <div className={classes.multiSelectDialogTitle}>
-                        {props?.dialogTitle ? props.dialogTitle : 'Pesquise'}
+                        {dialogTitle ? dialogTitle : 'Pesquise'}
                         <IconButton color="inherit" onClick={handleCloseDialog}>
                             <CloseIcon />
                         </IconButton>
@@ -113,24 +74,19 @@ const MultiSelectComponent = (props) => {
                         open={openMultiSelect}
                         onOpen={() => setOpenMultiSelect(true)}
                         onClose={(e) => setOpenMultiSelect(false)}
-                        // onChange={(event) => console.log('onChange', event.target.value)}
-                        // onInputChange={(event) => console.log('onInputChange', event)}
-                        getOptionSelected={(option, value) => {
-                            setAutoCompleteValue(option);
-                            return option.name === value.name;
-                        }}
+                        onChange={onChange}
+                        onInputChange={(event, value) => SearchInAPI(event, value)}
                         getOptionLabel={(option) => option.name}
-                        options={optionsMultiSelect}
-                        loading={loadingMultiSelect}
+                        options={autoCompleteOption.data}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                label={props?.label || props?.name}
+                                label={label || name}
                                 InputProps={{
                                     ...params.InputProps,
                                     endAdornment: (
                                         <>
-                                            {loadingMultiSelect ? <CircularProgress color="inherit" size={20} /> : null}
+                                            {autoCompleteOption.loading ? <CircularProgress color="inherit" size={20} /> : null}
                                             {params.InputProps.endAdornment}
                                         </>
                                     ),
@@ -148,7 +104,7 @@ const MultiSelectComponent = (props) => {
 
 
             <MUIDataTable
-                title={props?.label || 'Items'}
+                title={label || 'Items'}
                 data={listData}
                 columns={[
                     {
@@ -192,3 +148,5 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center'
     }
 }));
+
+

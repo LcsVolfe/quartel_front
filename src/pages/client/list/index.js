@@ -8,22 +8,18 @@ const ClientListPage = () => {
             name: "name",
             label: "Nome",
         },
-        {
-            name: "zipcode",
-            label: "Cep",
-        },
-        {
-            name: "street",
-            label: "Rua",
-        },
-        {
-            name: "city",
-            label: "Cidade",
-        },
-        {
-            name: "region",
-            label: "Estado",
-        },
+        // {
+        //     name: "zipcode",
+        //     label: "Cep",
+        // },
+        // {
+        //     name: "street",
+        //     label: "Rua",
+        // },
+        // {
+        //     name: "region",
+        //     label: "Estado",
+        // },
         {
             name: "cpf",
             label: "Cpf",
@@ -39,6 +35,10 @@ const ClientListPage = () => {
         {
             name: "email",
             label: "Email",
+        },
+        {
+            name: "city",
+            label: "Cidade",
         },
     ];
 
