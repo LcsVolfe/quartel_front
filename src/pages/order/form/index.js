@@ -17,8 +17,23 @@ const OrderFormPage = () => {
             // },
         },
         {
-            name: 'address',
-            label: 'Endereço',
+            name: 'zipcode',
+            label: 'CEP',
+            type: typesEnum.TEXT,
+        },
+        {
+            name: 'street',
+            label: 'Rua',
+            type: typesEnum.TEXT,
+        },
+        {
+            name: 'city',
+            label: 'Cidade',
+            type: typesEnum.TEXT,
+        },
+        {
+            name: 'region',
+            label: 'Estado',
             type: typesEnum.TEXT,
         },
         {
@@ -28,8 +43,9 @@ const OrderFormPage = () => {
         },
         {
             name: 'dateFinish',
-            label: 'Data Início',
+            label: 'Data Término',
             type: typesEnum.DATE,
+            defaultValue: null
         },
         {
             name: 'grandTotal',
@@ -45,6 +61,20 @@ const OrderFormPage = () => {
             name: 'gateway',
             label: 'Pagamento',
             type: typesEnum.SELECT,
+            options: [
+                {
+                    label: 'Dinheiro',
+                    value: 0
+                },
+                {
+                    label: 'Cartão',
+                    value: 1
+                },
+                {
+                    label: 'Boleto',
+                    value: 2
+                }
+            ]
         },
         {
             name: 'squareMeter',
@@ -60,6 +90,20 @@ const OrderFormPage = () => {
             name: 'status',
             label: 'Status',
             type: typesEnum.SELECT,
+            options: [
+                {
+                    label: 'Orçamento',
+                    value: 0
+                },
+                {
+                    label: 'Em Andamento',
+                    value: 1
+                },
+                {
+                    label: 'Fechada',
+                    value: 2
+                }
+            ]
         },
         {
             name: 'orderLine',
