@@ -109,7 +109,26 @@ const OrderFormPage = () => {
             name: 'orderLine',
             label: 'Produtos',
             type: typesEnum.MULTISELECT,
-            path: 'products-search-by-isselling'
+            path: 'products-search-by-isselling',
+            additionalFields: [
+                {
+                    name: 'qty',
+                    label: 'Quantidade',
+                    type: typesEnum.NUMBER
+                },
+                {
+                    name: 'lineAmount',
+                    label: 'Quantidade',
+                    type: typesEnum.CURRENCY,
+                    readOnly: true
+                },
+                {
+                    name: 'price',
+                    label: 'Quantidade',
+                    type: typesEnum.NUMBER
+                },
+
+            ]
         },
         {
             name: 'toolLine',

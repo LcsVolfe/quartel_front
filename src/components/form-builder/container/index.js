@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from "react-router-dom";
-import FormBuilder from '../presentation';
+import FormBuilderPresentation from '../presentation';
 import { selectFormBuilder } from '../selectors';
 import PropTypes from 'prop-types';
 import {fetchFormBuilder, loadAutoCompleteFormBuilder, loadDataFormBuilder} from "../action-creators";
@@ -62,7 +62,7 @@ const FormBuilderContainer = ({
 	const data = useSelector(selectFormBuilder);
 	return (
 		<>
-			{ data.initRenderPresentationComponent ? <FormBuilder
+			{ data.initRenderPresentationComponent ? <FormBuilderPresentation
 				{...data}
 				onSubmit={promisseFetch}
 				controls={controls}

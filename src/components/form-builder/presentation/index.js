@@ -28,7 +28,7 @@ import {setCompleteOption} from "../reducer";
 
 
 
-const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, autoCompleteOption, onSubmitForm, onExit, handleAutoCompleteChange, dispatch }) => {
+const FormBuilderPresentation = ({ controls, onSubmit, title, isColumn, elevation, autoCompleteOption, onSubmitForm, onExit, handleAutoCompleteChange, dispatch }) => {
 	let location = useLocation();
 	const classes = useStyles();
 	let fieldsState = {};
@@ -337,7 +337,7 @@ const FormBuilder = ({ controls, onSubmit, title, isColumn, elevation, autoCompl
 	);
 }
 
-FormBuilder.propTypes = {
+FormBuilderPresentation.propTypes = {
 	controls: PropTypes.array,
 	onSubmit: PropTypes.func,
 	loading: PropTypes.bool,
@@ -348,7 +348,7 @@ FormBuilder.propTypes = {
 
 
 
-export default FormBuilder;
+export default FormBuilderPresentation;
 
 
 

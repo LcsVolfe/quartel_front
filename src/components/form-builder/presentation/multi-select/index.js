@@ -14,8 +14,10 @@ import MUIDataTable from "mui-datatables";
 import CloseIcon from '@material-ui/icons/Close';
 import ApiService from "../../../../service";
 import {setCompleteOption} from "../../reducer";
+import {FormBuilder} from "../../index";
+import FormBuilderPresentation from "../index";
 
-const MultiSelectComponent = ({name, label, handleAutoCompleteChange, onResult, dialogTitle, path, autoCompleteOption, dispatch}) => {
+const MultiSelectComponent = ({name, label, handleAutoCompleteChange, onResult, dialogTitle, path, autoCompleteOption, dispatch, additionalFields}) => {
     const classes = useStyles();
 
     const [listData, setListData] = useState([]);
@@ -94,6 +96,12 @@ const MultiSelectComponent = ({name, label, handleAutoCompleteChange, onResult, 
                             />
                         )}
                     />
+
+                    {additionalFields ? <FormBuilderPresentation controls={additionalFields} />: null}
+
+                    {/*{additionalFields ? additionalFields.map(field => {*/}
+                    {/*    return (<FormBuilder>FOMR</FormBuilder>)*/}
+                    {/*}): null}*/}
                 </DialogContent>
                 <DialogActions>
                     <Button variant={'contained'}  onClick={handleCloseDialog} color="primary" autoFocus>
