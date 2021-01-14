@@ -135,8 +135,8 @@ const MultiSelectComponent = ({
                         toolBar={false}
                         elevation={0}
                     />: null}
-
                 </DialogContent>
+
                 {!additionalFields ? <DialogActions>
                     <Button variant={'contained'}  onClick={()=>handleCloseDialog(true)} color="primary" autoFocus>
                         Adicionar

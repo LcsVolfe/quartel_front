@@ -1,6 +1,7 @@
 import React from 'react';
 import {FormBuilder} from "../../../components/form-builder";
 import typesEnum from "../../../components/form-builder/enum/types.enum";
+import validators from "../../../components/form-builder/enum/validators.enum";
 
 const ClientFormPage = () => {
 
@@ -13,10 +14,10 @@ const ClientFormPage = () => {
             name: 'name',
             label: 'Nome',
             type: typesEnum.TEXT,
-            // validations: {
-            //     required: validators.required(),
-            //     minLength: validators.minLength(3),
-            // },
+            validations: {
+                required: validators.required(),
+                minLength: validators.minLength(3),
+            },
         },
         {
             name: 'zipcode',
@@ -42,6 +43,9 @@ const ClientFormPage = () => {
             name: 'cpf',
             label: 'CPF',
             type: typesEnum.CPF,
+            validations: {
+                cpf: validators.cpf
+            }
         },
         {
             name: 'cnpj',

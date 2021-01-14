@@ -5,7 +5,7 @@ import {initApresentataion, setCompleteOption, setFormBuilder} from "../reducer"
 
 
 
-export const fetchFormBuilder = (data, action, history, onDismountComponent) => async (dispatch) => {
+export const fetchFormBuilder = (data, action=1, history, onDismountComponent) => async (dispatch) => {
 	let result;
 	switch(action){
 		case 1:
