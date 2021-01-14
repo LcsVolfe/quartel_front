@@ -6,10 +6,7 @@ import { selectTableRender } from '../selectors';
 import PropTypes from 'prop-types';
 import {deleteTable, fetchTableRender} from "../action-creators";
 
-const TableRenderContainer = ({
-	title,
-	columns
-}) => {
+const TableRenderContainer = (props) => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const promisseFetch = useCallback(
@@ -36,8 +33,7 @@ const TableRenderContainer = ({
 	return (
 		<TableRender
 			{...data}
-			title={title}
-			columns={columns}
+			{...props}
 			deleteItem={deleteItem}
 			history={history}
 		/>

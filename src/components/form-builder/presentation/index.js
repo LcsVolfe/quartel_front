@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import TextField from '@material-ui/core/TextField';
 import {
-	AppBar, CircularProgress, FormControl,
+	AppBar, Button, CircularProgress, Container, FormControl,
 	Grid, IconButton, InputLabel,
 	MenuItem,
 	Paper,
@@ -28,7 +28,9 @@ import {setCompleteOption} from "../reducer";
 
 
 
-const FormBuilderPresentation = ({ controls, onSubmit, title, isColumn, elevation, autoCompleteOption, onSubmitForm, onExit, handleAutoCompleteChange, dispatch }) => {
+const FormBuilderPresentation = ({
+				 controls, onSubmit, title, isColumn, elevation, autoCompleteOption, TakeFormReference,
+				 onSubmitForm, onExit, handleAutoCompleteChange, dispatch, toolBar=true, onClick }) => {
 	let location = useLocation();
 	const classes = useStyles();
 	let fieldsState = {};
@@ -49,8 +51,9 @@ const FormBuilderPresentation = ({ controls, onSubmit, title, isColumn, elevatio
 			if(field.type === typesEnum.DATE)
 				value = field.defaultValue ? field.defaultValue : new Date();
 
-			if(field.type === typesEnum.AUTOCOMPLETE)
+			if(field.type === typesEnum.AUTOCOMPLETE){
 				autoCompleteOpenState[field.name] = {open: false, loading: false};
+			}
 
 			fieldsState[field.name] = value;
 			// setFormState(field.name, value)
@@ -72,7 +75,7 @@ const FormBuilderPresentation = ({ controls, onSubmit, title, isColumn, elevatio
 		setState({ ...state, [name]: value });
 	}
 
-	const defineTypeAction = (action) => {
+	const defineTypeAction = (action=1) => {
 		let data = {...state, ...watch()};
 		if(onSubmitForm?.id)
 			data = {id: onSubmitForm.id, ...data}
@@ -97,15 +100,25 @@ const FormBuilderPresentation = ({ controls, onSubmit, title, isColumn, elevatio
 
 				case typesEnum.MULTISELECT:
 					if(value.length)
-						newValue = value.map(item=>Number(item.id));
+						if(control.additionalFields)
+							newValue = value
+						else
+							newValue = value.map(item=>Number(item.id));
 					data[control.name] = newValue
 					break;
+
+				case typesEnum.AUTOCOMPLETE:
+				case typesEnum.INVISIBLE:
+					data[control.name] = value?.id || value
+					// data[control.name] = value
 
 				default: break;
 			}
 		});
-		console.log(data)
-		onSubmit(data, action);
+		// console.log(data)
+		if(onSubmit)
+			onSubmit(data, action);
+		return data
 	}
 	const updateAutoComplete = (open, loading= false, name) => setAutoCompleteOpen({
 		...autoCompleteOpen,
@@ -124,13 +137,22 @@ const FormBuilderPresentation = ({ controls, onSubmit, title, isColumn, elevatio
 		setAutoCompleteOpen(stateToUpdate)
 	}, [autoCompleteOption])
 
+	useEffect(()=>{
+		// console.log(state, watch())
+
+		if(TakeFormReference)
+			TakeFormReference(watch(), setFormState)
+	}, [])
+
 	const onError = (errors, e) => console.log(errors, e);
+
+
 	return (
-		<Paper className={classes.paper}>
-			<Box p={4} className={classes.box}>
+		<Paper className={classes.paper} elevation={elevation}>
+			<Box p={4}>
 				<h1>{title}</h1>
 
-				<AppBar position="relative" >
+				{toolBar && <AppBar position="relative" className={classes.appBar}>
 					<Toolbar className={classes.toolBarForm}>
 						<IconButton color="inherit" onClick={onExit} component={Link} to={location.pathname.replace('form', 'list')}>
 							<ArrowBackIcon />
@@ -139,199 +161,241 @@ const FormBuilderPresentation = ({ controls, onSubmit, title, isColumn, elevatio
 							<SaveIcon />
 						</IconButton>
 					</Toolbar>
-				</AppBar>
+				</AppBar>}
 
-				<form className={classes.form} onSubmit={handleSubmit(defineTypeAction, onError)}>
 
-					{controls.map((field, index)=>{
-						switch (field.type) {
-							case typesEnum.TEXT:
-							case typesEnum.NUMBER:
-							case typesEnum.PASSWORD:
-							case typesEnum.EMAIL:
-								return (
-									<TextField
-										key={index}
-										name={field.name}
-										error={!!errors[field.name]}
-										label={field.label || field.name}
-										type={field.type}
-										inputRef={register(field?.validations)}
-										helperText={errors[field.name]?.message}
-										// value={state[field.name]}
-										// onChange={(e) => {
-										//     console.log(e.target.value);
-										// }}
-									/>
-								);
-
-							case typesEnum.SELECT:
-								field.options = field?.options || [{label: 'Defina as opções', value: 0}]
-								return (
-									<FormControl key={index}>
-										<InputLabel id={field.name}>{field.label}</InputLabel>
-										<Select
-											labelId={field.name}
-											label={field.label || field.name}
-											name={field.name}
-											value={state[field.name]}
-											inputRef={register(field?.validations)}
-											onChange={handleChangeSelect}
-										>
-											{field.options.map((item, i) => {
-												return (<MenuItem key={i} value={item.value}>{item.label}</MenuItem>)
-											})}
-										</Select>
-									</FormControl>
-								);
-
-							case typesEnum.BOOLEAN:
-								return (
-									<Box key={index} className={classes.boolean}>
-										<Switch
-											inputRef={register}
-											checked={state[field.name] || false}
-											onChange={handleChangeSwitch}
-											name={field.name}
-											color="primary"
-										/>
-										<span>{field.label}</span>
-									</Box>
-								);
-
-							case typesEnum.AUTOCOMPLETE:
-
-								// console.log(autoCompleteOpen[field.name]?.loading, autoCompleteOption)
-								return (
-									<Autocomplete
-										key={index}
-										open={autoCompleteOpen[field.name]?.open}
-										onOpen={() => updateAutoComplete(true, false, field.name)}
-										onClose={() => updateAutoComplete(false, false, field.name)}
-										onChange={(event, value) => {
-											setFormState(field.name, value?.id);
-											dispatch(setCompleteOption({data: [], loading: true}))
-										}}
-										value={state[field.name]}
-										getOptionLabel={(option) => option.name}
-										options={autoCompleteOption.data}
-										loading={autoCompleteOpen[field.name]?.loading && autoCompleteOption.data.length==0}
-										onInputChange={((event, value) => {
-											if(event.type != 'change') return;
-											updateAutoComplete(true, true, field.name)
-											handleAutoCompleteChange(value, field.path)
-										})}
-										renderInput={(params) => (
+				<form onSubmit={handleSubmit(defineTypeAction, onError)}>
+						<Grid
+							container
+							spacing={2}
+							direction={'row'}
+							// justify={'center'}
+							alignItems={'center'}
+						>
+							{controls.map((field, index)=>{
+								let componentToRender;
+								let xs = 12;
+								let sm = 4;
+								let lg = 3;
+								switch (field.type) {
+									case typesEnum.TEXT:
+									case typesEnum.NUMBER:
+									case typesEnum.PASSWORD:
+									case typesEnum.EMAIL:
+										componentToRender = (
 											<TextField
-												{...params}
-												label={field?.label || field.name}
+												className={classes.w100}
+												key={index}
 												name={field.name}
-												InputProps={{
-													...params.InputProps,
-													endAdornment: (
-														<>
-															{autoCompleteOpen[field.name]?.loading && autoCompleteOption.data.length==0 ? <CircularProgress color="inherit" size={20} /> : null}
-															{params.InputProps.endAdornment}
-														</>
-													),
-												}}
-											/>
-										)}
-									/>
-								);
-
-							case typesEnum.MULTISELECT:
-								return (<MultiSelectComponent
-									{...field}
-									key={index}
-									onResult={multiListUpdate}
-									handleAutoCompleteChange={handleAutoCompleteChange}
-									autoCompleteOption={autoCompleteOption}
-									dispatch={dispatch}
-								/>);
-
-							case typesEnum.DATE:
-								return (
-									<MuiPickersUtilsProvider key={index} utils={DateFnsUtils} locale={ptBR}>
-										<Grid container justify="space-around">
-											<KeyboardDatePicker
-												variant={'inline'}
-												format="dd/MM/yyyy"
+												error={!!errors[field.name]}
 												label={field.label || field.name}
-												value={state[field.name]}
-												onChange={(date, value) => handleDateChange(date, value, field.name)}
-											/>
-										</Grid>
-									</MuiPickersUtilsProvider>
-								);
-
-							case typesEnum.CURRENCY:
-
-								return (
-									<Controller
-										key={index}
-										as={
-											<CurrencyTextField
-												label={field.label || field.name}
-												currencySymbol="R$ "
-												outputFormat={"number"}
-												decimalCharacter=","
-												digitGroupSeparator=" "
+												type={field.type}
+												inputRef={register(field?.validations)}
 												helperText={errors[field.name]?.message}
-												// onChange={(event, value)=> setValue(value)}
+												// value={state[field.name]}
+												// onChange={(e) => {
+												//     console.log(e.target.value);
+												// }}
 											/>
-										}
-										control={control}
-										name={field.name}
-										rules={{validate: (value) => field?.validations?.rule ? field.validations.rule(value) : null}}
-									/>);
+										);
+										break;
 
-							case typesEnum.CPF:
-							case typesEnum.CNPJ:
-							case typesEnum.PHONE:
-							case typesEnum.ZIPCODE:
-							case typesEnum.MASK:
-								let maskPatter =
-									field.type === typesEnum.CPF ? '999.999.999-99' :
-										field.type === typesEnum.CNPJ ? '99.999.999/9999-99':
-											field.type === typesEnum.PHONE ? '(99) 99999-9999':
-												field.type === typesEnum.ZIPCODE ? '99999-999':
-													field?.mask ? field.mask : null;
+									case typesEnum.SELECT:
+										field.options = field?.options || [{label: 'Defina as opções', value: 0}]
+										componentToRender = (
+											<FormControl key={index} className={classes.w100}>
+												<InputLabel id={field.name}>{field.label}</InputLabel>
+												<Select
+													labelId={field.name}
+													label={field.label || field.name}
+													name={field.name}
+													value={state[field.name]}
+													inputRef={register(field?.validations)}
+													onChange={handleChangeSelect}
+												>
+													{field.options.map((item, i) => {
+														return (<MenuItem key={i} value={item.value}>{item.label}</MenuItem>)
+													})}
+												</Select>
+											</FormControl>
+										);
+										break
 
+									case typesEnum.BOOLEAN:
+										componentToRender = (
+											<Box key={index} className={classes.boolean}>
+												<Switch
+													inputRef={register}
+													checked={state[field.name] || false}
+													onChange={handleChangeSwitch}
+													name={field.name}
+													color="primary"
+												/>
+												<span>{field.label}</span>
+											</Box>
+										);
+										break;
 
-								return (
-									<Controller
-										key={index}
-										as={
-											// <CustomInputMask field={field} errors={errors} />
-											<InputMask mask={maskPatter}>
-												{() => (
+									case typesEnum.AUTOCOMPLETE:
+										// console.log(autoCompleteOpen[field.name]?.loading, autoCompleteOption)
+										componentToRender = (
+											<Autocomplete
+												key={index}
+												className={classes.w100}
+												open={autoCompleteOpen[field.name]?.open}
+												onOpen={() => updateAutoComplete(true, false, field.name)}
+												onClose={() => updateAutoComplete(false, false, field.name)}
+												onChange={(event, value) => {
+													setFormState(field.name, value);
+													dispatch(setCompleteOption({data: [], loading: true}))
+												}}
+												value={state[field.name]}
+												getOptionLabel={(option) => option.name}
+												options={autoCompleteOption?.data}
+												loading={autoCompleteOpen[field.name]?.loading && autoCompleteOption.data.length==0}
+												onInputChange={((event, value) => {
+													if(event?.type != 'change') return;
+													updateAutoComplete(true, true, field.name)
+													handleAutoCompleteChange(value, field.path)
+												})}
+												renderInput={(params) => (
 													<TextField
-														error={!!errors[field.name]}
+														{...params}
+														label={field?.label || field.name}
 														name={field.name}
-														label={field.label ||field.name}
-														helperText={errors[field.name]?.message}
+														InputProps={{
+															...params.InputProps,
+															endAdornment: (
+																<>
+																	{autoCompleteOpen[field.name]?.loading && autoCompleteOption.data.length==0 ? <CircularProgress color="inherit" size={20} /> : null}
+																	{params.InputProps.endAdornment}
+																</>
+															),
+														}}
 													/>
 												)}
-											</InputMask>
-										}
-										control={control}
-										name={field.name}
-										rules={{validate: (value) => field?.validations?.rule ? field.validations.rule(value) : null}}
-									/>
+											/>
+										);
+										break;
+
+									case typesEnum.MULTISELECT:
+										xs = 12;
+										sm = 12;
+										lg = 12;
+										componentToRender = (<MultiSelectComponent
+											{...field}
+											key={index}
+											className={classes.w100}
+											initValue={onSubmitForm[field.name]}
+											onResult={multiListUpdate}
+											handleAutoCompleteChange={handleAutoCompleteChange}
+											autoCompleteOption={autoCompleteOption}
+											dispatch={dispatch}
+											setFormState={setFormState}
+										/>);
+										break;
+
+									case typesEnum.DATE:
+										componentToRender = (
+											<MuiPickersUtilsProvider key={index} utils={DateFnsUtils} locale={ptBR}>
+												<KeyboardDatePicker
+													className={classes.w100}
+													variant={'inline'}
+													format="dd/MM/yyyy"
+													label={field.label || field.name}
+													value={state[field.name]}
+													onChange={(date, value) => handleDateChange(date, value, field.name)}
+												/>
+											</MuiPickersUtilsProvider >
+										);
+										break;
+
+									case typesEnum.CURRENCY:
+
+										componentToRender = (
+											<Controller
+												key={index}
+												as={
+													<CurrencyTextField
+														label={field.label || field.name}
+														className={classes.w100}
+														currencySymbol="R$ "
+														outputFormat={"number"}
+														decimalCharacter=","
+														digitGroupSeparator=" "
+														helperText={errors[field.name]?.message}
+														// onChange={(event, value)=> setValue(value)}
+													/>
+												}
+												control={control}
+												name={field.name}
+												rules={{validate: (value) => field?.validations?.rule ? field.validations.rule(value) : null}}
+											/>);
+										break;
+
+									case typesEnum.CPF:
+									case typesEnum.CNPJ:
+									case typesEnum.PHONE:
+									case typesEnum.ZIPCODE:
+									case typesEnum.MASK:
+										let maskPatter =
+											field.type === typesEnum.CPF ? '999.999.999-99' :
+												field.type === typesEnum.CNPJ ? '99.999.999/9999-99':
+													field.type === typesEnum.PHONE ? '(99) 99999-9999':
+														field.type === typesEnum.ZIPCODE ? '99999-999':
+															field?.mask ? field.mask : null;
+
+
+										componentToRender = (
+											<Controller
+												key={index}
+												as={
+													// <CustomInputMask field={field} errors={errors} />
+													<InputMask mask={maskPatter} >
+														{() => (
+															<TextField
+																error={!!errors[field.name]}
+																name={field.name}
+																label={field.label ||field.name}
+																helperText={errors[field.name]?.message}
+																className={classes.w100}
+															/>
+														)}
+													</InputMask>
+												}
+												control={control}
+												name={field.name}
+												rules={{validate: (value) => field?.validations?.rule ? field.validations.rule(value) : null}}
+											/>
+										);
+										break
+
+									case typesEnum.INVISIBLE:
+										return;
+
+									default:
+										return <span key={field.name}>Elemento não encontrado. {field.name}</span>
+								}
+
+								return (
+									<Grid item xs={xs} sm={sm} lg={lg}>
+									{/*<Grid item xs={12} sm={6} lg={4} xl={3}>*/}
+										{componentToRender}
+									</Grid>
 								);
+							})}
 
-							case typesEnum.INVISIBLE:
-								return;
-
-							default:
-								return <span key={field.name}>Elemento não encontrado. {field.name}</span>
-						}
-					})}
+						</Grid>
+					{!toolBar && <Grid item>
+						<Button
+							variant={'contained'}
+							onClick={()=>onClick(defineTypeAction())}
+						>
+							Adicionar
+						</Button>
+					</Grid>}
 
 				</form>
-
-
 			</Box>
 		</Paper>
 	);
@@ -353,29 +417,23 @@ export default FormBuilderPresentation;
 
 
 const useStyles = makeStyles((theme) => ({
-	form: {
-		'& > *': {
-			margin: theme.spacing(1),
-			width: '25ch',
-		},
-		display: 'flex',
-		flexWrap: 'wrap',
-	},
 	paper: {
 		display: 'flex',
 		justifyContent: 'center',
-		maxWidth: '800px',
+		maxWidth: '1000px',
 		margin: '0 auto',
-	},
-	box: {
-		maxWidth: '750px',
-		justifyContent: 'center'
 	},
 	boolean: {
 		order: 1
 	},
 	toolBarForm: {
 		display: 'flex',
-		justifyContent: 'space-between'
+		justifyContent: 'space-between',
 	},
+	w100: {
+		width: '100%'
+	},
+	appBar: {
+		marginBottom: 24
+	}
 }));

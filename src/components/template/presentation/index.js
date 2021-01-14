@@ -15,7 +15,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import {AccountCircle} from "@material-ui/icons";
-import {LinearProgress, Menu, MenuItem} from "@material-ui/core";
+import {Grid, LinearProgress, Menu, MenuItem, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom";
 
 import Logo from '../../../imgs/logo_quartel.png';
@@ -135,6 +135,10 @@ export default function Template({content, onPromisse}) {
 			<main className={classes.content}>
 				{content}
 			</main>
+			<Grid container className={classes.footer} alignItems={'center'} justify={'center'} direction={'column'}>
+				<Typography color={'#FFF'} variant={'h5'}>Volfe</Typography>
+				<Typography color={'#FFF'}>Soluções Tecnológicas</Typography>
+			</Grid>
 		</div>
 	);
 }
@@ -170,6 +174,9 @@ const useStyles = makeStyles((theme) => ({
 		width: drawerWidth,
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
+		[theme.breakpoints.down('xs')]: {
+			display: 'none'
+		},
 	},
 	drawerOpen: {
 		width: drawerWidth,
@@ -213,5 +220,18 @@ const useStyles = makeStyles((theme) => ({
 		width: '100vw',
 		top: '64px',
 		zIndex: '1200'
+	},
+	footer: {
+		width: '100vw',
+		position: 'fixed',
+		bottom: 0,
+		height: 70,
+		maxHeight: 70,
+		backgroundColor: '#2f2c39',
+		zIndex: 1201,
+		color: '#FFF',
+		[theme.breakpoints.down('xs')]: {
+			display: 'none'
+		},
 	}
 }));

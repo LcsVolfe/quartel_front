@@ -4,8 +4,7 @@ import {
     BooleanColumn,
     CurrencyColumn,
     DateColumn,
-    EnumColumn,
-    NumberColumn
+    NumberColumn, OptionsColumn
 } from "../../../components/table-render/presentation";
 import {UnityOptions} from "../form/options";
 
@@ -33,7 +32,7 @@ const ProductListPage = () => {
         {
             name: 'unity',
             label: 'Unidade',
-            options: {customBodyRender: (value)=>EnumColumn(value, UnityOptions)},
+            options: {customBodyRender: (value)=>OptionsColumn(value, UnityOptions)},
         },
         {
             name: 'puchaseDate',

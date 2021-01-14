@@ -1,5 +1,7 @@
 import React from 'react';
 import {TableRender} from "../../../components/table-render";
+import {MaskColumn} from "../../../components/table-render/presentation";
+import MaskEnum from "../../../components/form-builder/enum/mask.enum";
 
 
 const ClientListPage = () => {
@@ -23,14 +25,17 @@ const ClientListPage = () => {
         {
             name: "cpf",
             label: "Cpf",
+            options: {customBodyRender: value => MaskColumn(value, MaskEnum.CPF)}
         },
         {
             name: "cnpj",
             label: "Cnpj",
+            options: {customBodyRender: value => MaskColumn(value, MaskEnum.CNPJ)}
         },
         {
             name: "phone",
             label: "Telefone",
+            options: {customBodyRender: value => MaskColumn(value, MaskEnum.PHONE)}
         },
         {
             name: "email",

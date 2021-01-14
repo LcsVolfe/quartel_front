@@ -91,7 +91,7 @@ const findZipCode = (zipCode) =>  {
 }
 
 const mountApiResult = (res, error = false, pagination = true) => {
-    console.log(res)
+    // console.log(res)
     return ({
         errorRequest: error,
         data: pagination ? res.data?.results : res.data,

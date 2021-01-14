@@ -12,26 +12,46 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import AddIcon from '@material-ui/icons/Add';
 import MUIDataTable from "mui-datatables";
 import CloseIcon from '@material-ui/icons/Close';
-import ApiService from "../../../../service";
 import {setCompleteOption} from "../../reducer";
-import {FormBuilder} from "../../index";
 import FormBuilderPresentation from "../index";
+import typesEnum from "../../enum/types.enum";
+import Tooltip from "@material-ui/core/Tooltip";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
-const MultiSelectComponent = ({name, label, handleAutoCompleteChange, onResult, dialogTitle, path, autoCompleteOption, dispatch, additionalFields}) => {
+const MultiSelectComponent = ({
+          name, label, handleAutoCompleteChange, onResult, initValue, setFormState,
+          dialogTitle, path, autoCompleteOption, dispatch, additionalFields, columns}) => {
     const classes = useStyles();
 
-    const [listData, setListData] = useState([]);
+    const [listData, setListData] = useState(initValue || []);
     const [autoCompleteValue, setAutoCompleteValue] = useState(null);
     const [openMultiSelect, setOpenMultiSelect] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
+    const rowsSelected = useState([]);
+
 
     const handleClickOpenDialog = () => {
         setOpenDialog(true);
         setAutoCompleteValue(null);
     }
-    const handleCloseDialog = () => {
+    const handleCloseDialog = (data) => {
+        let newList = listData;
+        let toSave;
+        if(autoCompleteValue && data) {
+            toSave = autoCompleteValue;
+            if(additionalFields){
+                toSave = {}
+                additionalFields.map(field=> {
+                    if(field.type != typesEnum.INVISIBLE) return;
+                    toSave[field.name] = autoCompleteValue.id;
+                    toSave.name = autoCompleteValue.name;
+                })
+                toSave = {...data, ...toSave}
+            }
+            newList = [...listData, toSave];
+        }
         setOpenDialog(false);
-        let newList = [...listData, autoCompleteValue];
         setListData(newList);
         onResult(newList, name);
         dispatch(setCompleteOption({data: [], loading: false}))
@@ -43,9 +63,21 @@ const MultiSelectComponent = ({name, label, handleAutoCompleteChange, onResult, 
     }
 
     const onChange = (event, value) => {
+        console.log(value)
         if(value?.id)
             setAutoCompleteValue(value)
+    }
 
+
+    const onRowsDelete = (list) => {
+        let listIds = [];
+        list.data.map(item => {
+            listIds.push(listData[item.dataIndex]?.id)
+        })
+        let newList = listData.filter(item=>!listIds.includes(item.id));
+        setListData(newList)
+        setFormState(name, newList)
+        // console.log()
     }
 
 
@@ -61,12 +93,12 @@ const MultiSelectComponent = ({name, label, handleAutoCompleteChange, onResult, 
 
             <Dialog
                 open={openDialog}
-                onClose={handleCloseDialog}
+                onClose={()=>handleCloseDialog(false)}
             >
                 <DialogTitle>
                     <div className={classes.multiSelectDialogTitle}>
                         {dialogTitle ? dialogTitle : 'Pesquise'}
-                        <IconButton color="inherit" onClick={handleCloseDialog}>
+                        <IconButton color="inherit" onClick={()=>handleCloseDialog(false)}>
                             <CloseIcon />
                         </IconButton>
                     </div>
@@ -97,24 +129,27 @@ const MultiSelectComponent = ({name, label, handleAutoCompleteChange, onResult, 
                         )}
                     />
 
-                    {additionalFields ? <FormBuilderPresentation controls={additionalFields} />: null}
+                    {additionalFields ? <FormBuilderPresentation
+                        controls={additionalFields}
+                        onClick={handleCloseDialog}
+                        toolBar={false}
+                        elevation={0}
+                    />: null}
 
-                    {/*{additionalFields ? additionalFields.map(field => {*/}
-                    {/*    return (<FormBuilder>FOMR</FormBuilder>)*/}
-                    {/*}): null}*/}
                 </DialogContent>
-                <DialogActions>
-                    <Button variant={'contained'}  onClick={handleCloseDialog} color="primary" autoFocus>
+                {!additionalFields ? <DialogActions>
+                    <Button variant={'contained'}  onClick={()=>handleCloseDialog(true)} color="primary" autoFocus>
                         Adicionar
                     </Button>
-                </DialogActions>
+                </DialogActions>: null}
+
             </Dialog>
 
 
             <MUIDataTable
                 title={label || 'Items'}
                 data={listData}
-                columns={[
+                columns={columns || [
                     {
                         name: "id",
                         label: "ID",
@@ -126,7 +161,25 @@ const MultiSelectComponent = ({name, label, handleAutoCompleteChange, onResult, 
                 ]}
                 options={{
                     download: false,
-                    print: false
+                    print: false,
+                    rowsSelected,
+                    selectableRowsOnClick: true,
+                    onRowsDelete,
+                    customToolbarSelect: (selectedRows) => (
+                        <div>
+                            {selectedRows.data.length === 1 ? <Tooltip title={"Editar"}>
+                                <IconButton onClick={()=>console.log(rowsSelected)}>
+                                    <EditIcon />
+                                </IconButton>
+                            </Tooltip>: null}
+
+                            <Tooltip title={"Deletar"}>
+                                <IconButton onClick={()=>onRowsDelete(selectedRows)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                    )
                 }}
             />
         </div>

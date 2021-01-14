@@ -1,11 +1,16 @@
 import React from 'react';
 import typesEnum from "../../../components/form-builder/enum/types.enum";
 import {FormBuilder} from "../../../components/form-builder";
+import {GatewayOptions, StatusOptions} from "./options";
 
 
 const OrderFormPage = () => {
 
     let fields = [
+        {
+            name: 'address',
+            type: typesEnum.INVISIBLE
+        },
         {
             name: 'client',
             label: 'Cliente',
@@ -50,31 +55,18 @@ const OrderFormPage = () => {
         {
             name: 'grandTotal',
             label: 'Total',
-            type: typesEnum.NUMBER,
+            type: typesEnum.CURRENCY,
         },
         {
             name: 'discount',
             label: 'Desconto',
-            type: typesEnum.NUMBER,
+            type: typesEnum.CURRENCY,
         },
         {
             name: 'gateway',
             label: 'Pagamento',
             type: typesEnum.SELECT,
-            options: [
-                {
-                    label: 'Dinheiro',
-                    value: 0
-                },
-                {
-                    label: 'Cartão',
-                    value: 1
-                },
-                {
-                    label: 'Boleto',
-                    value: 2
-                }
-            ]
+            options: GatewayOptions
         },
         {
             name: 'squareMeter',
@@ -90,20 +82,7 @@ const OrderFormPage = () => {
             name: 'status',
             label: 'Status',
             type: typesEnum.SELECT,
-            options: [
-                {
-                    label: 'Orçamento',
-                    value: 0
-                },
-                {
-                    label: 'Em Andamento',
-                    value: 1
-                },
-                {
-                    label: 'Fechada',
-                    value: 2
-                }
-            ]
+            options: StatusOptions
         },
         {
             name: 'orderLine',
@@ -112,29 +91,77 @@ const OrderFormPage = () => {
             path: 'products-search-by-isselling',
             additionalFields: [
                 {
+                    name: 'product',
+                    type: typesEnum.INVISIBLE
+                },
+                {
                     name: 'qty',
                     label: 'Quantidade',
                     type: typesEnum.NUMBER
                 },
                 {
+                    name: 'price',
+                    label: 'Preço',
+                    type: typesEnum.NUMBER
+                },
+                {
                     name: 'lineAmount',
-                    label: 'Quantidade',
+                    label: 'Total',
                     type: typesEnum.CURRENCY,
                     readOnly: true
                 },
-                {
-                    name: 'price',
-                    label: 'Quantidade',
-                    type: typesEnum.NUMBER
-                },
 
+            ],
+            columns: [
+                {
+                    name: "product",
+                    label: "ID",
+                },
+                {
+                    name: "name",
+                    label: "Nome",
+                },
+                {
+                    name: "price",
+                    label: "Preço",
+                },
+                {
+                    name: "qty",
+                    label: "Quantidade",
+                },
             ]
         },
         {
             name: 'toolLine',
             label: 'Ferramentas',
             type: typesEnum.MULTISELECT,
-            path: 'products-search-by-tool'
+            path: 'products-search-by-tool',
+            additionalFields: [
+                {
+                    name: 'product',
+                    type: typesEnum.INVISIBLE
+                },
+                {
+                    name: 'qty',
+                    label: 'Quantidade',
+                    type: typesEnum.NUMBER
+                },
+
+            ],
+            columns: [
+                {
+                    name: "product",
+                    label: "ID",
+                },
+                {
+                    name: "name",
+                    label: "Nome",
+                },
+                {
+                    name: "qty",
+                    label: "Quantidade",
+                },
+            ]
         },
         {
             name: 'employeeLine',
@@ -144,7 +171,14 @@ const OrderFormPage = () => {
         },
     ];
 
-    return (<FormBuilder controls={fields} title={'Cadastro de Serviço'}  />);
+    let formState;
+
+    const TakeFormReference = (data, setFormState) => {
+        // console.log(data)
+        // setFormState('region', 'xxxxxxx')
+    }
+
+    return (<FormBuilder controls={fields} title={'Cadastro de Serviço'} TakeFormReference={TakeFormReference}  />);
 }
 
 export default OrderFormPage;
