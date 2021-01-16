@@ -20,7 +20,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const MultiSelectComponent = ({
-          name, label, handleAutoCompleteChange, onResult, initValue, setFormState,
+          name, label, handleAutoCompleteChange, onResult, initValue, setFormState, TakeFormReference, watchForm,
           dialogTitle, path, autoCompleteOption, dispatch, additionalFields, columns}) => {
     const classes = useStyles();
 
@@ -63,11 +63,10 @@ const MultiSelectComponent = ({
     }
 
     const onChange = (event, value) => {
-        console.log(value)
+        // console.log(value)
         if(value?.id)
             setAutoCompleteValue(value)
     }
-
 
     const onRowsDelete = (list) => {
         let listIds = [];
@@ -79,6 +78,9 @@ const MultiSelectComponent = ({
         setFormState(name, newList)
         // console.log()
     }
+
+    // const onFormChange = (data, setFormState) => {console.log(data)}
+    const onFormChange = (data, setFormState) => TakeFormReference({...data, autoCompleteValue}, setFormState)
 
 
     return (
@@ -132,7 +134,8 @@ const MultiSelectComponent = ({
                     {additionalFields ? <FormBuilderPresentation
                         controls={additionalFields}
                         onClick={handleCloseDialog}
-                        toolBar={false}
+                        TakeFormReference={onFormChange}
+                        actionBar={false}
                         elevation={0}
                     />: null}
                 </DialogContent>
@@ -207,6 +210,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+    mb: {
+        marginBottom: 16
     }
 }));
 

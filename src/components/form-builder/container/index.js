@@ -15,7 +15,9 @@ const FormBuilderContainer = ({
 	title,
 	isColumn,
 	elevation,
-    TakeFormReference
+    TakeFormReference,
+	actionBar,
+    saveBtn
 }) => {
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -74,6 +76,8 @@ const FormBuilderContainer = ({
 				onExit={onDismountComponent}
 				handleAutoCompleteChange={handleAutoCompleteChange}
 				TakeFormReference={TakeFormReference}
+				actionBar={actionBar}
+				saveBtn={saveBtn}
 			/> : null}
 		</>
 	);

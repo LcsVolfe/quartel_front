@@ -136,8 +136,8 @@ export default function Template({content, onPromisse}) {
 				{content}
 			</main>
 			<Grid container className={classes.footer} alignItems={'center'} justify={'center'} direction={'column'}>
-				<Typography color={'#FFF'} variant={'h5'}>Volfe</Typography>
-				<Typography color={'#FFF'}>Soluções Tecnológicas</Typography>
+				<Typography  variant={'h5'}>Volfe</Typography>
+				<Typography >Soluções Tecnológicas</Typography>
 			</Grid>
 		</div>
 	);

@@ -2,11 +2,23 @@ import React from 'react';
 import typesEnum from "../../../components/form-builder/enum/types.enum";
 import {FormBuilder} from "../../../components/form-builder";
 import {GatewayOptions, StatusOptions} from "./options";
+import OrderLineFormPage from "./order-line";
 
 
 const OrderFormPage = () => {
 
+
+
+    const TakeFormReference = (data, setFormState) => {
+        // console.log(data)
+        // setFormState('region', 'xxxxxxx')
+    }
     let fields = [
+        // {
+        //     name: 'xxxxx',
+        //     type: typesEnum.MULTISELECT,
+        //     customComponent: <OrderLineFormPage TakeFormReference={TakeFormReference} />
+        // },
         {
             name: 'address',
             type: typesEnum.INVISIBLE
@@ -95,6 +107,12 @@ const OrderFormPage = () => {
                     type: typesEnum.INVISIBLE
                 },
                 {
+                    name: 'stock',
+                    label: 'Estoque',
+                    type: typesEnum.NUMBER,
+                    readOnly: true
+                },
+                {
                     name: 'qty',
                     label: 'Quantidade',
                     type: typesEnum.NUMBER
@@ -171,14 +189,8 @@ const OrderFormPage = () => {
         },
     ];
 
-    let formState;
-
-    const TakeFormReference = (data, setFormState) => {
-        // console.log(data)
-        // setFormState('region', 'xxxxxxx')
-    }
-
     return (<FormBuilder controls={fields} title={'Cadastro de Serviço'} TakeFormReference={TakeFormReference}  />);
+
 }
 
 export default OrderFormPage;

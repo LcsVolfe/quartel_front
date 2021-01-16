@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Controller, useForm } from 'react-hook-form';
+import {Controller, useForm, useWatch} from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import TextField from '@material-ui/core/TextField';
 import {
@@ -26,16 +26,13 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import {setCompleteOption} from "../reducer";
 
 
-
-
 const FormBuilderPresentation = ({
-				 controls, onSubmit, title, isColumn, elevation, autoCompleteOption, TakeFormReference,
-				 onSubmitForm, onExit, handleAutoCompleteChange, dispatch, toolBar=true, onClick }) => {
+				 controls, onSubmit, title, isColumn, elevation, autoCompleteOption, TakeFormReference, saveBtn=true,
+				 onSubmitForm, onExit, handleAutoCompleteChange, dispatch, actionBar=true, onClick }) => {
 	let location = useLocation();
 	const classes = useStyles();
 	let fieldsState = {};
 	let autoCompleteOpenState = {};
-
 
 	const checkControls = (onSubmitForm) => {
 		controls.forEach(field => {
@@ -62,7 +59,8 @@ const FormBuilderPresentation = ({
 	checkControls(onSubmitForm)
 	const [state, setState] = useState(fieldsState);
 	const [autoCompleteOpen, setAutoCompleteOpen] = useState(autoCompleteOpenState);
-	const { register, handleSubmit, control, errors, setValue, watch } = useForm({defaultValues: fieldsState});
+	const { register, handleSubmit, control, errors, setValue, watch, trigger } = useForm({defaultValues: fieldsState});
+	const watchForm = useWatch({control});
 
 	const multiListUpdate = (data, name) => setFormState(name, data);
 	const handleChangeSwitch = (event) => setFormState(event.target.name, event.target.checked);
@@ -71,6 +69,7 @@ const FormBuilderPresentation = ({
 
 
 	const setFormState = (name, value) => {
+		if(state[name] == value) return;
 		setValue(name, value)
 		setState({ ...state, [name]: value });
 	}
@@ -139,21 +138,22 @@ const FormBuilderPresentation = ({
 	}, [autoCompleteOption])
 
 	useEffect(()=>{
-		// console.log(state, watch())
-
-		if(TakeFormReference)
-			TakeFormReference(watch(), setFormState)
-	}, [])
+		// console.log(TakeFormReference)
+		// console.log(TakeFormReference)
+		if(TakeFormReference){
+			// console.log(watchForm, state)
+			TakeFormReference(watchForm, setFormState)
+		}
+	}, [watchForm])
 
 	const onError = (errors, e) => console.log(errors, e);
 
-
+	// console.log(watchForm)
 	return (
 		<Paper className={classes.paper} elevation={elevation}>
-			<Box p={toolBar ? 4 : 0} className={classes.w100}>
+			<Box p={actionBar ? 4 : 0} className={classes.w100}>
 				<h1>{title}</h1>
-
-				{toolBar && <AppBar position="relative" className={classes.appBar}>
+				{actionBar && <AppBar position="relative" className={classes.appBar}>
 					<Toolbar className={classes.toolBarForm}>
 						<IconButton color="inherit" onClick={onExit} component={Link} to={location.pathname.replace('form', 'list')}>
 							<ArrowBackIcon />
@@ -176,6 +176,7 @@ const FormBuilderPresentation = ({
 						// justify={'center'}
 						alignItems={'center'}
 					>
+						{/*<IsolateReRender control={control} />*/}
 						{controls.map((field, index)=>{
 							let componentToRender;
 							let xs = 12;
@@ -196,6 +197,7 @@ const FormBuilderPresentation = ({
 											type={field.type}
 											inputRef={register(field?.validations)}
 											helperText={errors[field.name]?.message}
+											disabled={field.readOnly}
 											// value={state[field.name]}
 											// onChange={(e) => {
 											//     console.log(e.target.value);
@@ -286,17 +288,22 @@ const FormBuilderPresentation = ({
 									xs = 12;
 									sm = 12;
 									lg = 12;
-									componentToRender = (<MultiSelectComponent
-										{...field}
-										key={index}
-										className={classes.w100}
-										initValue={onSubmitForm[field.name]}
-										onResult={multiListUpdate}
-										handleAutoCompleteChange={handleAutoCompleteChange}
-										autoCompleteOption={autoCompleteOption}
-										dispatch={dispatch}
-										setFormState={setFormState}
-									/>);
+									if (field?.customComponent)
+										componentToRender = field.customComponent;
+									else
+										componentToRender = (<MultiSelectComponent
+											{...field}
+											key={index}
+											className={classes.w100}
+											// initValue={(field.name in onSubmitForm) ? onSubmitForm[field.name] : null}
+											onResult={multiListUpdate}
+											handleAutoCompleteChange={handleAutoCompleteChange}
+											autoCompleteOption={autoCompleteOption}
+											dispatch={dispatch}
+											setFormState={setFormState}
+											TakeFormReference={TakeFormReference}
+											watchForm={watchForm}
+										/>);
 									break;
 
 								case typesEnum.DATE:
@@ -327,6 +334,7 @@ const FormBuilderPresentation = ({
 													outputFormat={"number"}
 													decimalCharacter=","
 													digitGroupSeparator=" "
+													disabled={field.readOnly}
 													helperText={errors[field.name]?.message}
 													// onChange={(event, value)=> setValue(value)}
 												/>
@@ -391,8 +399,9 @@ const FormBuilderPresentation = ({
 
 					</Grid>
 
-					{!toolBar && <Grid container justify={'flex-end'}>
+					{!actionBar && saveBtn && <Grid container justify={'flex-end'}>
 						<Button
+							className={classes.mt}
 							color={'primary'}
 							variant={'contained'}
 							onClick={()=>onClick(defineTypeAction())}
@@ -441,4 +450,7 @@ const useStyles = makeStyles((theme) => ({
 	appBar: {
 		marginBottom: 24
 	},
+	mt: {
+		marginTop: 16
+	}
 }));

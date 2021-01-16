@@ -1,65 +1,72 @@
 import PersonIcon from '@material-ui/icons/Person';
+import BuildIcon from '@material-ui/icons/Build';
+import StoreIcon from '@material-ui/icons/Store';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import ClientFormPage from "./pages/client/form";
 import ClientListPage from "./pages/client/list";
 import {Template} from "./components/template";
-import BuildIcon from '@material-ui/icons/Build';
-import StoreIcon from '@material-ui/icons/Store';
 import ProductListPage from "./pages/product/list";
 import ProductFormPage from "./pages/product/form";
-import ListAltIcon from '@material-ui/icons/ListAlt';
 import OrderListPage from "./pages/order/list";
 import OrderFormPage from "./pages/order/form";
 import EmployeeListPage from "./pages/employee/list";
 import EmployeeFormPage from "./pages/employee/form";
+import DashboardPage from "./pages/dashboard";
+import OrderLineFormPage from "./pages/order/form/order-line";
 const router = [
+  {
+    path: '/',
+    text: 'Dashboard',
+    icon: <DashboardIcon />,
+    component: <DashboardPage />
+  },
   {
     path: '/list/clients',
     text: 'Clientes',
     icon: <PersonIcon />,
-    component: <Template content={<ClientListPage />} />
+    component: <ClientListPage />
   },
   {
     path: '/form/clients',
-    component: <Template content={<ClientFormPage />} />
+    component: <ClientFormPage />
   },
   {
     path: '/list/products',
     text: 'Produtos',
     icon: <StoreIcon />,
-    component: <Template content={<ProductListPage />} />
+    component: <ProductListPage />
   },
   {
     path: '/form/products',
-    component: <Template content={<ProductFormPage />} />
+    component: <ProductFormPage />
   },
   {
     path: '/list/orders',
     text: 'Serviços',
     icon: <ListAltIcon />,
-    component: <Template content={<OrderListPage />} />
+    component: <OrderListPage />
   },
   {
     path: '/form/orders',
-    component: <Template content={<OrderFormPage />} ></Template>
+    component: <OrderFormPage />
   },
   {
     path: '/list/employees',
     text: 'Funcionários',
     icon: <BuildIcon />,
-    component: <Template content={<EmployeeListPage />} />
+    component: <EmployeeListPage />
   },
   {
     path: '/form/employees',
-    component: <Template content={<EmployeeFormPage />} ></Template>
+    component: <EmployeeFormPage />
   },
 
 
-  // {
-  //   path: '/formbuilder',
-  //   text: 'Form Builder',
-  //   icon: <InboxIcon />,
-  //   component: <Template content={<FormBuilderComponent />} ></Template>
-  // }
+  {
+    path: '/formbuilder',
+    component: <OrderLineFormPage />
+  }
 ];
 
 export default router;

@@ -63,6 +63,10 @@ const ClientFormPage = () => {
             type: typesEnum.EMAIL,
         },
     ];
+    // const TakeFormReference = (data, setFormState) => {
+    //     console.log('FORM PAGE', data)
+    //     // setFormState('region', 'xxxxxxx')
+    // }
 
     return (<FormBuilder controls={fields} title={'Cadastro de Cliente'}  />);
 }
