@@ -84,6 +84,8 @@ const useStyles = makeStyles((theme) => ({
 
 const optionsLanguage = {
 	filterType: 'checkbox',
+	print: false,
+	download: false,
 	textLabels: {
 		body: {
 			noMatch: "Desculpe, nenhum registro correspondente encontrado",

@@ -20,9 +20,11 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const MultiSelectComponent = ({
-          name, label, handleAutoCompleteChange, onResult, initValue, setFormState, TakeFormReference, watchForm,
+          name, label, handleAutoCompleteChange, onResult, initValue, setFormState, TakeFormReference, defaultValue,
           dialogTitle, path, autoCompleteOption, dispatch, additionalFields, columns}) => {
     const classes = useStyles();
+
+    console.log(defaultValue)
 
     const [listData, setListData] = useState(initValue || []);
     const [autoCompleteValue, setAutoCompleteValue] = useState(null);
@@ -37,15 +39,15 @@ const MultiSelectComponent = ({
     }
     const handleCloseDialog = (data) => {
         let newList = listData;
-        let toSave;
-        if(autoCompleteValue && data) {
+        let toSave;debugger
+        if(autoCompleteValue && Number(data?.qty) > 0) {
             toSave = autoCompleteValue;
             if(additionalFields){
                 toSave = {}
                 additionalFields.map(field=> {
                     if(field.type != typesEnum.INVISIBLE) return;
-                    toSave[field.name] = autoCompleteValue.id;
                     toSave.name = autoCompleteValue.name;
+                    toSave[field.name] = autoCompleteValue.id;
                 })
                 toSave = {...data, ...toSave}
             }
@@ -58,7 +60,10 @@ const MultiSelectComponent = ({
     }
 
     const SearchInAPI = (event, value) => {
-        if(event.type != 'change') return;
+        if(event.type != 'change') {
+            setAutoCompleteValue(null)
+            return;
+        }
         handleAutoCompleteChange(value, path)
     }
 
@@ -66,21 +71,22 @@ const MultiSelectComponent = ({
         // console.log(value)
         if(value?.id)
             setAutoCompleteValue(value)
+
     }
 
     const onRowsDelete = (list) => {
         let listIds = [];
         list.data.map(item => {
-            listIds.push(listData[item.dataIndex]?.id)
+            listIds.push(listData[item.dataIndex]?.id);
         })
         let newList = listData.filter(item=>!listIds.includes(item.id));
-        setListData(newList)
-        setFormState(name, newList)
-        // console.log()
+        setListData(newList);
+        setFormState(name, newList);
+        onFormChange({listData: newList},setFormState);
     }
 
     // const onFormChange = (data, setFormState) => {console.log(data)}
-    const onFormChange = (data, setFormState) => TakeFormReference({...data, autoCompleteValue}, setFormState)
+    const onFormChange = (data, setFormState) => TakeFormReference({listData, ...data, autoCompleteValue}, setFormState)
 
 
     return (
@@ -170,11 +176,11 @@ const MultiSelectComponent = ({
                     onRowsDelete,
                     customToolbarSelect: (selectedRows) => (
                         <div>
-                            {selectedRows.data.length === 1 ? <Tooltip title={"Editar"}>
-                                <IconButton onClick={()=>console.log(rowsSelected)}>
-                                    <EditIcon />
-                                </IconButton>
-                            </Tooltip>: null}
+                            {/*{selectedRows.data.length === 1 ? <Tooltip title={"Editar"}>*/}
+                            {/*    <IconButton onClick={()=>console.log(rowsSelected)}>*/}
+                            {/*        <EditIcon />*/}
+                            {/*    </IconButton>*/}
+                            {/*</Tooltip>: null}*/}
 
                             <Tooltip title={"Deletar"}>
                                 <IconButton onClick={()=>onRowsDelete(selectedRows)}>

@@ -55,6 +55,7 @@ const FormBuilderPresentation = ({
 			fieldsState[field.name] = value;
 			// setFormState(field.name, value)
 		});
+		// console.log(fieldsState)
 	}
 	checkControls(onSubmitForm)
 	const [state, setState] = useState(fieldsState);
@@ -76,6 +77,8 @@ const FormBuilderPresentation = ({
 
 	const defineTypeAction = (action=1, event) => {
 		action = 1;
+		if(TakeFormReference)
+			TakeFormReference({watchForm, state}, setFormState)
 		let data = {...state, ...watch()};
 		if(onSubmitForm?.id)
 			data = {id: onSubmitForm.id, ...data}
@@ -99,7 +102,8 @@ const FormBuilderPresentation = ({
 					break;
 
 				case typesEnum.MULTISELECT:
-					if(value.length)
+					if(control?.customComponent) break;
+					if(value?.length > 0)
 						if(control.additionalFields)
 							newValue = value
 						else
@@ -142,7 +146,7 @@ const FormBuilderPresentation = ({
 		// console.log(TakeFormReference)
 		if(TakeFormReference){
 			// console.log(watchForm, state)
-			TakeFormReference(watchForm, setFormState)
+			TakeFormReference({watchForm, state}, setFormState)
 		}
 	}, [watchForm])
 
@@ -192,16 +196,14 @@ const FormBuilderPresentation = ({
 											className={classes.w100}
 											key={index}
 											name={field.name}
+											// value={state[field.name]  || ''}
 											error={!!errors[field.name]}
 											label={field.label || field.name}
 											type={field.type}
 											inputRef={register(field?.validations)}
 											helperText={errors[field.name]?.message}
 											disabled={field.readOnly}
-											// value={state[field.name]}
-											// onChange={(e) => {
-											//     console.log(e.target.value);
-											// }}
+											onChange={(event) => setFormState(event.target.name, event.target.value)}
 										/>
 									);
 									break;
@@ -295,7 +297,7 @@ const FormBuilderPresentation = ({
 											{...field}
 											key={index}
 											className={classes.w100}
-											// initValue={(field.name in onSubmitForm) ? onSubmitForm[field.name] : null}
+											initValue={onSubmitForm[field.name]}
 											onResult={multiListUpdate}
 											handleAutoCompleteChange={handleAutoCompleteChange}
 											autoCompleteOption={autoCompleteOption}
@@ -322,27 +324,20 @@ const FormBuilderPresentation = ({
 									break;
 
 								case typesEnum.CURRENCY:
-
-									componentToRender = (
-										<Controller
-											key={index}
-											as={
-												<CurrencyTextField
-													label={field.label || field.name}
-													className={classes.w100}
-													currencySymbol="R$ "
-													outputFormat={"number"}
-													decimalCharacter=","
-													digitGroupSeparator=" "
-													disabled={field.readOnly}
-													helperText={errors[field.name]?.message}
-													// onChange={(event, value)=> setValue(value)}
-												/>
-											}
-											control={control}
-											name={field.name}
-											rules={{validate: (value) => field?.validations?.rule ? field.validations.rule(value) : null}}
-										/>);
+									componentToRender = (<CurrencyTextField
+										label={field.label || field.name}
+										className={classes.w100}
+										currencySymbol="R$ "
+										value={state[field.name]}
+										outputFormat={"number"}
+										decimalCharacter=","
+										inputRef={register(field?.validations)}
+										digitGroupSeparator=" "
+										disabled={field.readOnly}
+										helperText={errors[field.name]?.message}
+										// onChange={(event, value)=> setValue(value)}
+										onChange={(event, value)=> setFormState(field.name, value)}
+									/>);
 									break;
 
 								case typesEnum.CPF:

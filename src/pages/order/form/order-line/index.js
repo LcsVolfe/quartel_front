@@ -6,25 +6,31 @@ import FormBuilderPresentation from "../../../../components/form-builder/present
 import {CurrencyColumn} from "../../../../components/table-render/presentation";
 
 
-const OrderLineFormPage = ({TakeFormReference}) => {
+const OrderLineFormPage = ({TakeFormReference, orderState}) => {
 
     let fields = [
         {
-            name: 'product',
+            name: 'orderLine',
             label: 'Produtos',
             type: typesEnum.MULTISELECT,
             path: 'products-search-by-isselling',
             additionalFields: [
                 {
-                    name: '',
+                    name: 'product',
+                    type: typesEnum.INVISIBLE
+                },
+                {
+                    name: 'stock',
                     label: 'Estoque',
-                    type: typesEnum.NUMBER,
-                    readOnly: true
+                    type: typesEnum.TEXT,
+                    readOnly: true,
+                    defaultValue: '0'
                 },
                 {
                     name: 'qty',
                     label: 'Quantidade',
-                    type: typesEnum.NUMBER
+                    type: typesEnum.NUMBER,
+                    defaultValue: '0'
                 },
                 {
                     name: 'price',
@@ -35,7 +41,8 @@ const OrderLineFormPage = ({TakeFormReference}) => {
                     name: 'lineAmount',
                     label: 'Total',
                     type: typesEnum.CURRENCY,
-                    readOnly: true
+                    readOnly: true,
+                    defaultValue: '0'
                 },
             ],
             columns: [
@@ -56,29 +63,38 @@ const OrderLineFormPage = ({TakeFormReference}) => {
                     name: "qty",
                     label: "Quantidade",
                 },
-            ]
+                {
+                    name: "lineAmount",
+                    label: "Total",
+                    options: {customBodyRender: CurrencyColumn}
+                },
+            ],
+            defaultValue: orderState
         },
     ];
 
     const onFormChange = (data, setFormState) => {
-        let {price, qty, autoCompleteValue} = data
+        if(data?.autoCompleteValue) {
+            // console.log('lineAmount', Number(data.state?.price) * Number(data.watchForm.qty))
+            data.state.product = data.autoCompleteValue.id;
+            setFormState('stock', data.autoCompleteValue.qty)
+            if(!data.state?.price)
+                setFormState('price', data.autoCompleteValue.price)
+            if(data.watchForm.qty > data.autoCompleteValue.qty)
+                setFormState('qty', Number(data.autoCompleteValue.qty))
 
-        let lineAmount = Number(price?.replaceAll(' ', '').replace(',', '.')) * Number(qty) || 0;
-        // console.log( Number(price.replace(',','.')) * Number(qty))
-        console.log( price , Number(qty))
+            setFormState('lineAmount', (Number(data.state?.price) * Number(data.watchForm.qty)) || 0)
+            // console.log('line', data.listData)
+            TakeFormReference(data.listData)
+        } else {
+            setFormState('qty', '0')
+            setFormState('stock', 0)
+            setFormState('price', 0)
+            setFormState('lineAmount', 0)
+        }
+        if(data?.listData)
+            TakeFormReference(data.listData)
 
-        // if(data.lineAmount != lineAmount)
-        setFormState('lineAmount', lineAmount)
-
-        //
-        // console.log(data)
-        // console.log(lineAmount)
-        // setAutoCompleteOpen(data)
-        // console.log(data, setFormState)
-        // console.log(data)
-        // if (price != '100' && price)
-        //     setFormState('lineamount', '100')
-        // TakeFormReference('SAIU DE ORDELINE PARA FORM')
     }
 
 
