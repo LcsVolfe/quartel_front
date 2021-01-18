@@ -10,28 +10,34 @@ import {initApresentataion, loadingFormBuilder, setCompleteOption, setFormBuilde
 
 
 
-const FormBuilderContainer = ({
-	controls,
-	title,
-	isColumn,
-	elevation,
-    TakeFormReference,
-	actionBar,
-    saveBtn
-}) => {
+const FormBuilderContainer = (props
+// 	{
+// 	// controls,
+// 	// title,
+// 	// isColumn,
+// 	// elevation,
+//     // TakeFormReference,
+// 	// actionBar,
+//     // saveBtn,
+// 	//   btnText,btnJustify,
+// 	//   onClickToSubmitForm
+//
+// }
+) => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const query = useQuery();
 
 	const promisseFetch = useCallback(
-		(data, action) => {
+		async (data, action) => {
+			if(props?.onClick) return;
 			dispatch(fetchFormBuilder(data, action, history, onDismountComponent));
 		},
 		[dispatch]
 	);
 
 	const loadDataForPut = useCallback(
-		() => {
+		 () => {
 			dispatch(loadingFormBuilder());
 			if(query.get('id'))
 				dispatch(loadDataFormBuilder(query.get('id'), history));
@@ -67,17 +73,21 @@ const FormBuilderContainer = ({
 		<>
 			{ data.initRenderPresentationComponent ? <FormBuilderPresentation
 				{...data}
+				{...props}
 				onSubmit={promisseFetch}
-				controls={controls}
-				title={title}
-				isColumn={isColumn}
-				elevation={elevation}
+				// controls={controls}
+				// title={title}
+				// isColumn={isColumn}
+				// elevation={elevation}
 				dispatch={dispatch}
 				onExit={onDismountComponent}
 				handleAutoCompleteChange={handleAutoCompleteChange}
-				TakeFormReference={TakeFormReference}
-				actionBar={actionBar}
-				saveBtn={saveBtn}
+				// TakeFormReference={TakeFormReference}
+				// actionBar={actionBar}
+				// saveBtn={saveBtn}
+				// btnText={btnText}
+				// btnJustify={btnJustify}
+				// onClick={onClickToSubmitForm}
 			/> : null}
 		</>
 	);

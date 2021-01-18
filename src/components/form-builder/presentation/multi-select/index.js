@@ -24,8 +24,6 @@ const MultiSelectComponent = ({
           dialogTitle, path, autoCompleteOption, dispatch, additionalFields, columns}) => {
     const classes = useStyles();
 
-    console.log(defaultValue)
-
     const [listData, setListData] = useState(initValue || []);
     const [autoCompleteValue, setAutoCompleteValue] = useState(null);
     const [openMultiSelect, setOpenMultiSelect] = useState(false);
@@ -39,7 +37,7 @@ const MultiSelectComponent = ({
     }
     const handleCloseDialog = (data) => {
         let newList = listData;
-        let toSave;debugger
+        let toSave;
         if(autoCompleteValue && Number(data?.qty) > 0) {
             toSave = autoCompleteValue;
             if(additionalFields){

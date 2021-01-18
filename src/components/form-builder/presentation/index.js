@@ -27,8 +27,8 @@ import {setCompleteOption} from "../reducer";
 
 
 const FormBuilderPresentation = ({
-				 controls, onSubmit, title, isColumn, elevation, autoCompleteOption, TakeFormReference, saveBtn=true,
-				 onSubmitForm, onExit, handleAutoCompleteChange, dispatch, actionBar=true, onClick }) => {
+				 controls, onSubmit, title, isColumn, elevation, autoCompleteOption, TakeFormReference, saveBtn=true, inputFullWidth=false,
+				 onSubmitForm, onExit, handleAutoCompleteChange, dispatch, actionBar=true, onClick, btnText, btnJustify, submitFormByBtnClick=false }) => {
 	let location = useLocation();
 	const classes = useStyles();
 	let fieldsState = {};
@@ -39,7 +39,6 @@ const FormBuilderPresentation = ({
 			let value;
 			if(
 				onSubmitForm?.id || (field.type === typesEnum.BOOLEAN ||
-				field.type === typesEnum.MULTISELECT ||
 				field.defaultValue)
 			)
 				value = onSubmitForm?.id ? onSubmitForm[field.name] :
@@ -48,9 +47,12 @@ const FormBuilderPresentation = ({
 			if(field.type === typesEnum.DATE)
 				value = field.defaultValue ? field.defaultValue : new Date();
 
-			if(field.type === typesEnum.AUTOCOMPLETE){
+			if(field.type === typesEnum.AUTOCOMPLETE)
 				autoCompleteOpenState[field.name] = {open: false, loading: false};
-			}
+
+			if(field.type === typesEnum.MULTISELECT)
+				value = [];
+
 
 			fieldsState[field.name] = value;
 			// setFormState(field.name, value)
@@ -108,7 +110,7 @@ const FormBuilderPresentation = ({
 							newValue = value
 						else
 							newValue = value.map(item=>Number(item.id));
-					data[control.name] = newValue
+					data[control.name] = newValue || []
 					break;
 
 				case typesEnum.AUTOCOMPLETE:
@@ -122,6 +124,8 @@ const FormBuilderPresentation = ({
 		// console.log(data)
 		if(onSubmit)
 			onSubmit(data, action);
+		if(onClick)
+			onClick(data);
 		return data
 	}
 	const updateAutoComplete = (open, loading= false, name) => setAutoCompleteOpen({
@@ -176,7 +180,7 @@ const FormBuilderPresentation = ({
 					<Grid
 						container
 						spacing={2}
-						direction={'row'}
+						direction={isColumn ? 'column' : 'row'}
 						// justify={'center'}
 						alignItems={'center'}
 					>
@@ -184,8 +188,8 @@ const FormBuilderPresentation = ({
 						{controls.map((field, index)=>{
 							let componentToRender;
 							let xs = 12;
-							let sm = 4;
-							let lg = 3;
+							let sm = inputFullWidth ? 12 : 4;
+							let lg = inputFullWidth ? 12 : 3;
 							switch (field.type) {
 								case typesEnum.TEXT:
 								case typesEnum.NUMBER:
@@ -257,6 +261,7 @@ const FormBuilderPresentation = ({
 												setFormState(field.name, value);
 												dispatch(setCompleteOption({data: [], loading: true}))
 											}}
+											noOptionsText={'Sem opções'}
 											value={state[field.name]}
 											getOptionLabel={(option) => option.name}
 											options={autoCompleteOption?.data}
@@ -269,8 +274,10 @@ const FormBuilderPresentation = ({
 											renderInput={(params) => (
 												<TextField
 													{...params}
+													// inputRef={register(field?.validations)}
 													label={field?.label || field.name}
 													name={field.name}
+													error={!!errors[field.name]}
 													InputProps={{
 														...params.InputProps,
 														endAdornment: (
@@ -385,7 +392,7 @@ const FormBuilderPresentation = ({
 							}
 
 							return (
-								<Grid item xs={xs} sm={sm} lg={lg}>
+								<Grid item xs={xs} sm={sm} lg={lg} className={classes.w100}>
 								{/*<Grid item xs={12} sm={6} lg={4} xl={3}>*/}
 									{componentToRender}
 								</Grid>
@@ -394,14 +401,17 @@ const FormBuilderPresentation = ({
 
 					</Grid>
 
-					{!actionBar && saveBtn && <Grid container justify={'flex-end'}>
+					{!actionBar && saveBtn && <Grid container justify={btnJustify ? 'center' : 'flex-end'}>
 						<Button
-							className={classes.mt}
+							className={classes.mButton}
+							fullWidth
+							type={submitFormByBtnClick ? 'submit' : ''}
+							form={'form'}
 							color={'primary'}
 							variant={'contained'}
 							onClick={()=>onClick(defineTypeAction())}
 						>
-							Adicionar
+							{btnText ? btnText : 'Adicionar'}
 						</Button>
 					</Grid>}
 				</form>
@@ -429,6 +439,7 @@ const useStyles = makeStyles((theme) => ({
 	paper: {
 		display: 'flex',
 		justifyContent: 'center',
+		width: '100%',
 		maxWidth: '1000px',
 		margin: '0 auto',
 	},
@@ -445,7 +456,8 @@ const useStyles = makeStyles((theme) => ({
 	appBar: {
 		marginBottom: 24
 	},
-	mt: {
-		marginTop: 16
+	mButton: {
+		marginTop: 16,
+		marginBottom: 16,
 	}
 }));

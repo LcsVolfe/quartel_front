@@ -16,7 +16,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import {AccountCircle} from "@material-ui/icons";
 import {Grid, LinearProgress, Menu, MenuItem, Typography} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 import Logo from '../../../imgs/logo_quartel.png';
 import router from "../../../AppRouter";
@@ -25,13 +25,14 @@ import TSnackbar from "./snackbar";
 const drawerWidth = 240;
 
 
-export default function Template({content, onPromisse}) {
+export default function Template({content, onPromisse, useAuth}) {
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const openIcon = Boolean(anchorEl);
-
+	let history = useHistory();
+	let auth = useAuth();
 	// console.log(onPromisse)
 
 
@@ -88,7 +89,9 @@ export default function Template({content, onPromisse}) {
 							onClose={handleClose}
 						>
 							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={handleClose}>My account</MenuItem>
+							<MenuItem onClick={() => {
+								auth.signout(() => history.push("/login"));
+							}}>Logout</MenuItem>
 						</Menu>
 					</div>
 

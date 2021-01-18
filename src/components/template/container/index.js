@@ -4,10 +4,11 @@ import Template from '../presentation';
 import { selectOnPromisse } from '../selectors';
 import PropTypes from 'prop-types';
 
-const TemplateContainer = ({ content }) => {
+const TemplateContainer = ({ content, useAuth }) => {
 	const onPromisse = useSelector(selectOnPromisse);
 	return (
 		<Template
+			useAuth={useAuth}
 			{...onPromisse}
 			content={content}
 		></Template>

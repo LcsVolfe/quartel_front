@@ -8,6 +8,9 @@ let cancelToken;
 
 const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
     // await delay(2000);
+    let headers = {
+        'Authorization': 'Bearer ' + localStorage.getItem('AuthorizationToken')
+    }
 
     switch (method) {
         case 'GET':
@@ -15,7 +18,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
                 cancelToken.cancel("Operation canceled due to new request.");
             cancelToken = axios.CancelToken.source();
             try {
-                let res = await axios.get(`${URL_BASE}/${path}/`,{ cancelToken: cancelToken.token });
+                let res = await axios.get(`${URL_BASE}/${path}/`,{ cancelToken: cancelToken.token, headers });
                 if(path.includes('/')){
                     return mountApiResult(res, false, false)
                     // return res.data;
@@ -30,7 +33,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
         case 'POST':
             dispatch(finishOnPromisse());
             try {
-                let response = await axios.post(`${URL_BASE}/${path}/`, body);
+                let response = await axios.post(`${URL_BASE}/${path}/`, body, {headers});
                 if(response?.status === 201)
                     dispatch(resultOnPromisse(mountApiResult(response)))
                 return response;
@@ -44,7 +47,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
         case 'PUT':
             dispatch(finishOnPromisse());
             try {
-                let response = await axios.put(`${URL_BASE}/${path}/`, body);
+                let response = await axios.put(`${URL_BASE}/${path}/`, body, {headers});
                 if(response?.status === 200)
                     dispatch(resultOnPromisse(mountApiResult(response)))
                 return response;
@@ -56,7 +59,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
 
         case 'DELETE':
             try {
-                let response = await axios.delete(`${URL_BASE}/${path}/${id}/`, body);
+                let response = await axios.delete(`${URL_BASE}/${path}/${id}/`, {body, headers});
                 if(response?.status === 204)
                     dispatch(resultOnPromisse(mountApiResult(response)))
                 return response;
@@ -91,7 +94,7 @@ const findZipCode = (zipCode) =>  {
 }
 
 const mountApiResult = (res, error = false, pagination = true) => {
-    // console.log(res)
+    console.log(res)
     return ({
         errorRequest: error,
         data: pagination ? res.data?.results : res.data,
@@ -105,6 +108,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const ApiService = {
     FindZipCode: zipCode => findZipCode(zipCode),
+    CustomRequest: (path, method, data, dispatch) => fetchApi(path, 'POST', data, dispatch),
     CreateForm: (data, path, dispatch) => fetchApi(path, 'POST', data, dispatch),
     UpdateForm: (data, path, dispatch) => fetchApi(path, 'PUT', data, dispatch, data?.id),
     Fetch: (path, dispatch) => fetchApi(path, 'GET', {}, dispatch),

@@ -3,6 +3,7 @@ import typesEnum from "../../../components/form-builder/enum/types.enum";
 import {FormBuilder} from "../../../components/form-builder";
 import {GatewayOptions, StatusOptions} from "./options";
 import OrderLineFormPage from "./order-line";
+import validators from "../../../components/form-builder/enum/validators.enum";
 
 
 const OrderFormPage = () => {
@@ -17,7 +18,6 @@ const OrderFormPage = () => {
             grandTotal += Number(line.lineAmount);
         })
         setFormState('orderLine', orderLine)
-        debugger
         setFormState('grandTotal', grandTotal)
 
     }
@@ -33,10 +33,9 @@ const OrderFormPage = () => {
             label: 'Cliente',
             type: typesEnum.AUTOCOMPLETE,
             path: 'clients-search-by-name',
-            // validations: {
-            //     required: validators.required(),
-            //     minLength: validators.minLength(3),
-            // },
+            validations: {
+                rule: validators.required,
+            },
         },
         {
             name: 'zipcode',
@@ -73,11 +72,13 @@ const OrderFormPage = () => {
             name: 'grandTotal',
             label: 'Total',
             type: typesEnum.CURRENCY,
+            defaultValue: '0'
         },
         {
             name: 'discount',
             label: 'Desconto',
             type: typesEnum.CURRENCY,
+            defaultValue: '0'
         },
         {
             name: 'gateway',
@@ -89,6 +90,7 @@ const OrderFormPage = () => {
             name: 'squareMeter',
             label: 'Mt2',
             type: typesEnum.NUMBER,
+            defaultValue: '0'
         },
         {
             name: 'isPaid',
@@ -189,7 +191,8 @@ const OrderFormPage = () => {
             name: 'employeeLine',
             label: 'Funcionários',
             type: typesEnum.MULTISELECT,
-            path: 'employees-search-by-name'
+            path: 'employees-search-by-name',
+
         },
     ];
 
