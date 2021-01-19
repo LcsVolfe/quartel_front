@@ -16,7 +16,6 @@ import {setCompleteOption} from "../../reducer";
 import FormBuilderPresentation from "../index";
 import typesEnum from "../../enum/types.enum";
 import Tooltip from "@material-ui/core/Tooltip";
-import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const MultiSelectComponent = ({

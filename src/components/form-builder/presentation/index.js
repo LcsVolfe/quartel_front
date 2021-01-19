@@ -400,13 +400,12 @@ const FormBuilderPresentation = ({
 						})}
 
 					</Grid>
-
 					{!actionBar && saveBtn && <Grid container justify={btnJustify ? 'center' : 'flex-end'}>
 						<Button
 							className={classes.mButton}
 							fullWidth
-							type={submitFormByBtnClick ? 'submit' : ''}
-							form={'form'}
+							type={submitFormByBtnClick ? 'submit' : 'click'}
+							form={submitFormByBtnClick ? 'form' : ''}
 							color={'primary'}
 							variant={'contained'}
 							onClick={()=>onClick(defineTypeAction())}

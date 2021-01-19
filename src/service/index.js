@@ -9,7 +9,8 @@ let cancelToken;
 const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
     // await delay(2000);
     let headers = {
-        'Authorization': 'Bearer ' + localStorage.getItem('AuthorizationToken')
+        'Authorization': 'Bearer ' + localStorage.getItem('AuthorizationToken'),
+        'Content-Type': 'application/json'
     }
 
     switch (method) {
@@ -94,10 +95,10 @@ const findZipCode = (zipCode) =>  {
 }
 
 const mountApiResult = (res, error = false, pagination = true) => {
-    console.log(res)
+    // console.log(res)
     return ({
         errorRequest: error,
-        data: pagination ? res.data?.results : res.data,
+        data: pagination && res.data?.results ? res.data?.results : res.data,
         message: res.message,
         status: pagination ? res.status : res.status,
         statusText: res?.statusText || res.response?.statusText
@@ -108,7 +109,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const ApiService = {
     FindZipCode: zipCode => findZipCode(zipCode),
-    CustomRequest: (path, method, data, dispatch) => fetchApi(path, 'POST', data, dispatch),
+    CustomRequest: (path, method='GET', data={}, dispatch) => fetchApi(path, method, data, dispatch),
     CreateForm: (data, path, dispatch) => fetchApi(path, 'POST', data, dispatch),
     UpdateForm: (data, path, dispatch) => fetchApi(path, 'PUT', data, dispatch, data?.id),
     Fetch: (path, dispatch) => fetchApi(path, 'GET', {}, dispatch),

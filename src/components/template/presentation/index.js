@@ -211,6 +211,9 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 		padding: theme.spacing(3),
 		marginTop: theme.spacing(7),
+		paddingBottom: 80
+		// overflow: 'auto',
+		// maxHeight: '85vh'
 	},
 	marginLeftAuto: {
 		marginLeft: 'auto',

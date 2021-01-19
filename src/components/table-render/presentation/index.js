@@ -23,7 +23,7 @@ export const DateColumn = (value) => FormatDate(value);
 export const MaskColumn = (value, mask) => (<span >{new StringMask(mask).apply(value)}</span>);
 export const OptionsColumn = (value, options) => (<span>{options.filter(op=>op.value === value)[0]?.label}</span>);
 
-const TableRender = ({ options, title, columns, onLoadTable, loading, deleteItem, history }) => {
+const TableRender = ({ options, title, columns, onLoadTable, loading, deleteItem, history, actionBar=true }) => {
 	const classes = useStyles();
 	const rowsSelected = useState([]);
 	let location = useLocation();
@@ -40,13 +40,14 @@ const TableRender = ({ options, title, columns, onLoadTable, loading, deleteItem
 	return (
 		<>
 			{loading ? false : <>
-				<AppBar position="relative">
+				{actionBar && <AppBar position="relative">
 					<Toolbar className={classes.appBar}>
 						<IconButton color="inherit" component={Link} to={location.pathname.replace('list', 'form')}>
 							<AddIcon />
 						</IconButton>
 					</Toolbar>
-				</AppBar>
+				</AppBar>}
+
 
 				<MUIDataTable
 					title={title}
@@ -102,7 +103,7 @@ const optionsLanguage = {
 			search: "Buscar",
 			downloadCsv: "Download CSV",
 			print: "Imprimir",
-			viewColumns: "Columnas",
+			viewColumns: "Colunas",
 			filterTable: "Filtros",
 		},
 		filter: {
