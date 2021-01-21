@@ -4,6 +4,7 @@ import {FormBuilder} from "../../../../components/form-builder";
 import {GatewayOptions, StatusOptions} from "../options";
 import FormBuilderPresentation from "../../../../components/form-builder/presentation";
 import {CurrencyColumn} from "../../../../components/table-render/presentation";
+import validators from "../../../../components/form-builder/enum/validators.enum";
 
 
 const OrderLineFormPage = ({TakeFormReference, orderState}) => {
@@ -30,7 +31,6 @@ const OrderLineFormPage = ({TakeFormReference, orderState}) => {
                     name: 'qty',
                     label: 'Quantidade',
                     type: typesEnum.NUMBER,
-                    defaultValue: '0'
                 },
                 {
                     name: 'price',
@@ -80,11 +80,12 @@ const OrderLineFormPage = ({TakeFormReference, orderState}) => {
             setFormState('stock', data.autoCompleteValue.qty)
             if(!data.state?.price)
                 setFormState('price', data.autoCompleteValue.price)
-            if(data.watchForm.qty > data.autoCompleteValue.qty)
-                setFormState('qty', Number(data.autoCompleteValue.qty))
+            if(Number(data.watchForm.qty) > Number(data.autoCompleteValue.qty))
+                setFormState('qty', Number(data.autoCompleteValue.qty));
+            else if(Number(data.watchForm.qty) == 0)
+                setFormState('qty', 1);
 
             setFormState('lineAmount', (Number(data.state?.price) * Number(data.watchForm.qty)) || 0)
-            // console.log('line', data.listData)
             TakeFormReference(data.listData)
         } else {
             setFormState('qty', '0')

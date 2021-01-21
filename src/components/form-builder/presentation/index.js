@@ -51,7 +51,7 @@ const FormBuilderPresentation = ({
 				autoCompleteOpenState[field.name] = {open: false, loading: false};
 
 			if(field.type === typesEnum.MULTISELECT)
-				value = [];
+				value = onSubmitForm[field.name] || [];
 
 
 			fieldsState[field.name] = value;
@@ -152,7 +152,7 @@ const FormBuilderPresentation = ({
 			// console.log(watchForm, state)
 			TakeFormReference({watchForm, state}, setFormState)
 		}
-	}, [watchForm])
+	}, [watchForm, state])
 
 	const onError = (errors, e) => console.log(errors, e);
 

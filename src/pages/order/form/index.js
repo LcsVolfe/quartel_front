@@ -103,53 +103,6 @@ const OrderFormPage = () => {
             type: typesEnum.SELECT,
             options: StatusOptions
         },
-        // {
-        //     name: 'orderLine',
-        //     label: 'Produtos',
-        //     type: typesEnum.MULTISELECT,
-        //     path: 'products-search-by-isselling',
-        //     additionalFields: [
-        //         {
-        //             name: 'product',
-        //             type: typesEnum.INVISIBLE
-        //         },
-        //         {
-        //             name: 'qty',
-        //             label: 'Quantidade',
-        //             type: typesEnum.NUMBER
-        //         },
-        //         {
-        //             name: 'price',
-        //             label: 'Preço',
-        //             type: typesEnum.NUMBER
-        //         },
-        //         {
-        //             name: 'lineAmount',
-        //             label: 'Total',
-        //             type: typesEnum.CURRENCY,
-        //             // readOnly: true
-        //         },
-        //
-        //     ],
-        //     columns: [
-        //         {
-        //             name: "product",
-        //             label: "ID",
-        //         },
-        //         {
-        //             name: "name",
-        //             label: "Nome",
-        //         },
-        //         {
-        //             name: "price",
-        //             label: "Preço",
-        //         },
-        //         {
-        //             name: "qty",
-        //             label: "Quantidade",
-        //         },
-        //     ]
-        // },
         {
             name: 'orderLine',
             type: typesEnum.MULTISELECT,
@@ -168,7 +121,9 @@ const OrderFormPage = () => {
                 {
                     name: 'qty',
                     label: 'Quantidade',
-                    type: typesEnum.NUMBER
+                    type: typesEnum.NUMBER,
+                    defaultValue: 1,
+
                 },
 
             ],
@@ -183,7 +138,7 @@ const OrderFormPage = () => {
                 },
                 {
                     name: "qty",
-                    label: "Quantidade",
+                    label: "Quantidade"
                 },
             ]
         },

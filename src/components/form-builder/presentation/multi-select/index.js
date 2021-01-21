@@ -35,9 +35,10 @@ const MultiSelectComponent = ({
         setAutoCompleteValue(null);
     }
     const handleCloseDialog = (data) => {
+        debugger
         let newList = listData;
         let toSave;
-        if(autoCompleteValue && Number(data?.qty) > 0) {
+        if(autoCompleteValue) {
             toSave = autoCompleteValue;
             if(additionalFields){
                 toSave = {}
@@ -144,7 +145,7 @@ const MultiSelectComponent = ({
                 </DialogContent>
 
                 {!additionalFields ? <DialogActions>
-                    <Button variant={'contained'}  onClick={()=>handleCloseDialog(true)} color="primary" autoFocus>
+                    <Button variant={'contained'}  onClick={()=>handleCloseDialog(autoCompleteValue)} color="primary" autoFocus>
                         Adicionar
                     </Button>
                 </DialogActions>: null}
