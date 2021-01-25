@@ -38,7 +38,7 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
                 open={open}
                 onClose={handleClose}
             >
-                <DialogTitle>{"Deseja dar baixa na conta?"}</DialogTitle>
+                <DialogTitle>{"Confirmar pagamento?"}</DialogTitle>
                 <DialogContent>
                     Total da conta: R$ {selectedEvent?.amount}
                     <FormBuilderPresentation

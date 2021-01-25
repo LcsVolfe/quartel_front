@@ -48,7 +48,7 @@ const useStyles = makeStyles({
         // minWidth: 650,
     },
     tableContainer: {
-        maxHeight: 200,
+        maxHeight: 600,
         overflow: 'auto'
     },
     bold:{

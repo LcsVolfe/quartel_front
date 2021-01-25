@@ -44,7 +44,8 @@ const DebtPaymentFormPage = () => {
             name: 'gateway',
             label: 'Forma Pagamento',
             type: typesEnum.SELECT,
-            options: GatewayOptions
+            options: GatewayOptions,
+            defaultValue: 0
         },
         {
             name: 'description',
