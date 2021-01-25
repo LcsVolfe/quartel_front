@@ -114,7 +114,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const ApiService = {
     FindZipCode: zipCode => findZipCode(zipCode),
-    CustomRequest: (path, method='GET', data={}, dispatch) => fetchApi(path, method, data, dispatch),
+    CustomRequest: (path, method='GET', data={}, dispatch, id) => fetchApi(path, method, data, dispatch, id),
     CreateForm: (data, path, dispatch) => fetchApi(path, 'POST', data, dispatch),
     UpdateForm: (data, path, dispatch) => fetchApi(path, 'PUT', data, dispatch, data?.id),
     Fetch: (path, dispatch) => fetchApi(path, 'GET', {}, dispatch),

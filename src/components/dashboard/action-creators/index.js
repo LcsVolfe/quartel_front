@@ -20,3 +20,14 @@ export const fetchDashboard = (data, location, history, auth) => async (dispatch
 		dispatch(dashboradError());
 	}
 };
+
+export const updateDebtDatePay = (data, id) => async (dispatch) => {
+	// dispatch(loadingDashboard());
+	try {
+		const res = await ApiService.CustomRequest('debt-payments/'+id,'PUT', data, dispatch, id)
+		if(res.status != 200) return;
+		dispatch(fetchDashboard())
+	} catch (err) {
+		dispatch(dashboradError());
+	}
+};
