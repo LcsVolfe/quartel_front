@@ -45,7 +45,7 @@ const FormBuilderPresentation = ({
 					field.defaultValue ? field.defaultValue : false;
 
 			if(field.type === typesEnum.DATE)
-				value = field.defaultValue ? field.defaultValue : new Date();
+				value = 'defaultValue' in field ? field.defaultValue : new Date();
 
 			if(field.type === typesEnum.AUTOCOMPLETE)
 				autoCompleteOpenState[field.name] = {open: false, loading: false};
@@ -319,6 +319,7 @@ const FormBuilderPresentation = ({
 									componentToRender = (
 										<MuiPickersUtilsProvider key={index} utils={DateFnsUtils} locale={ptBR}>
 											<KeyboardDatePicker
+												clearable
 												className={classes.w100}
 												variant={'inline'}
 												format="dd/MM/yyyy"

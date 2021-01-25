@@ -2,6 +2,7 @@ import React from 'react';
 import {TableRender} from "../../../components/table-render";
 import {BooleanColumn, CurrencyColumn, DateColumn, OptionsColumn} from "../../../components/table-render/presentation";
 import {GatewayOptions} from "../../order/form/options";
+import {colors} from "@material-ui/core";
 
 const DebtPaymentListPage = () => {
     let columns = [
@@ -18,11 +19,14 @@ const DebtPaymentListPage = () => {
         {
             name: "dateDue",
             label: "Data Vencimento",
-            options: {customBodyRender: DateColumn},
+            options: {customBodyRender: (value) => {
+                let color = new Date() > new Date(value) ? colors.red['700'] : colors.green['700'];
+                return (<span style={{color: color}}>{DateColumn(value)}</span>)
+                }},
         },
         {
             name: "datePay",
-            label: "Data Vencimento",
+            label: "Data Pagamento",
             options: {customBodyRender: DateColumn},
         },
         {
@@ -46,7 +50,7 @@ const DebtPaymentListPage = () => {
         }
     ];
 
-    return (<TableRender columns={columns} title={'Fornecedores'} />);
+    return (<TableRender columns={columns} title={'Contas a Pagar'} />);
 }
 
 export default DebtPaymentListPage;

@@ -15,6 +15,11 @@ const EmployeeFormPage = () => {
             },
         },
         {
+            name: 'dailyValue',
+            label: 'Valor Dia',
+            type: typesEnum.CURRENCY,
+        },
+        {
             name: 'cpf',
             label: 'CPF',
             type: typesEnum.CPF,

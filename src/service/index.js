@@ -27,7 +27,8 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
                 return mountApiResult(res)
                 // return res.data.results;
             } catch (error) {
-                return checkErrors(error, dispatch);
+                console.log('response with error : ', error.toJSON());
+                return checkErrors(error.toJSON(), dispatch);
             }
             break;
 
@@ -40,9 +41,9 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
                 return response;
             } catch (error) {
                 console.log(error)
-                console.log('response with error : ', error.response.data);
+                console.log('response with error : ', error);
 
-                return checkErrors(error, dispatch);
+                return checkErrors(error.toJSON(), dispatch);
             }
             break;
 
@@ -55,7 +56,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
                     dispatch(resultOnPromisse(mountApiResult(response)))
                 return response;
             } catch (error) {
-                return checkErrors(error, dispatch);
+                return checkErrors(error.toJSON(), dispatch);
             }
             break;
 
@@ -67,7 +68,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
                     dispatch(resultOnPromisse(mountApiResult(response)))
                 return response;
             } catch (error) {
-                return checkErrors(error, dispatch);
+                return checkErrors(error.toJSON(), dispatch);
             }
             break;
 
