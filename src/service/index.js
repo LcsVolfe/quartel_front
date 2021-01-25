@@ -1,7 +1,7 @@
 import axios from "axios";
 import {errorOnPromisse, finishOnPromisse, resultOnPromisse} from "../components/template/action-creators";
 
-const URL_BASE = 'http://localhost:8000'
+const URL_BASE = process.env.REACT_APP_API_URL
 
 
 let cancelToken;
