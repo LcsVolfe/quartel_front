@@ -1,7 +1,9 @@
 import PersonIcon from '@material-ui/icons/Person';
 import BuildIcon from '@material-ui/icons/Build';
 import StoreIcon from '@material-ui/icons/Store';
+import WorkIcon from '@material-ui/icons/Work';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import AttachMoney from '@material-ui/icons/AttachMoney';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ClientFormPage from "./pages/client/form";
 import ClientListPage from "./pages/client/list";
@@ -14,6 +16,11 @@ import EmployeeListPage from "./pages/employee/list";
 import EmployeeFormPage from "./pages/employee/form";
 import DashboardPage from "./pages/dashboard";
 import OrderLineFormPage from "./pages/order/form/order-line";
+import ProviderListPage from "./pages/provider/list";
+import ProviderFormPage from "./pages/provider/form";
+import DebtPaymentFormPage from "./pages/debt-payment/form";
+import DebtPaymentListPage from "./pages/debt-payment/list";
+
 const router = [
   {
     path: '/',
@@ -54,12 +61,33 @@ const router = [
   {
     path: '/list/employees',
     text: 'Funcionários',
-    icon: <BuildIcon />,
+    icon: <WorkIcon />,
     component: <EmployeeListPage />
   },
   {
     path: '/form/employees',
     component: <EmployeeFormPage />
+  },
+  {
+    path: '/list/providers',
+    text: 'Fornecedor',
+    icon: <BuildIcon />,
+    component: <ProviderListPage />
+  },
+  {
+    path: '/form/providers',
+    component: <ProviderFormPage />
+  },
+
+  {
+    path: '/list/debt-payments',
+    text: 'Despesas',
+    icon: <AttachMoney />,
+    component: <DebtPaymentListPage />
+  },
+  {
+    path: '/form/debt-payments',
+    component: <DebtPaymentFormPage />
   },
 
 

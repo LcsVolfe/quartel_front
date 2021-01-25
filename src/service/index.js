@@ -40,6 +40,8 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
                 return response;
             } catch (error) {
                 console.log(error)
+                console.log('response with error : ', error.response.data);
+
                 return checkErrors(error, dispatch);
             }
             break;
