@@ -10,6 +10,7 @@ import TotalCustomers from "./components/total-customers";
 import TasksProgress from "./components/task-progress";
 import TotalProfit from "./components/total-profit";
 import LowStockProducts from "./components/low-stock-products";
+import DebtsCalendar from "./components/debts-calendar";
 
 const Dashborad = ({loading, onClick, dashboard }) => {
 	return (
@@ -17,6 +18,9 @@ const Dashborad = ({loading, onClick, dashboard }) => {
 			<Grid container spacing={3}>
 				<Grid item lg={3} sm={6} xl={3} xs={12}>
 					<LowStockProducts data={dashboard?.products} />
+				</Grid>
+				<Grid item lg={3} sm={6} xl={3} xs={12}>
+					<DebtsCalendar />
 				</Grid>
 				<Grid item lg={3} sm={6} xl={3} xs={12}>
 					<Budget />
