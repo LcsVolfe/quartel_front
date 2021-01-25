@@ -38,6 +38,11 @@ const OrderFormPage = () => {
             },
         },
         {
+            name: 'name',
+            label: 'Nome da Obra',
+            type: typesEnum.TEXT,
+        },
+        {
             name: 'zipcode',
             label: 'CEP',
             type: typesEnum.TEXT,

@@ -11,6 +11,10 @@ const OrderListPage = () => {
             options: {customBodyRender: (value)=>(<span>{value?.name}</span>)}
         },
         {
+            name: "name",
+            label: "Nome da Obra",
+        },
+        {
             name: "grandTotal",
             label: "Total Final",
             options: {customBodyRender: CurrencyColumn}

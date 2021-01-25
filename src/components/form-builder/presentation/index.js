@@ -44,13 +44,13 @@ const FormBuilderPresentation = ({
 				value = onSubmitForm?.id ? onSubmitForm[field.name] :
 					field.defaultValue ? field.defaultValue : false;
 
-			if(field.type === typesEnum.DATE)
+			else if(field.type === typesEnum.DATE)
 				value = 'defaultValue' in field ? field.defaultValue : new Date();
 
-			if(field.type === typesEnum.AUTOCOMPLETE)
+			else if(field.type === typesEnum.AUTOCOMPLETE)
 				autoCompleteOpenState[field.name] = {open: false, loading: false};
 
-			if(field.type === typesEnum.MULTISELECT)
+			else if(field.type === typesEnum.MULTISELECT)
 				value = onSubmitForm[field.name] || [];
 
 
