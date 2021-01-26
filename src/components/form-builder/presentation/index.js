@@ -37,10 +37,7 @@ const FormBuilderPresentation = ({
 	const checkControls = (onSubmitForm) => {
 		controls.forEach(field => {
 			let value;
-			if(
-				onSubmitForm?.id || (field.type === typesEnum.BOOLEAN ||
-				field.defaultValue)
-			)
+			if(onSubmitForm?.id || field.defaultValue ||(field.type === typesEnum.BOOLEAN))
 				value = onSubmitForm?.id ? onSubmitForm[field.name] :
 					field.defaultValue ? field.defaultValue : false;
 
@@ -52,6 +49,9 @@ const FormBuilderPresentation = ({
 
 			else if(field.type === typesEnum.MULTISELECT)
 				value = onSubmitForm[field.name] || [];
+
+			else if(field.type === typesEnum.SELECT)
+				value = field?.defaultValue || 0;
 
 
 			fieldsState[field.name] = value;
@@ -115,7 +115,7 @@ const FormBuilderPresentation = ({
 
 				case typesEnum.AUTOCOMPLETE:
 				case typesEnum.INVISIBLE:
-					data[control.name] = value?.id || value
+					data[control.name] = state[control.name]?.id || state[control.name]
 					// data[control.name] = value
 
 				default: break;
@@ -198,7 +198,6 @@ const FormBuilderPresentation = ({
 									componentToRender = (
 										<TextField
 											className={classes.w100}
-											key={index}
 											name={field.name}
 											// value={state[field.name]  || ''}
 											error={!!errors[field.name]}
@@ -215,7 +214,7 @@ const FormBuilderPresentation = ({
 								case typesEnum.SELECT:
 									field.options = field?.options || [{label: 'Defina as opções', value: 0}]
 									componentToRender = (
-										<FormControl key={index} className={classes.w100}>
+										<FormControl  className={classes.w100}>
 											<InputLabel id={field.name}>{field.label}</InputLabel>
 											<Select
 												labelId={field.name}
@@ -235,7 +234,7 @@ const FormBuilderPresentation = ({
 
 								case typesEnum.BOOLEAN:
 									componentToRender = (
-										<Box key={index} className={classes.boolean}>
+										<Box  className={classes.boolean}>
 											<Switch
 												inputRef={register}
 												checked={state[field.name] || false}
@@ -251,8 +250,13 @@ const FormBuilderPresentation = ({
 								case typesEnum.AUTOCOMPLETE:
 									// console.log(autoCompleteOpen[field.name]?.loading, autoCompleteOption)
 									componentToRender = (
+										// <Controller
+										// 	name={field.name}
+										// 	control={control}
+										// 	rules={{validate: (value) => field?.validations?.rule ? field.validations.rule(value) : null}}
+										// 	as={()}
+										// />
 										<Autocomplete
-											key={index}
 											className={classes.w100}
 											open={autoCompleteOpen[field.name]?.open}
 											onOpen={() => updateAutoComplete(true, false, field.name)}
@@ -290,6 +294,7 @@ const FormBuilderPresentation = ({
 												/>
 											)}
 										/>
+
 									);
 									break;
 
@@ -302,7 +307,6 @@ const FormBuilderPresentation = ({
 									else
 										componentToRender = (<MultiSelectComponent
 											{...field}
-											key={index}
 											className={classes.w100}
 											initValue={onSubmitForm[field.name]}
 											onResult={multiListUpdate}
@@ -317,7 +321,7 @@ const FormBuilderPresentation = ({
 
 								case typesEnum.DATE:
 									componentToRender = (
-										<MuiPickersUtilsProvider key={index} utils={DateFnsUtils} locale={ptBR}>
+										<MuiPickersUtilsProvider  utils={DateFnsUtils} locale={ptBR}>
 											<KeyboardDatePicker
 												clearable
 												className={classes.w100}
@@ -332,20 +336,22 @@ const FormBuilderPresentation = ({
 									break;
 
 								case typesEnum.CURRENCY:
-									componentToRender = (<CurrencyTextField
-										label={field.label || field.name}
-										className={classes.w100}
-										currencySymbol="R$ "
-										value={state[field.name]}
-										outputFormat={"number"}
-										decimalCharacter=","
-										inputRef={register(field?.validations)}
-										digitGroupSeparator=" "
-										disabled={field.readOnly}
-										helperText={errors[field.name]?.message}
-										// onChange={(event, value)=> setValue(value)}
-										onChange={(event, value)=> setFormState(field.name, value)}
-									/>);
+									componentToRender = (
+										<CurrencyTextField
+											label={field.label || field.name}
+											className={classes.w100}
+											currencySymbol="R$ "
+											value={state[field.name]}
+											outputFormat={"number"}
+											decimalCharacter=","
+											inputRef={register(field?.validations)}
+											digitGroupSeparator=" "
+											disabled={field.readOnly}
+											helperText={errors[field.name]?.message}
+											// onChange={(event, value)=> setValue(value)}
+											onChange={(event, value)=> setFormState(field.name, value)}
+										/>
+									);
 									break;
 
 								case typesEnum.CPF:
@@ -363,7 +369,6 @@ const FormBuilderPresentation = ({
 
 									componentToRender = (
 										<Controller
-											key={index}
 											as={
 												// <CustomInputMask field={field} errors={errors} />
 												<InputMask mask={maskPatter} >
@@ -393,7 +398,7 @@ const FormBuilderPresentation = ({
 							}
 
 							return (
-								<Grid item xs={xs} sm={sm} lg={lg} className={classes.w100}>
+								<Grid key={index} item xs={xs} sm={sm} lg={lg} className={classes.w100}>
 								{/*<Grid item xs={12} sm={6} lg={4} xl={3}>*/}
 									{componentToRender}
 								</Grid>

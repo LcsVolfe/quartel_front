@@ -5,9 +5,10 @@ import WorkIcon from '@material-ui/icons/Work';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import AttachMoney from '@material-ui/icons/AttachMoney';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import ClientFormPage from "./pages/client/form";
 import ClientListPage from "./pages/client/list";
-import {Template} from "./components/template";
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import ProductListPage from "./pages/product/list";
 import ProductFormPage from "./pages/product/form";
 import OrderListPage from "./pages/order/list";
@@ -20,6 +21,9 @@ import ProviderListPage from "./pages/provider/list";
 import ProviderFormPage from "./pages/provider/form";
 import DebtPaymentFormPage from "./pages/debt-payment/form";
 import DebtPaymentListPage from "./pages/debt-payment/list";
+import EmployeeWorkDayListPage from "./pages/employee-work-day/list";
+import EmployeeWorkDayFormPage from "./pages/employee-work-day/form";
+import {OrderCalculate} from "./components/order-calculate";
 
 const router = [
   {
@@ -78,7 +82,6 @@ const router = [
     path: '/form/providers',
     component: <ProviderFormPage />
   },
-
   {
     path: '/list/debt-payments',
     text: 'Despesas',
@@ -89,7 +92,21 @@ const router = [
     path: '/form/debt-payments',
     component: <DebtPaymentFormPage />
   },
-
+  {
+    path: '/list/employees-work-day',
+    text: 'Dia Trab. Func.',
+    icon: <AccessTimeIcon />,
+    component: <EmployeeWorkDayListPage />
+  },
+  {
+    path: '/form/employees-work-day',
+    component: <EmployeeWorkDayFormPage />
+  },
+  {
+    path: '/order-calculate',
+    icon: <AccountBalanceWalletIcon />,
+    component: <OrderCalculate />
+  },
 
   {
     path: '/formbuilder',

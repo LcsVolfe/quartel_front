@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import TableRender from '../presentation';
 import { selectTableRender } from '../selectors';
 import PropTypes from 'prop-types';
-import {deleteTable, fetchTableRender} from "../action-creators";
+import {deleteTable, fetchTableRender, setTableRender} from "../action-creators";
 
 const TableRenderContainer = (props) => {
 	const dispatch = useDispatch();
@@ -26,10 +26,11 @@ const TableRenderContainer = (props) => {
 
 	useEffect(()=> {
 		promisseFetch()
+		// return dispatch(setTableRender([]));
 	}, [])
 
 	const data = useSelector(selectTableRender);
-
+	// console.log(data)
 	return (
 		<TableRender
 			{...data}

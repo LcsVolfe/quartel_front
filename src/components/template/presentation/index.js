@@ -119,10 +119,10 @@ export default function Template({content, onPromisse, useAuth}) {
 				</div>
 				<Divider />
 				<List>
-					{router.map((item) => {
+					{router.map((item, index) => {
 						if(item.path.includes('form')) return;
 						return (
-							<ListItem button key={item.text} component={Link} to={item.path}>
+							<ListItem button key={index} component={Link} to={item.path}>
 								<ListItemIcon>
 									{item.icon}
 								</ListItemIcon>

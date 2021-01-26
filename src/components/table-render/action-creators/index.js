@@ -18,7 +18,7 @@ export const fetchTableRender = (history) => async (dispatch) => {
 	dispatch(loadingTableRender());
 	try {
 		let result = await ApiService.Fetch(TakePathRoute(history), dispatch);
-		console.log(result)
+		// console.log(result)
 		// await delay(1000);
 
 		dispatch(finishOnPromisse());

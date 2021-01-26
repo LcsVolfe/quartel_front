@@ -10,6 +10,7 @@ import moment from 'moment';
 import 'moment/locale/pt-br';
 import FormBuilderPresentation from "../../../../form-builder/presentation";
 import PStypesEnum from "../../../../form-builder/enum/types.enum";
+import {GatewayOptions} from "../../../../../pages/order/form/options";
 
 
 const localizer = momentLocalizer(moment)
@@ -40,7 +41,10 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
             >
                 <DialogTitle>{"Confirmar pagamento?"}</DialogTitle>
                 <DialogContent>
-                    Total da conta: R$ {selectedEvent?.amount}
+                    <DialogContentText>Método de pagamento: {GatewayOptions.map(gateway => {
+                        if (gateway.value == selectedEvent?.gateway) return gateway.label
+                    }) }</DialogContentText>
+                    <DialogContentText>Total da conta: R$ {selectedEvent?.amount}</DialogContentText>
                     <FormBuilderPresentation
                         TakeFormReference={TakeFormReference}
                         controls={[{label: 'Data Pagamento', name: 'datePay', type: PStypesEnum.DATE}]}

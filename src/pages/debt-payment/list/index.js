@@ -19,8 +19,8 @@ const DebtPaymentListPage = () => {
         {
             name: "dateDue",
             label: "Data Vencimento",
-            options: {customBodyRender: (value) => {
-                let color = new Date() > new Date(value) ? colors.red['700'] : colors.green['700'];
+            options: {customBodyRender: (value, data) => {
+                let color = data.rowData[6] ? '#000' : new Date() > new Date(value) ? colors.red['700'] : colors.green['700'];
                 return (<span style={{color: color}}>{DateColumn(value)}</span>)
                 }},
         },
