@@ -51,8 +51,11 @@ const FormBuilderPresentation = ({
 			else if(field.type === typesEnum.MULTISELECT)
 				value = onSubmitForm[field.name] || [];
 
-			else if(field.type === typesEnum.SELECT || field.type === typesEnum.CURRENCY)
+			else if(field.type === typesEnum.SELECT)
 				value = field?.defaultValue || 0;
+
+			else if(field.type === typesEnum.CURRENCY)
+				value = field?.defaultValue || '0';
 
 
 			fieldsState[field.name] = value;
