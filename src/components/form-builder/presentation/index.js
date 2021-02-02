@@ -343,28 +343,17 @@ const FormBuilderPresentation = ({
 
 								case typesEnum.CURRENCY:
 									componentToRender = (
-										// <CurrencyTextField
-										// 	label={field.label || field.name}
-										// 	className={classes.w100}
-										// 	currencySymbol="R$ "
-										// 	value={state[field.name]}
-										// 	outputFormat={"number"}
-										// 	decimalCharacter=","
-										// 	inputRef={register(field?.validations)}
-										// 	digitGroupSeparator=" "
-										// 	disabled={field.readOnly}
-										// 	helperText={errors[field.name]?.message}
-										// 	onChange={(event, value)=> setFormState(field.name, value)}
-										// />
 										<CurrencyTextField
-											label="Amount"
-											variant="standard"
+											label={field.label || field.name}
+											className={classes.w100}
+											currencySymbol="R$ "
 											value={state[field.name]}
-											currencySymbol="$"
-											//minimumValue="0"
-											outputFormat="string"
-											decimalCharacter="."
-											digitGroupSeparator=","
+											outputFormat={"number"}
+											decimalCharacter=","
+											// inputRef={register(field?.validations)}
+											digitGroupSeparator=" "
+											disabled={field.readOnly}
+											helperText={errors[field.name]?.message}
 											onChange={(event, value)=> setFormState(field.name, value)}
 										/>
 									);
