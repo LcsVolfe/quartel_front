@@ -51,7 +51,7 @@ const FormBuilderPresentation = ({
 			else if(field.type === typesEnum.MULTISELECT)
 				value = onSubmitForm[field.name] || [];
 
-			else if(field.type === typesEnum.SELECT)
+			else if(field.type === typesEnum.SELECT || field.type === typesEnum.CURRENCY)
 				value = field?.defaultValue || 0;
 
 
@@ -351,7 +351,6 @@ const FormBuilderPresentation = ({
 											digitGroupSeparator=" "
 											disabled={field.readOnly}
 											helperText={errors[field.name]?.message}
-											// onChange={(event, value)=> setValue(value)}
 											onChange={(event, value)=> setFormState(field.name, value)}
 										/>
 									);
