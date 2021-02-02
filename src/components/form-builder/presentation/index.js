@@ -226,7 +226,7 @@ const FormBuilderPresentation = ({
 												label={field.label || field.name}
 												name={field.name}
 												value={state[field.name]}
-												inputRef={register(field?.validations)}
+												// inputRef={register(field?.validations)}
 												onChange={handleChangeSelect}
 											>
 												{field.options.map((item, i) => {

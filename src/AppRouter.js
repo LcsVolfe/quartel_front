@@ -8,7 +8,6 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import ClientFormPage from "./pages/client/form";
 import ClientListPage from "./pages/client/list";
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import ProductListPage from "./pages/product/list";
 import ProductFormPage from "./pages/product/form";
 import OrderListPage from "./pages/order/list";
@@ -23,7 +22,7 @@ import DebtPaymentFormPage from "./pages/debt-payment/form";
 import DebtPaymentListPage from "./pages/debt-payment/list";
 import EmployeeWorkDayListPage from "./pages/employee-work-day/list";
 import EmployeeWorkDayFormPage from "./pages/employee-work-day/form";
-import Currency from "./pages/currency";
+
 
 const router = [
   {
@@ -101,11 +100,6 @@ const router = [
   {
     path: '/form/employees-work-day',
     component: <EmployeeWorkDayFormPage />
-  },
-
-  {
-    path: '/currency',
-    component: <Currency />
   },
 
   {
