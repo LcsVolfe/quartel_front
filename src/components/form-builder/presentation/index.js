@@ -169,7 +169,7 @@ const FormBuilderPresentation = ({
 						<IconButton color="inherit" onClick={onExit} component={Link} to={location.pathname.replace('form', 'list')}>
 							<ArrowBackIcon />
 						</IconButton>
-						<IconButton color="inherit" type={'submit'} form={'form'}>
+						<IconButton color="inherit" type={'submit'} form={FORM_ID}>
 							<SaveIcon />
 						</IconButton>
 						{/*<IconButton color="inherit" onClick={() => defineTypeAction(1)}>*/}
