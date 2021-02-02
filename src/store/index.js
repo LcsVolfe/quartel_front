@@ -5,7 +5,8 @@ import { reducer as onLoadTable } from "../components/table-render";
 import { reducer as onPromisse } from "../components/template";
 import { reducer as onLogin } from "../components/login";
 import { reducer as onDashboard } from "../components/dashboard";
-import { reducer as OrderCalculate } from "../components/order-calculate";
+import { reducer as onEmployeeWorkDay } from "../components/employee-work-day";
+import { reducer as onEmployeeWorkDayCalculate } from "../components/employee-work-day";
 
 const rootReducer = combineReducers({
     onSubmitForm,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     onPromisse,
     onLogin,
     onDashboard,
-    OrderCalculate,
+    onEmployeeWorkDay,
+    onEmployeeWorkDayCalculate,
 });
 
 export const initStore = (initialState = {}) =>

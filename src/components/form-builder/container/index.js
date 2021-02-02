@@ -10,23 +10,11 @@ import {initApresentataion, loadingFormBuilder, setCompleteOption, setFormBuilde
 
 
 
-const FormBuilderContainer = (props
-// 	{
-// 	// controls,
-// 	// title,
-// 	// isColumn,
-// 	// elevation,
-//     // TakeFormReference,
-// 	// actionBar,
-//     // saveBtn,
-// 	//   btnText,btnJustify,
-// 	//   onClickToSubmitForm
-//
-// }
-) => {
+const FormBuilderContainer = (props) => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const query = useQuery();
+	const [render, setRender] = useState(false);
 
 	const promisseFetch = useCallback(
 		async (data, action) => {
@@ -40,9 +28,14 @@ const FormBuilderContainer = (props
 		 () => {
 			dispatch(loadingFormBuilder());
 			if(query.get('id'))
-				dispatch(loadDataFormBuilder(query.get('id'), history));
-			else dispatch(initApresentataion(true));
-			// setTimeout(()=>setRenderComponent(true), 1300)
+				dispatch(loadDataFormBuilder(query.get('id'), history, setRender));
+			else {
+				if (props?.initValues)
+					dispatch(setFormBuilder(props.initValues));
+				// dispatch(initApresentataion(true));
+				setRender(true)
+
+			}
 		},
 		[dispatch]
 	);
@@ -58,7 +51,8 @@ const FormBuilderContainer = (props
 		() => {
 			dispatch(finishOnPromisse())
 			dispatch(setFormBuilder({}))
-			dispatch(initApresentataion(false));
+			// dispatch(initApresentataion(false));
+			setRender(false)
 		},
 		[dispatch]
 	);
@@ -71,24 +65,14 @@ const FormBuilderContainer = (props
 	const data = useSelector(selectFormBuilder);
 	return (
 		<>
-			{ data.initRenderPresentationComponent ? <FormBuilderPresentation
+			{render && <FormBuilderPresentation
 				{...data}
 				{...props}
 				onSubmit={promisseFetch}
-				// controls={controls}
-				// title={title}
-				// isColumn={isColumn}
-				// elevation={elevation}
 				dispatch={dispatch}
 				onExit={onDismountComponent}
 				handleAutoCompleteChange={handleAutoCompleteChange}
-				// TakeFormReference={TakeFormReference}
-				// actionBar={actionBar}
-				// saveBtn={saveBtn}
-				// btnText={btnText}
-				// btnJustify={btnJustify}
-				// onClick={onClickToSubmitForm}
-			/> : null}
+			/>}
 		</>
 	);
 };

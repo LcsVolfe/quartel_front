@@ -27,7 +27,7 @@ const TableRender = ({ options, title, columns, onLoadTable, loading, deleteItem
 	const classes = useStyles();
 	const rowsSelected = useState([]);
 	let location = useLocation();
-
+console.log(onLoadTable)
 	let optionsDefalut = {
 		...optionsLanguage,
 		...options,

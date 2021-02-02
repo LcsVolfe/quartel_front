@@ -28,12 +28,13 @@ export const fetchFormBuilder = (data, action=1, history, onDismountComponent) =
 	}
 };
 
-export const loadDataFormBuilder = (id, history) => async (dispatch) => {
+export const loadDataFormBuilder = (id, history, setRender) => async (dispatch) => {
 	let result = await ApiService.Fetch(TakePathAPIWithId(id, history), dispatch);
 	// console.log(result)
 	if(!result.errorRequest && result.data?.id){
 		dispatch(setFormBuilder(result.data));
-		dispatch(initApresentataion(true));
+		// dispatch(initApresentataion(true));
+		setRender(true);
 	}
 };
 

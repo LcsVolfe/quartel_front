@@ -27,9 +27,10 @@ import {setCompleteOption} from "../reducer";
 
 
 const FormBuilderPresentation = ({
-				 controls, onSubmit, title, isColumn, elevation, autoCompleteOption, TakeFormReference, saveBtn=true, inputFullWidth=false,
-				 onSubmitForm, onExit, handleAutoCompleteChange, dispatch, actionBar=true, onClick, btnText, btnJustify, submitFormByBtnClick=false }) => {
-	let location = useLocation();
+		 controls, onSubmit, title, isColumn, elevation, autoCompleteOption, TakeFormReference, saveBtn=true, inputFullWidth=false,
+		 onSubmitForm, onExit, handleAutoCompleteChange, dispatch, actionBar=true, onClick, btnText, btnJustify, submitFormByBtnClick=false }) => {
+	const FORM_ID = Math.random();
+	const location = useLocation();
 	const classes = useStyles();
 	let fieldsState = {};
 	let autoCompleteOpenState = {};
@@ -89,10 +90,12 @@ const FormBuilderPresentation = ({
 			let newValue;
 			switch (control.type){
 				case typesEnum.CURRENCY:
-					// console.log(String(value))
 					newValue = String(value).replaceAll(' ', '').replace(',', '.');
-					// console.log(newValue)
 					data[control.name] = newValue;
+					break;
+
+				case typesEnum.DATE:
+					data[control.name] = state[control.name];
 					break;
 
 				case typesEnum.CPF:
@@ -175,8 +178,7 @@ const FormBuilderPresentation = ({
 					</Toolbar>
 				</AppBar>}
 
-
-				<form onSubmit={handleSubmit(defineTypeAction)} id={'form'}>
+				<form onSubmit={handleSubmit(defineTypeAction)} id={FORM_ID}>
 					<Grid
 						container
 						spacing={2}
@@ -323,7 +325,8 @@ const FormBuilderPresentation = ({
 									componentToRender = (
 										<MuiPickersUtilsProvider  utils={DateFnsUtils} locale={ptBR}>
 											<KeyboardDatePicker
-												clearable
+												// clearable={true}
+												disabled={field.readOnly}
 												className={classes.w100}
 												variant={'inline'}
 												format="dd/MM/yyyy"
@@ -411,7 +414,7 @@ const FormBuilderPresentation = ({
 							className={classes.mButton}
 							fullWidth
 							type={submitFormByBtnClick ? 'submit' : 'click'}
-							form={submitFormByBtnClick ? 'form' : ''}
+							form={submitFormByBtnClick ? FORM_ID : ''}
 							color={'primary'}
 							variant={'contained'}
 							onClick={()=>onClick(defineTypeAction())}

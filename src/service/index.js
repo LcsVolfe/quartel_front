@@ -1,5 +1,10 @@
 import axios from "axios";
-import {errorOnPromisse, finishOnPromisse, resultOnPromisse} from "../components/template/action-creators";
+import {
+    errorOnPromisse,
+    finishOnPromisse,
+    resultOnPromisse,
+} from "../components/template/action-creators";
+import {SingOutCB} from "../components/template/container";
 
 const URL_BASE = process.env.REACT_APP_API_URL
 
@@ -27,8 +32,8 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
                 return mountApiResult(res)
                 // return res.data.results;
             } catch (error) {
-                if(error)
-                    return checkErrors(error, dispatch);
+                if(error?.response)
+                    return checkErrors(error.response, dispatch);
                 console.log('response with error : ', error.toJSON());
                 return checkErrors(error.toJSON(), dispatch);
             }
@@ -82,6 +87,10 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
 }
 
 const checkErrors = (res, dispatch) => {
+    if (res.status == 401)
+        dispatch(SingOutCB())
+
+
     let error = mountApiResult(res, true);
     dispatch(errorOnPromisse(error))
     return error;
@@ -104,9 +113,10 @@ const mountApiResult = (res, error = false, pagination = true) => {
     return ({
         errorRequest: error,
         data: pagination && res.data?.results ? res.data?.results : res.data,
-        message: res.message,
+        message: res.message || 'Erro na conexão',
         status: pagination ? res.status : res.status,
-        statusText: res?.statusText || res.response?.statusText
+        statusText: res?.statusText || res.response?.statusText,
+        method: res?.config.method,
     });
 }
 

@@ -3,10 +3,14 @@ import {FormBuilder} from "../../../components/form-builder";
 import typesEnum from "../../../components/form-builder/enum/types.enum";
 import validators from "../../../components/form-builder/enum/validators.enum";
 import {PeriodOptions, PeriodOptionsEnum} from "./options";
+import {FormatDate} from "../../../utils/date";
 
-const EmployeeWorkDayFormPage = () => {
-
+const EmployeeWorkDayFormPage = ({TakeFormReference, workDay, selectedEvent}) => {
     let fields = [
+        {
+            name: 'id',
+            type: typesEnum.INVISIBLE
+        },
         {
             name: 'order',
             label: 'Obra',
@@ -41,6 +45,8 @@ const EmployeeWorkDayFormPage = () => {
             name: 'dateWork',
             label: 'Dia Trabalhado',
             type: typesEnum.DATE,
+            defaultValue: workDay,
+            readOnly: !!workDay
         },
         {
             name: 'workNight',
@@ -49,7 +55,7 @@ const EmployeeWorkDayFormPage = () => {
         }
     ];
 
-    const TakeFormReference = ({state}, setFormState) => {
+    const onFormChange = ({state}, setFormState) => {
         // console.log(state)
         if (state?.employee?.dailyValue && Number(state.dailyValue) == 0)
             setFormState('dailyValue', state.employee.dailyValue)
@@ -59,11 +65,14 @@ const EmployeeWorkDayFormPage = () => {
         if(state.period == PeriodOptionsEnum.NOITE)
             setFormState('workNight', true)
 
-
+        if(TakeFormReference)
+            TakeFormReference(state)
         // setFormState('dailyValue', state.employee.dailyValue)
     }
 
-    return (<FormBuilder controls={fields} title={'Cadastro de Funcionário'} TakeFormReference={TakeFormReference}  />);
+
+
+    return (<FormBuilder controls={fields} initValues={selectedEvent} TakeFormReference={onFormChange} actionBar={false} saveBtn={false} elevation={0} />);
 }
 
 export default EmployeeWorkDayFormPage;

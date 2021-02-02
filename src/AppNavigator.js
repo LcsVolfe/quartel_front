@@ -83,28 +83,6 @@ const AppNavigator = () => {
             </Router>
         </ProvideAuth>
     );
-  // return (
-  //     <ProvideAuth>
-  //         <Router>
-  //             <Switch>
-  //               {router.map((item, index) => {
-  //                   if (item.path == '/')
-  //                       return (
-  //                           <Route exact key={index} path={item.path}>
-  //                               <Template content={item.component} />
-  //                           </Route>
-  //                       )
-  //                   else
-  //                       return (
-  //                           <Route key={index} path={item.path}>
-  //                               <Template content={item.component} />
-  //                           </Route>
-  //                       )
-  //               })}
-  //             </Switch>
-  //         </Router>
-  //     </ProvideAuth>
-  // );
 }
 export default AppNavigator;
 

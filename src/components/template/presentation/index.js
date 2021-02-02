@@ -25,14 +25,12 @@ import TSnackbar from "./snackbar";
 const drawerWidth = 240;
 
 
-export default function Template({content, onPromisse, useAuth}) {
+export default function Template({content, onPromisse, handlerSingOut}) {
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const openIcon = Boolean(anchorEl);
-	let history = useHistory();
-	let auth = useAuth();
 	// console.log(onPromisse)
 
 
@@ -89,9 +87,7 @@ export default function Template({content, onPromisse, useAuth}) {
 							onClose={handleClose}
 						>
 							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={() => {
-								auth.signout(() => history.push("/login"));
-							}}>Logout</MenuItem>
+							<MenuItem onClick={handlerSingOut}>Logout</MenuItem>
 						</Menu>
 					</div>
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import {TableRender} from "../../../components/table-render";
-import {DateColumn, MaskColumn, OptionsColumn} from "../../../components/table-render/presentation";
+import {DateColumn, OptionsColumn} from "../../../components/table-render/presentation";
 import {PeriodOptions} from "../form/options";
+import {EmployeeWorkDay} from "../../../components/employee-work-day";
 
 const EmployeeWorkDayListPage = () => {
     let columns = [
@@ -30,7 +31,8 @@ const EmployeeWorkDayListPage = () => {
 
     return (
         <>
-            <TableRender columns={columns} title={'Dia de Trabalho Funcionários'} />
+            <EmployeeWorkDay />
+            {/*<TableRender columns={columns} title={'Dia de Trabalho Funcionários'} />*/}
         </>
     );
 }
