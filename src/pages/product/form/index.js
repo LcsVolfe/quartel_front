@@ -38,6 +38,7 @@ const ProductFormPage = () => {
             name: 'minStock',
             label: 'Estoque Mínimo',
             type: typesEnum.NUMBER,
+            defaultValue: 10
         },
         {
             name: 'unity',

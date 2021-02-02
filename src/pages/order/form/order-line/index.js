@@ -78,7 +78,8 @@ const OrderLineFormPage = ({TakeFormReference, orderState}) => {
             // console.log('lineAmount', Number(data.state?.price) * Number(data.watchForm.qty))
             data.state.product = data.autoCompleteValue.id;
             setFormState('stock', data.autoCompleteValue.qty)
-            if(!data.state?.price)
+
+            if(!data.state?.price == 0)
                 setFormState('price', data.autoCompleteValue.price)
             if(Number(data.watchForm.qty) > Number(data.autoCompleteValue.qty))
                 setFormState('qty', Number(data.autoCompleteValue.qty));
