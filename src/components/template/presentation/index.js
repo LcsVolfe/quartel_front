@@ -60,7 +60,10 @@ export default function Template({content, onPromisse, handlerSingOut}) {
 					>
 						<MenuIcon />
 					</IconButton>
-					<img src={Logo} className={classes.imglogo} alt={''}/>
+					<Link to={''}>
+
+						<img src={Logo} className={classes.imglogo} alt={''}/>
+					</Link>
 					<div className={classes.marginLeftAuto}>
 						<IconButton
 							aria-label="account of current user"
@@ -173,9 +176,9 @@ const useStyles = makeStyles((theme) => ({
 		width: drawerWidth,
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
-		[theme.breakpoints.down('xs')]: {
-			display: 'none'
-		},
+		// [theme.breakpoints.down('xs')]: {
+		// 	display: 'none'
+		// },
 	},
 	drawerOpen: {
 		width: drawerWidth,
@@ -193,6 +196,9 @@ const useStyles = makeStyles((theme) => ({
 		width: theme.spacing(7) + 1,
 		[theme.breakpoints.up('sm')]: {
 			width: theme.spacing(9) + 1,
+		},
+		[theme.breakpoints.down('xs')]: {
+			display: 'none'
 		},
 	},
 	toolbar: {
