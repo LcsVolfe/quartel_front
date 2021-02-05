@@ -28,11 +28,11 @@ export default function BasicTable({data, columns}) {
                             low = false;
 
                         return (
-                            <TableRow key={i} className={low ? classes.redRow : classes.yellowRow}>
+                            <TableRow className={low ? classes.redRow : classes.yellowRow}>
                                 {columns.map((column, i) => {
                                     if(column?.customRenderValue)
-                                        return (<TableCell>{column.customRenderValue(row[column.name])}</TableCell>)
-                                    return (<TableCell className={low ? classes.redRow : classes.yellowRow}>{row[column.name]}</TableCell>)
+                                        return (<TableCell key={i}>{column.customRenderValue(row[column.name])}</TableCell>)
+                                    return (<TableCell key={i} className={low ? classes.redRow : classes.yellowRow}>{row[column.name]}</TableCell>)
                                 })}
                             </TableRow>
                         )

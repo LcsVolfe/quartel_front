@@ -9,7 +9,7 @@ const DebtPaymentListPage = () => {
         {
             name: "provider",
             label: "Fornecedor",
-            options: {customBodyRender: (value)=>(<span>{value?.name}</span>)}
+            options: {customBodyRender: (value)=>value?.name}
         },
         {
             name: "amount",
@@ -19,10 +19,11 @@ const DebtPaymentListPage = () => {
         {
             name: "dateDue",
             label: "Data Vencimento",
-            options: {customBodyRender: (value, data) => {
-                let color = data.rowData[6] ? '#000' : new Date() > new Date(value) ? colors.red['700'] : colors.green['700'];
-                return (<span style={{color: color}}>{DateColumn(value)}</span>)
-                }},
+            options: {customBodyRender: (value, data) => DateColumn(value)},
+            // options: {customBodyRender: (value, data) => {
+            //     let color = data.rowData[6] ? '#000' : new Date() > new Date(value) ? colors.red['700'] : colors.green['700'];
+            //     return (<span style={{color: color}}>{DateColumn(value)}</span>)
+            //     }},
         },
         {
             name: "datePay",

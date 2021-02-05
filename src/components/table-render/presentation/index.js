@@ -21,7 +21,7 @@ export const CurrencyColumn = (value) => (<span>R$ {ToDecimal(value)}</span>);
 export const NumberColumn = (value) => ToDecimal(value);
 export const DateColumn = (value) => FormatDate(value);
 export const MaskColumn = (value, mask) => (<span >{new StringMask(mask).apply(value)}</span>);
-export const OptionsColumn = (value, options) => (<span>{options.filter(op=>op.value === value)[0]?.label}</span>);
+export const OptionsColumn = (value, options) => (options.filter(op=>op.value === value)[0]?.label);
 
 const TableRender = ({ options, title, columns, onLoadTable, loading, deleteItem, history, actionBar=true }) => {
 	const classes = useStyles();

@@ -37,7 +37,7 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
         <div>
             <Dialog
                 open={open}
-                onClose={handleClose}
+                onClose={()=>handleClose(false)}
             >
                 <DialogTitle>{"Confirmar pagamento?"}</DialogTitle>
                 <DialogContent>

@@ -29,14 +29,14 @@ const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCrea
 	return (
 		<Container maxWidth={false}>
 			<Grid container spacing={3}>
-				<Grid item lg={8} sm={12} xl={8} xs={12}>
+				<Grid item lg={12} sm={12} xl={8} xs={12}>
 					<EmployeeWorkDayCalendar
 						events={employeeWorkDay?.events}
 						handlerCreateNewWorkDay={handlerCreateNewWorkDay}
 						handlerDeleteWorkDay={handlerDeleteWorkDay}
 					/>
 				</Grid>
-				<Grid item lg={4} sm={12} xl={4} xs={12}>
+				<Grid item lg={12} sm={12} xl={4} xs={12}>
 					<FormBuilder
 						title={'Filtros'}
 						onClick={handlerCalculateWorkDay}

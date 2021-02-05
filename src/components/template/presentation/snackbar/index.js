@@ -19,21 +19,10 @@ const TSnackbar = ({errorRequest, data = {}, status, statusText, message='OperaÃ
     let severity = errorRequest ? 'error' : 'success';
 
     useEffect(()=>{
-        // console.log('>>>>>>>>>>>> useEffect',
-        //     'openSnackBack: '+ openSnackBack,
-        //     'errorRequest: ' + errorRequest,
-        //     'status: ' + status,
-        // )
         if(errorRequest !== undefined)
             setOpenSnackBack(true)
     }, [errorRequest])
 
-
-    // console.log('>>>>>>>>>>>> return',
-    //     'openSnackBack: '+ openSnackBack,
-    //     'errorRequest: ' + errorRequest,
-    //     'status: ' + status,
-    //     )
 
     return (
         <Snackbar

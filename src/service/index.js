@@ -113,7 +113,7 @@ const mountApiResult = (res, error = false, pagination = true) => {
     return ({
         errorRequest: error,
         data: pagination && res.data?.results ? res.data?.results : res.data,
-        message: res.message || 'Erro na conexão',
+        message: res.message || error ? 'Erro na conexão' : 'Operação realizada com sucesso',
         status: pagination ? res.status : res.status,
         statusText: res?.statusText || res.response?.statusText,
         method: res?.config.method,
