@@ -6,12 +6,14 @@ import {
 } from "../components/template/action-creators";
 import {SingOutCB} from "../components/template/container";
 
+
 const URL_BASE = process.env.REACT_APP_API_URL
+// const URL_BASE = 'https://drf-quartel.herokuapp.com'
 
 
 let cancelToken;
 
-const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
+const fetchApi = async (path = '', method = 'GET', body={}, dispatch, id) => {
     // await delay(2000);
     let headers = {
         'Authorization': 'Bearer ' + localStorage.getItem('AuthorizationToken'),
@@ -35,7 +37,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
                 if(error?.response)
                     return checkErrors(error.response, dispatch);
                 console.log('response with error : ', error.toJSON());
-                return checkErrors(error.toJSON(), dispatch);
+                return checkErrors(error?.toJSON(), dispatch);
             }
             break;
 
@@ -43,6 +45,7 @@ const fetchApi = async (path = '', method = 'GET', body, dispatch, id) => {
             dispatch(finishOnPromisse());
             try {
                 let response = await axios.post(`${URL_BASE}/${path}/`, body, {headers});
+                // console.log(response)
                 if(response?.status === 201)
                     dispatch(resultOnPromisse(mountApiResult(response)))
                 return response;

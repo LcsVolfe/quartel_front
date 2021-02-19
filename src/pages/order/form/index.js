@@ -4,23 +4,68 @@ import {FormBuilder} from "../../../components/form-builder";
 import {GatewayOptions, StatusOptions} from "./options";
 import OrderLineFormPage from "./order-line";
 import validators from "../../../components/form-builder/enum/validators.enum";
+import ActionEnum from "../../../components/form-builder/enum/action.enum";
+import {Dialog, DialogContent, DialogContentText, DialogTitle, Grid,} from "@material-ui/core";
+import ApiService from "../../../service";
+import {useDispatch} from "react-redux";
+import {finishOnPromisse, loadingOnPromisse} from "../../../components/template/action-creators";
+
+const closeOrder = async (id, dispatch) => {
+    try {
+        const res = await ApiService.CustomRequest(`close-order/${id}`, 'POST', {},dispatch)
+        if(res.status != 200) return;
+        return res.data;
+    } catch (err) {
+        return err
+    }
+};
+
+const SimpleDialog = ({ onClose, open, id=99 }) => {
+    const dispatch = useDispatch();
+    const [state, setState] = useState();
+
+    useEffect(async ()=>{
+        setState(await closeOrder(id, dispatch));
+    },[])
+
+    return (
+        <Dialog onClose={onClose} open={open}>
+            <DialogTitle>Fechamento Ordem</DialogTitle>
+            <DialogContent>
+                <DialogContentText>Total Material: R$ {state?.lineTotal}</DialogContentText>
+                <DialogContentText>Total Mão de Obra: R$ {state?.employeeTotal}</DialogContentText>
+                <DialogContentText>Custo Total: R$ {state?.costTotal}</DialogContentText>
+                <DialogContentText>Valor Cobrado: R$ {state?.grandTotal}</DialogContentText>
+                <DialogContentText>Lucro: R$ {state?.profit}</DialogContentText>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 
 const OrderFormPage = () => {
-
-    const [orderLine, setOrderLine] = useState()
+    const [orderLine, setOrderLine] = useState();
+    const [open, setOpen] = useState(false);
     const orderLineForm = (data) => setOrderLine(data)
-    const SetOrderLineForm = (data) => setOrderLine(data)
+    const handleClose = () => setOpen(false);
     const TakeFormReference = (data, setFormState) => {
         if(!orderLine) return;
-        let grandTotal = 0;
+        let linesTotal = 0;
         orderLine.map(line => {
-            grandTotal += Number(line.lineAmount);
-        })
-        setFormState('orderLine', orderLine)
-        setFormState('grandTotal', grandTotal)
+            linesTotal += Number(line.lineAmount);
+        });
 
+        setFormState('orderLine', orderLine)
+        setFormState('lineTotal', linesTotal)
+        // setFormState('grandTotal', linesTotal + Number(data.state.grandTotal))
     }
+
+    const closeOrder = (itemId) => {
+        setOpen(true);
+        console.log('chamo meu action', itemId)
+    }
+
+
 
 
     let fields = [
@@ -80,8 +125,20 @@ const OrderFormPage = () => {
             defaultValue: '0'
         },
         {
+            name: 'lineTotal',
+            label: 'Total Produtos',
+            type: typesEnum.CURRENCY,
+            readOnly: true
+        },
+        {
             name: 'discount',
             label: 'Desconto',
+            type: typesEnum.CURRENCY,
+            defaultValue: '0'
+        },
+        {
+            name: 'left',
+            label: 'Sobrou',
             type: typesEnum.CURRENCY,
             defaultValue: '0'
         },
@@ -98,15 +155,15 @@ const OrderFormPage = () => {
             defaultValue: '0'
         },
         {
-            name: 'isPaid',
-            label: 'Paga',
-            type: typesEnum.BOOLEAN,
-        },
-        {
             name: 'status',
             label: 'Status',
             type: typesEnum.SELECT,
             options: StatusOptions
+        },
+        {
+            name: 'isPaid',
+            label: 'Paga',
+            type: typesEnum.BOOLEAN,
         },
         {
             name: 'orderLine',
@@ -147,17 +204,24 @@ const OrderFormPage = () => {
                 },
             ]
         },
-        {
-            name: 'employeeLine',
-            label: 'Funcionários',
-            type: typesEnum.MULTISELECT,
-            path: 'employees-search-by-name',
-
-        },
+        // {
+        //     name: 'employeeLine',
+        //     label: 'Funcionários',
+        //     type: typesEnum.MULTISELECT,
+        //     path: 'employees-search-by-name',
+        //
+        // },
     ];
 
 
-    return (<FormBuilder controls={fields} title={'Cadastro de Serviço'} TakeFormReference={TakeFormReference}  />);
+    return (
+        <Grid >
+            <SimpleDialog open={open} onClose={handleClose} />
+            <FormBuilder controls={fields} title={'Cadastro de Serviço'} TakeFormReference={TakeFormReference} actionBar={[
+                {name: ActionEnum.CLOSE_ORDER, action: closeOrder}
+            ]} />
+        </Grid>
+        );
 
 }
 

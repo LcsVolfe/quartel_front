@@ -19,9 +19,14 @@ const OrderListPage = () => {
             label: "Total Final",
             options: {customBodyRender: CurrencyColumn}
         },
+        // {
+        //     name: "discount",
+        //     label: "Desconto",
+        //     options: {customBodyRender: CurrencyColumn}
+        // },
         {
-            name: "discount",
-            label: "Desconto",
+            name: "left",
+            label: "Sobrou",
             options: {customBodyRender: CurrencyColumn}
         },
         {
@@ -34,11 +39,11 @@ const OrderListPage = () => {
             label: "Status",
             options: {customBodyRender: (value)=>OptionsColumn(value, StatusOptions)},
         },
-        {
-            name: "employeeLine",
-            label: "Funcionários",
-            options: {customBodyRender: (value)=> (<span>{value?.length}</span>)},
-        },
+        // {
+        //     name: "employeeLine",
+        //     label: "Funcionários",
+        //     options: {customBodyRender: (value)=> (<span>{value?.length}</span>)},
+        // },
     ];
 
     return (<TableRender title={'Serviços'} columns={columns}/>);

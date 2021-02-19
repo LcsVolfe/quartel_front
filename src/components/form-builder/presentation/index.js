@@ -15,6 +15,7 @@ import typesEnum from '../enum/types.enum';
 import Box from '@material-ui/core/Box';
 import {Link, useLocation} from "react-router-dom";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ReceiptIcon from '@material-ui/icons/Receipt';
 import SaveIcon from "@material-ui/icons/Save";
 import Switch from "@material-ui/core/Switch";
 import DateFnsUtils from "@date-io/date-fns";
@@ -24,11 +25,12 @@ import MultiSelectComponent from "./multi-select";
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {setCompleteOption} from "../reducer";
+import ToolBarActions from "./toolbar-actions";
 
 
 const FormBuilderPresentation = ({
 		 controls, onSubmit, title, isColumn, elevation, autoCompleteOption, TakeFormReference, saveBtn=true, inputFullWidth=false,
-		 onSubmitForm, onExit, handleAutoCompleteChange, dispatch, actionBar=true, onClick, btnText, btnJustify, submitFormByBtnClick=false }) => {
+		 onSubmitForm, onExit, handleAutoCompleteChange, dispatch, actionBar=[], onClick, btnText, btnJustify, submitFormByBtnClick=false }) => {
 	const FORM_ID = Math.random();
 	const location = useLocation();
 	const classes = useStyles();
@@ -167,19 +169,7 @@ const FormBuilderPresentation = ({
 		<Paper className={classes.paper} elevation={elevation}>
 			<Box p={actionBar ? 4 : 0} className={classes.w100}>
 				<h1>{title}</h1>
-				{actionBar && <AppBar position="relative" className={classes.appBar}>
-					<Toolbar className={classes.toolBarForm}>
-						<IconButton color="inherit" onClick={onExit} component={Link} to={location.pathname.replace('form', 'list')}>
-							<ArrowBackIcon />
-						</IconButton>
-						<IconButton color="inherit" type={'submit'} form={FORM_ID}>
-							<SaveIcon />
-						</IconButton>
-						{/*<IconButton color="inherit" onClick={() => defineTypeAction(1)}>*/}
-						{/*	<SaveIcon />*/}
-						{/*</IconButton>*/}
-					</Toolbar>
-				</AppBar>}
+				{actionBar && <ToolBarActions onExit={onExit} location={location} FORM_ID={FORM_ID} actionBar={actionBar} objId={onSubmitForm?.id}/>}
 
 				<form onSubmit={handleSubmit(defineTypeAction)} id={FORM_ID}>
 					<Grid
@@ -456,15 +446,8 @@ const useStyles = makeStyles((theme) => ({
 	boolean: {
 		order: 1
 	},
-	toolBarForm: {
-		display: 'flex',
-		justifyContent: 'space-between',
-	},
 	w100: {
 		width: '100%'
-	},
-	appBar: {
-		marginBottom: 24
 	},
 	mButton: {
 		marginTop: 16,
