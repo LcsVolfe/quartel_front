@@ -63,6 +63,8 @@ const FormBuilderPresentation = ({
 			fieldsState[field.name] = value;
 			// setFormState(field.name, value)
 		});
+		if(onSubmitForm?.id)
+			fieldsState.id = onSubmitForm.id;
 		// console.log(fieldsState)
 	}
 	checkControls(onSubmitForm)

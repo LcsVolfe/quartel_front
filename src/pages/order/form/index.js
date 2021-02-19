@@ -20,7 +20,7 @@ const closeOrder = async (id, dispatch) => {
     }
 };
 
-const SimpleDialog = ({ onClose, open, id=99 }) => {
+const SimpleDialog = ({ onClose, open, id }) => {
     const dispatch = useDispatch();
     const [state, setState] = useState();
 
@@ -46,9 +46,13 @@ const SimpleDialog = ({ onClose, open, id=99 }) => {
 const OrderFormPage = () => {
     const [orderLine, setOrderLine] = useState();
     const [open, setOpen] = useState(false);
+    const [id, setId] = useState();
     const orderLineForm = (data) => setOrderLine(data)
     const handleClose = () => setOpen(false);
     const TakeFormReference = (data, setFormState) => {
+        if(data.state?.id)
+            setId(data.state.id);
+
         if(!orderLine) return;
         let linesTotal = 0;
         orderLine.map(line => {
@@ -124,24 +128,24 @@ const OrderFormPage = () => {
             type: typesEnum.CURRENCY,
             defaultValue: '0'
         },
-        {
-            name: 'lineTotal',
-            label: 'Total Produtos',
-            type: typesEnum.CURRENCY,
-            readOnly: true
-        },
+        // {
+        //     name: 'lineTotal',
+        //     label: 'Total Produtos',
+        //     type: typesEnum.CURRENCY,
+        //     readOnly: true
+        // },
         {
             name: 'discount',
             label: 'Desconto',
             type: typesEnum.CURRENCY,
             defaultValue: '0'
         },
-        {
-            name: 'left',
-            label: 'Sobrou',
-            type: typesEnum.CURRENCY,
-            defaultValue: '0'
-        },
+        // {
+        //     name: 'profit',
+        //     label: 'Lucro',
+        //     type: typesEnum.CURRENCY,
+        //     defaultValue: '0'
+        // },
         {
             name: 'gateway',
             label: 'Pagamento',
@@ -216,10 +220,10 @@ const OrderFormPage = () => {
 
     return (
         <Grid >
-            <SimpleDialog open={open} onClose={handleClose} />
             <FormBuilder controls={fields} title={'Cadastro de Serviço'} TakeFormReference={TakeFormReference} actionBar={[
                 {name: ActionEnum.CLOSE_ORDER, action: closeOrder}
             ]} />
+            {id && <SimpleDialog open={open} onClose={handleClose} id={id}/>}
         </Grid>
         );
 

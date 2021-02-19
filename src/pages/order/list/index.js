@@ -24,11 +24,11 @@ const OrderListPage = () => {
         //     label: "Desconto",
         //     options: {customBodyRender: CurrencyColumn}
         // },
-        {
-            name: "left",
-            label: "Sobrou",
-            options: {customBodyRender: CurrencyColumn}
-        },
+        // {
+        //     name: "profit",
+        //     label: "Lucro",
+        //     options: {customBodyRender: CurrencyColumn}
+        // },
         {
             name: "gateway",
             label: "Pagamento",

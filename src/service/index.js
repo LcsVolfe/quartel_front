@@ -36,8 +36,9 @@ const fetchApi = async (path = '', method = 'GET', body={}, dispatch, id) => {
             } catch (error) {
                 if(error?.response)
                     return checkErrors(error.response, dispatch);
-                console.log('response with error : ', error.toJSON());
-                return checkErrors(error?.toJSON(), dispatch);
+                // console.log('response with error : ', error.toJSON());
+               // return checkErrors(error?.toJSON(), dispatch);
+               return checkErrors({}, dispatch);
             }
             break;
 
@@ -119,7 +120,7 @@ const mountApiResult = (res, error = false, pagination = true) => {
         message: res.message || error ? 'Erro na conexão' : 'Operação realizada com sucesso',
         status: pagination ? res.status : res.status,
         statusText: res?.statusText || res.response?.statusText,
-        method: res?.config.method,
+        method: res?.config?.method,
     });
 }
 
