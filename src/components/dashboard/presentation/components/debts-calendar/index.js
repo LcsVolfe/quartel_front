@@ -8,9 +8,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/pt-br';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import copy from 'clipboard-copy';
+
 import FormBuilderPresentation from "../../../../form-builder/presentation";
 import PStypesEnum from "../../../../form-builder/enum/types.enum";
 import {GatewayOptions} from "../../../../../pages/order/form/options";
+import {IconButton} from "@material-ui/core";
+import {ToDecimal} from "../../../../../utils/number";
 
 
 const localizer = momentLocalizer(moment)
@@ -44,7 +49,17 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
                     <DialogContentText>Método de pagamento: {GatewayOptions.map(gateway => {
                         if (gateway.value == selectedEvent?.gateway) return gateway.label
                     }) }</DialogContentText>
-                    <DialogContentText>Total da conta: R$ {selectedEvent?.amount}</DialogContentText>
+                    <DialogContentText>Total da conta: R$ {ToDecimal(selectedEvent?.amount)}</DialogContentText>
+                    {selectedEvent?.documentNumber && (<DialogContentText>N. Documento: {selectedEvent.documentNumber.length > 10 ?
+                        `${selectedEvent.documentNumber.slice(0, 10)}...` : selectedEvent.documentNumber}
+                        <IconButton
+                            color="primary"
+                            onClick={() => copy(selectedEvent.documentNumber)}
+                        >
+                            <FileCopyIcon />
+                        </IconButton>
+                    </DialogContentText>)}
+
                     <FormBuilderPresentation
                         TakeFormReference={TakeFormReference}
                         controls={[{label: 'Data Pagamento', name: 'datePay', type: PStypesEnum.DATE}]}

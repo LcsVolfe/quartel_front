@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^12.6.0",
     "@unicef/material-ui-currency-textfield": "^0.8.6",
     "axios": "^0.21.1",
+    "clipboard-copy": "^4.0.1",
     "clsx": "^1.1.1",
     "cpf-cnpj-validator": "^1.0.3",
     "date-fns": "2.11.1",

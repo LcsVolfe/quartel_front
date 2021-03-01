@@ -58,6 +58,7 @@ const Login = ({loading, onClick }) => {
 						isColumn={true}
 						inputFullWidth={true}
 						elevation={0}
+						btnText={'Login'}
 						submitFormByBtnClick={true}
 					/>
 					{/*<form className={classes.form} >*/}
