@@ -16,9 +16,9 @@ const Dashborad = ({loading, onClick, dashboard, handlerDebtDatePay }) => {
 	return (
 		<Container maxWidth={false}>
 			<Grid container spacing={3}>
-				{dashboard?.products.length > 0 && (<Grid item lg={3} sm={4} xl={3} xs={12}>
+				<Grid item lg={3} sm={4} xl={3} xs={12}>
 					<LowStockProducts data={dashboard?.products}/>
-				</Grid>)}
+				</Grid>
 				<Grid item lg={9} sm={8} xl={9} xs={12}>
 					<DebtsCalendar handlerDebtDatePay={handlerDebtDatePay} events={dashboard?.debtPayments}/>
 				</Grid>
