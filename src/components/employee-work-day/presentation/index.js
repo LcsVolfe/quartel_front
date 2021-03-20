@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
 	Box,
-	Card, CardContent,
 	Container,
-
-	Grid, Popper, Tooltip,
+	Grid, Tooltip,
 } from "@material-ui/core";
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import EmployeeWorkDayCalendar from "./components/employee-work-day-calendar";
 import PStypesEnum from "../../form-builder/enum/types.enum";
 import {FormBuilder} from "../../form-builder";
 import TableRender, {CurrencyColumn} from "../../table-render/presentation";
 import {FirstDayMonthDatePicker, LastDayMonthDatePicker} from "../../../utils/date";
+import ApiService from "../../../service";
 
 
 const OrderEmployeeToolTip = (value) => (
@@ -25,6 +25,12 @@ const OrderEmployeeToolTip = (value) => (
 
 
 const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCreateNewWorkDay, handlerDeleteWorkDay, handlerCalculateWorkDay }) => {
+
+	const payEmployeeWorkDay = (days) => {
+		
+		let response = ApiService.CustomRequest('ee', 'PUT', {});
+	}
+
 
 	return (
 		<Container maxWidth={false}>
@@ -59,6 +65,11 @@ const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCrea
 						{employeeWorkDayCalculate?.employees && <TableRender
 							onLoadTable={Object.values(employeeWorkDayCalculate?.employees || {})}
 							actionBar={false}
+							canDelete={false}
+							editAction={false}
+							customAction={(id)=>console.log('customAction', id)}
+							customActionIcon={<AttachMoneyIcon />}
+							customActionLabel={'Pagar todos os dias do funcionario'}
 							title={'Dias por funcionário'}
 							columns={[
 								{name: 'name', label: 'Nome'},
@@ -71,6 +82,11 @@ const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCrea
 							<TableRender
 								onLoadTable={Object.values(employeeWorkDayCalculate?.orders || {})}
 								actionBar={false}
+								canDelete={false}
+								editAction={false}
+								customAction={(id)=>console.log('aaaa', id)}
+								customActionIcon={<AttachMoneyIcon />}
+								customActionLabel={'Pagar todos os dias da obra'}
 								title={'Dias por obra'}
 								columns={[
 									{name: 'name', label: 'Nome'},

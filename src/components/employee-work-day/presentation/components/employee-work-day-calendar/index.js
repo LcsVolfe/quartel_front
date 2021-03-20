@@ -9,11 +9,21 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import EmployeeWorkDayFormPage from "../../../../../pages/employee-work-day/form";
+import {Chip, makeStyles} from "@material-ui/core";
 
 
 const localizer = momentLocalizer(moment)
 
-
+const Event = (e, handleClickOpen) => {
+    const classes = useStyles({backgroundColor: e.event.isPaid ? 'green' : 'red'});
+    return (<Chip
+            label={e.event.title}
+            onClick={()=>handleClickOpen(e.event)}
+            size="small"
+            className={classes.root}
+        />
+    )
+}
 
 const EmployeeWorkDayCalendar = ({events=[], handlerCreateNewWorkDay, handlerDeleteWorkDay}) => {
     const [open, setOpen] = useState(false);
@@ -90,9 +100,26 @@ const EmployeeWorkDayCalendar = ({events=[], handlerCreateNewWorkDay, handlerDel
                 style={{ height: 600, width: 800 }}
                 onSelectEvent={(e)=>handleClickOpen(e)}
                 onSelectSlot={handleSelect}
+                components={{
+                    eventWrapper: (e) => Event(e, handleClickOpen),
+                }}
             />
         </div>
     )
 }
 
-export default EmployeeWorkDayCalendar
+const useStyles = makeStyles((theme) => {
+    return ({
+        root: {
+            // backgroundColor: theme.backgroundColor,
+            backgroundColor: props => props.backgroundColor,
+            "&:hover": {
+                background: props => props.hover
+            },
+            color: 'white',
+            fontWeight: 'bold'
+        },
+    })
+});
+
+export default EmployeeWorkDayCalendar;

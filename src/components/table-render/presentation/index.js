@@ -23,18 +23,28 @@ export const DateColumn = (value) => FormatDate(value);
 export const MaskColumn = (value, mask) => (<span >{new StringMask(mask).apply(value)}</span>);
 export const OptionsColumn = (value, options) => (options.filter(op=>op.value === value)[0]?.label);
 
-const TableRender = ({ options, title, columns, onLoadTable, loading, deleteItem, history, actionBar=true }) => {
+const TableRender = ({ options, title, columns, onLoadTable, loading, deleteItem, history, actionBar=true,
+						 editAction=true, customAction, customActionIcon, customActionLabel, canDelete=true }) => {
 	const classes = useStyles();
 	const rowsSelected = useState([]);
 	let location = useLocation();
-console.log(onLoadTable)
+
 	let optionsDefalut = {
 		...optionsLanguage,
 		...options,
 		rowsSelected,
 		selectableRowsOnClick: true,
 		customToolbarSelect: (selectedRows) =>
-			<CustomToolbarSelect selectedRows={selectedRows} data={onLoadTable} deleteItem={deleteItem} history={history}/>
+			<CustomToolbarSelect
+				selectedRows={selectedRows}
+				data={onLoadTable}
+				deleteItem={deleteItem}
+				history={history}
+				editAction={editAction}
+				customAction={customAction}
+				customActionIcon={customActionIcon}
+				customActionLabel={customActionLabel}
+			/>
 	}
 	return (
 		<>

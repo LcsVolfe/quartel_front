@@ -52,6 +52,11 @@ const EmployeeWorkDayFormPage = ({TakeFormReference, workDay, selectedEvent}) =>
             name: 'workNight',
             label: 'Trab. Noite',
             type: typesEnum.BOOLEAN
+        },
+        {
+            name: 'isPaid',
+            label: 'Pago',
+            type: typesEnum.BOOLEAN
         }
     ];
 
