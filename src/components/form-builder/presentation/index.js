@@ -8,15 +8,13 @@ import {
 	Grid, IconButton, InputLabel,
 	MenuItem,
 	Paper,
-	Select, Toolbar,
+	Select, Toolbar, Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import typesEnum from '../enum/types.enum';
 import Box from '@material-ui/core/Box';
 import {Link, useLocation} from "react-router-dom";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ReceiptIcon from '@material-ui/icons/Receipt';
-import SaveIcon from "@material-ui/icons/Save";
+import Dropzone, {useDropzone} from 'react-dropzone'
 import Switch from "@material-ui/core/Switch";
 import DateFnsUtils from "@date-io/date-fns";
 import {ptBR} from "date-fns/locale";
@@ -72,6 +70,7 @@ const FormBuilderPresentation = ({
 	const [autoCompleteOpen, setAutoCompleteOpen] = useState(autoCompleteOpenState);
 	const { register, handleSubmit, control, errors, setValue, watch, trigger } = useForm({defaultValues: fieldsState});
 	const watchForm = useWatch({control});
+	const {acceptedFiles, getRootProps, getInputProps} = useDropzone({multiple: false});
 
 	const multiListUpdate = (data, name) => setFormState(name, data);
 	const handleChangeSwitch = (event) => setFormState(event.target.name, event.target.checked);
@@ -126,7 +125,24 @@ const FormBuilderPresentation = ({
 				case typesEnum.AUTOCOMPLETE:
 				case typesEnum.INVISIBLE:
 					data[control.name] = state[control.name]?.id || state[control.name]
-					// data[control.name] = value
+					break;
+
+				case typesEnum.DROPZONE:
+					data[control.name] = acceptedFiles;
+
+					var formData = new FormData();
+					formData.append('document', acceptedFiles[0]);
+
+					// fetch('http://api.mocki.io/v1/7bafd03f', {
+					fetch('http://127.0.0.1:8000/debt-payments/'+state?.id+'/', {
+						method: 'PUT',
+						headers:{
+							Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE1NTA5NjQxLCJqdGkiOiJmMDU2YzU4ZWYwNjY0MTlmYmM2ZGI1ZTYzYjgyOGUwMSIsInVzZXJfaWQiOjR9.WY0-xv9Zw0NwQvZVx7WBGtzXr0_9hVsWRToyVK1Y5kU'
+						},
+						body: formData
+					})
+
+					break;
 
 				default: break;
 			}
@@ -386,6 +402,32 @@ const FormBuilderPresentation = ({
 										/>
 									);
 									break
+
+								case typesEnum.DROPZONE:
+									let dropText = 'Clique ou arraste um arquivo.';
+									const files = acceptedFiles.map((file, i) => {
+										if(i===0)
+											dropText = file.path;
+										return (
+											<li key={file.path}>
+												{file.path} - {file.size} bytes
+											</li>
+										)
+									});
+									componentToRender = (
+										<Box>
+											<Typography color={'textSecondary'}>{field.label}</Typography>
+											<Box border={'1px dashed'} p={2} borderRadius={8} {...getRootProps({className: 'dropzone'})}>
+												<input {...getInputProps()} />
+												<Typography component={'p'} align={'center'}>{dropText}</Typography>
+											</Box>
+											{/*<aside>*/}
+											{/*	<h4>Files</h4>*/}
+											{/*	<ul>{files}</ul>*/}
+											{/*</aside>*/}
+										</Box>
+									);
+									break;
 
 								case typesEnum.INVISIBLE:
 									return;

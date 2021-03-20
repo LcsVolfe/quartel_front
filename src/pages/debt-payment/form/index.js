@@ -61,6 +61,11 @@ const DebtPaymentFormPage = () => {
             name: 'isMonthly',
             label: 'Mensal Fixa',
             type: typesEnum.BOOLEAN,
+        },
+        {
+            name: 'pdf',
+            label: 'Boleto',
+            type: typesEnum.DROPZONE,
         }
     ];
 

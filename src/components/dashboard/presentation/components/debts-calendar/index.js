@@ -14,12 +14,26 @@ import copy from 'clipboard-copy';
 import FormBuilderPresentation from "../../../../form-builder/presentation";
 import PStypesEnum from "../../../../form-builder/enum/types.enum";
 import {GatewayOptions} from "../../../../../pages/order/form/options";
-import {IconButton} from "@material-ui/core";
+import {Chip, IconButton, makeStyles} from "@material-ui/core";
 import {ToDecimal} from "../../../../../utils/number";
 
 
 const localizer = momentLocalizer(moment)
 
+const Event = (e, handleClickOpen) => {
+    let late = new Date(e.event.start) < new Date();
+    const classes = useStyles({backgroundColor: late ? 'red' : 'green'});
+    console.log(e)
+    console.log('late', late)
+
+    return (<Chip
+            label={e.event.title}
+            onClick={()=>handleClickOpen(e.event)}
+            size="small"
+            className={classes.root}
+        />
+    )
+}
 
 
 const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
@@ -36,6 +50,7 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
             handlerDebtDatePay({datePay, isPaid: true}, selectedEvent.id);
         setOpen(false);
     }
+
     const TakeFormReference = ({state}) => setDatePay(state?.datePay);
 
     return (
@@ -97,9 +112,28 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
                 views={['month']}
                 style={{ height: 600, width: 800 }}
                 onSelectEvent={(e)=>handleClickOpen(e)}
+                components={{
+                    eventWrapper: (e) => Event(e, handleClickOpen),
+                }}
             />
         </div>
     )
 }
 
-export default DebtsCalendar
+
+const useStyles = makeStyles((theme) => {
+    console.log(theme)
+    return ({
+        root: {
+            // backgroundColor: theme.backgroundColor,
+            backgroundColor: props => props.backgroundColor,
+            "&:hover": {
+                background: props => props.hover
+            },
+            color: 'white',
+            fontWeight: 'bold'
+        },
+    })
+});
+
+export default DebtsCalendar;
