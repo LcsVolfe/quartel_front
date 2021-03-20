@@ -16,6 +16,7 @@ import PStypesEnum from "../../../../form-builder/enum/types.enum";
 import {GatewayOptions} from "../../../../../pages/order/form/options";
 import {Chip, IconButton, makeStyles} from "@material-ui/core";
 import {ToDecimal} from "../../../../../utils/number";
+import {Alert} from "@material-ui/lab";
 
 
 const localizer = momentLocalizer(moment)
@@ -23,9 +24,6 @@ const localizer = momentLocalizer(moment)
 const Event = (e, handleClickOpen) => {
     let late = new Date(e.event.start) < new Date();
     const classes = useStyles({backgroundColor: late ? 'red' : 'green'});
-    console.log(e)
-    console.log('late', late)
-
     return (<Chip
             label={e.event.title}
             onClick={()=>handleClickOpen(e.event)}
@@ -40,6 +38,7 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
     const [open, setOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(false);
     const [datePay, setDatePay] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     const handleClickOpen = (event) => {
         setSelectedEvent(event)
@@ -49,6 +48,7 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
         if(confirm)
             handlerDebtDatePay({datePay, isPaid: true}, selectedEvent.id);
         setOpen(false);
+        setCopied(false);
     }
 
     const TakeFormReference = ({state}) => setDatePay(state?.datePay);
@@ -68,8 +68,11 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
                     {selectedEvent?.documentNumber && (<DialogContentText>N. Documento: {selectedEvent.documentNumber.length > 10 ?
                         `${selectedEvent.documentNumber.slice(0, 10)}...` : selectedEvent.documentNumber}
                         <IconButton
-                            color="primary"
-                            onClick={() => copy(selectedEvent.documentNumber)}
+                            color={!copied ? 'primary' : 'secondary'}
+                            onClick={() => {
+                                copy(selectedEvent.documentNumber);
+                                setCopied(true);
+                            }}
                         >
                             <FileCopyIcon />
                         </IconButton>
@@ -116,13 +119,13 @@ const DebtsCalendar = ({handlerDebtDatePay, events=[]}) => {
                     eventWrapper: (e) => Event(e, handleClickOpen),
                 }}
             />
+
         </div>
     )
 }
 
 
 const useStyles = makeStyles((theme) => {
-    console.log(theme)
     return ({
         root: {
             // backgroundColor: theme.backgroundColor,

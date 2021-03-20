@@ -1,6 +1,7 @@
 import React from 'react';
 import BasicTable from "./basic-table";
 import {Grid} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 
 const LowStockProducts = ({ data }) => {
 
@@ -25,7 +26,10 @@ const LowStockProducts = ({ data }) => {
 		// },
 	]
 	return (
-		<BasicTable columns={columns} data={data} />
+		<Box>
+			<h2>Estoque baixo</h2>
+			<BasicTable columns={columns} data={data} />
+		</Box>
 	);
 };
 
