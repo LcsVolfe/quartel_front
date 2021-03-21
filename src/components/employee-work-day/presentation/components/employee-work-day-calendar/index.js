@@ -25,7 +25,7 @@ const Event = (e, handleClickOpen) => {
     )
 }
 
-const EmployeeWorkDayCalendar = ({events=[], handlerCreateNewWorkDay, handlerDeleteWorkDay}) => {
+const EmployeeWorkDayCalendar = ({events=[], handlerCreateUpdateWorkDay, handlerDeleteWorkDay}) => {
     const [open, setOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(false);
     const [state, setState] = useState();
@@ -37,9 +37,11 @@ const EmployeeWorkDayCalendar = ({events=[], handlerCreateNewWorkDay, handlerDel
     }
     const handleClose = (confirm) => {
         if(confirm && state?.employee && state?.order){
+            console.log(confirm, state)
+
             state.employee = state.employee.id;
             state.order = state.order.id;
-            handlerCreateNewWorkDay(state);
+            handlerCreateUpdateWorkDay(state);
         }
         setSelectedEvent(null);
         setOpen(false);

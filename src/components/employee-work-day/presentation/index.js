@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
 	Box,
 	Container,
@@ -10,7 +10,6 @@ import PStypesEnum from "../../form-builder/enum/types.enum";
 import {FormBuilder} from "../../form-builder";
 import TableRender, {CurrencyColumn} from "../../table-render/presentation";
 import {FirstDayMonthDatePicker, LastDayMonthDatePicker} from "../../../utils/date";
-import ApiService from "../../../service";
 
 
 const OrderEmployeeToolTip = (value) => (
@@ -24,13 +23,19 @@ const OrderEmployeeToolTip = (value) => (
 	);
 
 
-const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCreateNewWorkDay, handlerDeleteWorkDay, handlerCalculateWorkDay }) => {
-
-	const payEmployeeWorkDay = (days) => {
-		
-		let response = ApiService.CustomRequest('ee', 'PUT', {});
+const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCreateUpdateWorkDay, handlerDeleteWorkDay,
+							 handlerCalculateWorkDay, executePaymentWorkDays }) => {
+	const [filters, setFilters] = useState();
+	const payEmployeeWorkDay = async (ids, selectedRows) =>{
+		for await (let row of selectedRows) {
+			executePaymentWorkDays(row.workDaysIds, filters)
+		}
 	}
 
+	const calculateWorkDay = (data) => {
+		handlerCalculateWorkDay(data);
+		setFilters(data);
+	}
 
 	return (
 		<Container maxWidth={false}>
@@ -38,14 +43,14 @@ const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCrea
 				<Grid item lg={12} sm={12} xl={8} xs={12}>
 					<EmployeeWorkDayCalendar
 						events={employeeWorkDay?.events}
-						handlerCreateNewWorkDay={handlerCreateNewWorkDay}
+						handlerCreateUpdateWorkDay={handlerCreateUpdateWorkDay}
 						handlerDeleteWorkDay={handlerDeleteWorkDay}
 					/>
 				</Grid>
 				<Grid item lg={12} sm={12} xl={4} xs={12}>
 					<FormBuilder
 						title={'Filtros'}
-						onClick={handlerCalculateWorkDay}
+						onClick={calculateWorkDay}
 						actionBar={false}
 						btnText={'Filtrar'}
 						elevation={0}
@@ -67,7 +72,7 @@ const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCrea
 							actionBar={false}
 							canDelete={false}
 							editAction={false}
-							customAction={(id)=>console.log('customAction', id)}
+							customAction={(ids, selectedRows)=>payEmployeeWorkDay(ids, selectedRows)}
 							customActionIcon={<AttachMoneyIcon />}
 							customActionLabel={'Pagar todos os dias do funcionario'}
 							title={'Dias por funcionário'}
@@ -84,7 +89,7 @@ const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCrea
 								actionBar={false}
 								canDelete={false}
 								editAction={false}
-								customAction={(id)=>console.log('aaaa', id)}
+								customAction={(ids, selectedRows)=>payEmployeeWorkDay(ids, selectedRows)}
 								customActionIcon={<AttachMoneyIcon />}
 								customActionLabel={'Pagar todos os dias da obra'}
 								title={'Dias por obra'}

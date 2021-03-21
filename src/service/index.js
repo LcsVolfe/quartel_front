@@ -47,7 +47,7 @@ const fetchApi = async (path = '', method = 'GET', body={}, dispatch, id) => {
             try {
                 let response = await axios.post(`${URL_BASE}/${path}/`, body, {headers});
                 // console.log(response)
-                if(response?.status === 201)
+                if(response?.status === 201 || response?.status === 200)
                     dispatch(resultOnPromisse(mountApiResult(response)))
                 return response;
             } catch (error) {

@@ -1,10 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-	createEmployeeWorkDay,
+	createUpdateEmployeeWorkDay,
 	fetchEmployeeWorkDay,
 	handlerCalculateEmployeeWorkDay,
-	DeleteNewWorkDay
+	DeleteNewWorkDay, ExecutePaymentWorkDays
 } from '../action-creators';
 import EmployeeWorkDay from '../presentation';
 import {selectEmployeeWorkDay, selectEmployeeWorkDayCalculate} from '../selectors';
@@ -17,16 +17,23 @@ const EmployeeWorkDayContainer = (props) => {
 		dispatch(fetchEmployeeWorkDay());
 	}, [dispatch]);
 
-	const handlerCreateNewWorkDay = useCallback((data) => {
-		dispatch(createEmployeeWorkDay(data));
+	const handlerCreateUpdateWorkDay = useCallback((data) => {
+		dispatch(createUpdateEmployeeWorkDay(data));
 	}, [dispatch]);
 
 	const handlerDeleteWorkDay = useCallback((data) => {
 		dispatch(DeleteNewWorkDay(data));
 	}, []);
 
+	const executePaymentWorkDays = useCallback((data, filters) => {
+		dispatch(ExecutePaymentWorkDays(data));
+		dispatch(handlerCalculateEmployeeWorkDay(filters));
+		dispatch(fetchEmployeeWorkDay());
+	}, []);
+
 	const handlerCalculateWorkDay = useCallback((data) => {
 		dispatch(handlerCalculateEmployeeWorkDay(data));
+		dispatch(fetchEmployeeWorkDay());
 	}, [dispatch]);
 
 	useEffect(handlerEmployeeWorkDay, []);
@@ -36,8 +43,9 @@ const EmployeeWorkDayContainer = (props) => {
 	return <EmployeeWorkDay
 		{...data}
 		{...props}
+		executePaymentWorkDays={executePaymentWorkDays}
 		handlerCalculateWorkDay={handlerCalculateWorkDay}
-		handlerCreateNewWorkDay={handlerCreateNewWorkDay}
+		handlerCreateUpdateWorkDay={handlerCreateUpdateWorkDay}
 		handlerDeleteWorkDay={handlerDeleteWorkDay} />;
 };
 

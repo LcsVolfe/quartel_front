@@ -11,8 +11,10 @@ const CustomToolbarSelect = ({customActionLabel, selectedRows, data, deleteItem,
 
     const handleClick = async (type) => {
         let listIds = [];
+        let values = [];
         selectedRows.data.map((item, i) => {
         	listIds.push(data[item.dataIndex]?.id)
+            values.push(data[item.dataIndex])
         })
 
         switch (type){
@@ -24,7 +26,7 @@ const CustomToolbarSelect = ({customActionLabel, selectedRows, data, deleteItem,
                 ListToFormEdit(history, listIds[0])
                 break;
             case 3: // CUSTOM
-                customAction(listIds)
+                customAction(listIds, values)
                 break;
             default:
                 return

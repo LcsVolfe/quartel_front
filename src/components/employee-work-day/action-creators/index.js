@@ -24,7 +24,7 @@ export const fetchEmployeeWorkDay = () => async (dispatch) => {
 	}
 };
 
-export const createEmployeeWorkDay = (data) => async (dispatch) => {
+export const createUpdateEmployeeWorkDay = (data) => async (dispatch) => {
 	dispatch(loadingEmployeeWorkDay());
 	try {
 		let url = 'employees-work-day';
@@ -48,6 +48,18 @@ export const DeleteNewWorkDay = (data) => async (dispatch) => {
 		const res = await ApiService.CustomRequest(`employees-work-day`,'DELETE', data, dispatch, data.id)
 		if(res.status == 204)
 			dispatch(fetchEmployeeWorkDay());
+	} catch (err) {
+		dispatch(employeeWorkDayError());
+	}
+};
+
+export const ExecutePaymentWorkDays = (listId) => async (dispatch) => {
+	dispatch(loadingEmployeeWorkDay());
+	try {
+		const res = await ApiService.CustomRequest(`employee-work-day-execute-payments`,'POST', listId, dispatch)
+		return res;
+		// if(res.status == 200)
+		// 	dispatch(fetchEmployeeWorkDay());
 	} catch (err) {
 		dispatch(employeeWorkDayError());
 	}
