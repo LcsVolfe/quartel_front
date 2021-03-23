@@ -7,7 +7,7 @@ import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import {ListToFormEdit} from "../../../../utils/navigation";
 
 const CustomToolbarSelect = ({customActionLabel, selectedRows, data, deleteItem, history, editAction, customAction,
-                                 customActionIcon,  canDelete}) => {
+                                 customActionIcon,  canDelete=true}) => {
 
     const handleClick = async (type) => {
         let listIds = [];
