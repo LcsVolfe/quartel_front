@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const Budget = ({ className, ...rest }) => {
+const Budget = ({ className, value, ...rest }) => {
 	const classes = useStyles();
 
 	return (
@@ -52,13 +52,13 @@ const Budget = ({ className, ...rest }) => {
 							gutterBottom
 							variant="h6"
 						>
-							BUDGET
+							Obras
 						</Typography>
 						<Typography
 							color="textPrimary"
 							variant="h3"
 						>
-							$24,000
+							{value}
 						</Typography>
 					</Grid>
 					<Grid item>
@@ -72,18 +72,11 @@ const Budget = ({ className, ...rest }) => {
 					display="flex"
 					alignItems="center"
 				>
-					<ArrowDownwardIcon className={classes.differenceIcon} />
-					<Typography
-						className={classes.differenceValue}
-						variant="body2"
-					>
-						12%
-					</Typography>
 					<Typography
 						color="textSecondary"
 						variant="caption"
 					>
-						Since last month
+						em andamento
 					</Typography>
 				</Box>
 			</CardContent>

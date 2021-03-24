@@ -6,6 +6,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import AttachMoney from '@material-ui/icons/AttachMoney';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import ClientFormPage from "./pages/client/form";
 import ClientListPage from "./pages/client/list";
 import ProductListPage from "./pages/product/list";
@@ -22,6 +23,8 @@ import DebtPaymentFormPage from "./pages/debt-payment/form";
 import DebtPaymentListPage from "./pages/debt-payment/list";
 import EmployeeWorkDayListPage from "./pages/employee-work-day/list";
 import EmployeeWorkDayFormPage from "./pages/employee-work-day/form";
+import DebtReceiveListPage from "./pages/debt-receiver/list";
+import DebtReceiveFormPage from "./pages/debt-receiver/form";
 
 
 const router = [
@@ -90,6 +93,16 @@ const router = [
   {
     path: '/form/debt-payments',
     component: <DebtPaymentFormPage />
+  },
+  {
+    path: '/list/debt-receives',
+    text: 'Recebíveis',
+    icon: <LocalAtmIcon />,
+    component: <DebtReceiveListPage />
+  },
+  {
+    path: '/form/debt-receives',
+    component: <DebtReceiveFormPage />
   },
   {
     path: '/list/employees-work-day',

@@ -4,14 +4,14 @@ import typesEnum from "../../../components/form-builder/enum/types.enum";
 import validators from "../../../components/form-builder/enum/validators.enum";
 import {GatewayOptions} from "../../order/form/options";
 
-const DebtPaymentFormPage = () => {
+const DebtReceiveFormPage = () => {
 
     let fields = [
         {
-            name: 'provider',
-            label: 'Fornecedor',
+            name: 'client',
+            label: 'Cliente',
             type: typesEnum.AUTOCOMPLETE,
-            path: 'providers-search-by-name',
+            path: 'clients-search-by-name',
             validations: {
                 rule: validators.required,
             },
@@ -33,8 +33,8 @@ const DebtPaymentFormPage = () => {
             },
         },
         {
-            name: 'datePay',
-            label: 'Pagamento',
+            name: 'dateReceive',
+            label: 'Recebido',
             type: typesEnum.DATE,
             defaultValue: null
         },
@@ -56,8 +56,8 @@ const DebtPaymentFormPage = () => {
             type: typesEnum.TEXT,
         },
         {
-            name: 'isPaid',
-            label: 'Paga',
+            name: 'isReceive',
+            label: 'Recebida',
             type: typesEnum.BOOLEAN,
         },
         {
@@ -72,7 +72,7 @@ const DebtPaymentFormPage = () => {
         // }
     ];
 
-    return (<FormBuilder controls={fields} title={'Cadastro de Despesa'}  />);
+    return (<FormBuilder controls={fields} title={'Cadastro de recebíveis'}  />);
 }
 
-export default DebtPaymentFormPage;
+export default DebtReceiveFormPage;

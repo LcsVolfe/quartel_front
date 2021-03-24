@@ -36,6 +36,7 @@ const TableRender = ({ options, title, columns, onLoadTable, loading, deleteItem
 		selectableRowsOnClick: true,
 		customToolbarSelect: (selectedRows) =>
 			<CustomToolbarSelect
+				canDelete={canDelete}
 				selectedRows={selectedRows}
 				data={onLoadTable}
 				deleteItem={deleteItem}

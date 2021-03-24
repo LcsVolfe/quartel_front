@@ -15,6 +15,11 @@ import TotalProfit from "./components/total-profit";
 const Dashborad = ({loading, onClick, dashboard, handlerDebtDatePay }) => {
 	return (
 		<Container maxWidth={false}>
+			{/*<Grid container spacing={3}>*/}
+			{/*	<Grid item>*/}
+			{/*		<Budget value={5} />*/}
+			{/*	</Grid>*/}
+			{/*</Grid>*/}
 			<Grid container spacing={3}>
 				<Grid item lg={3} sm={4} xl={3} xs={12}>
 					<LowStockProducts data={dashboard?.products}/>
@@ -22,9 +27,7 @@ const Dashborad = ({loading, onClick, dashboard, handlerDebtDatePay }) => {
 				<Grid item lg={9} sm={8} xl={9} xs={12}>
 					<DebtsCalendar handlerDebtDatePay={handlerDebtDatePay} events={dashboard?.debtPayments}/>
 				</Grid>
-				{/*<Grid item>*/}
-				{/*	<Budget />*/}
-				{/*</Grid>*/}
+
 				{/*<Grid item>*/}
 				{/*	<TotalCustomers />*/}
 				{/*</Grid>*/}
