@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -16,7 +16,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import {AccountCircle} from "@material-ui/icons";
 import {Grid, LinearProgress, Menu, MenuItem, Typography} from "@material-ui/core";
-import {Link, useHistory} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
+import {Helmet} from "react-helmet";
 
 import Logo from '../../../imgs/logo_quartel.png';
 import router from "../../../AppRouter";
@@ -28,9 +29,12 @@ const drawerWidth = 240;
 export default function Template({content, onPromisse, handlerSingOut}) {
 	const classes = useStyles();
 	const theme = useTheme();
-	const [open, setOpen] = React.useState(false);
-	const [anchorEl, setAnchorEl] = React.useState(null);
+	const [open, setOpen] = useState(false);
+	const [anchorEl, setAnchorEl] = useState(null);
 	const openIcon = Boolean(anchorEl);
+	const location = useLocation();
+
+
 	// console.log(onPromisse)
 
 
@@ -41,6 +45,10 @@ export default function Template({content, onPromisse, handlerSingOut}) {
 
 	return (
 		<div className={classes.root}>
+			<Helmet>
+				<title>Quartel</title>
+			</Helmet>
+
 			<CssBaseline />
 			<AppBar
 				position="fixed"
@@ -121,7 +129,11 @@ export default function Template({content, onPromisse, handlerSingOut}) {
 					{router.map((item, index) => {
 						if(item.path.includes('form')) return;
 						return (
-							<ListItem button key={index} component={Link} to={item.path}>
+							<ListItem
+								button
+								key={index}
+								selected={location.pathname.split('/').pop() == item.path.split('/').pop()}
+								component={Link} to={item.path}>
 								<ListItemIcon>
 									{item.icon}
 								</ListItemIcon>

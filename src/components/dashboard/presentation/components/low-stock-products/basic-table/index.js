@@ -18,7 +18,7 @@ export default function BasicTable({data, columns}) {
             <Table className={classes.table} stickyHeader>
                 <TableHead>
                     <TableRow>
-                        {columns.map((column, i) => (<TableCell className={classes.bold}>{column.label}</TableCell>))}
+                        {columns.map((column, i) => (<TableCell key={i} className={classes.bold}>{column.label}</TableCell>))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -28,7 +28,7 @@ export default function BasicTable({data, columns}) {
                             low = false;
 
                         return (
-                            <TableRow className={low ? classes.redRow : classes.yellowRow}>
+                            <TableRow key={i} className={low ? classes.redRow : classes.yellowRow}>
                                 {columns.map((column, i) => {
                                     if(column?.customRenderValue)
                                         return (<TableCell key={i}>{column.customRenderValue(row[column.name])}</TableCell>)
