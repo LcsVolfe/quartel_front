@@ -3,13 +3,12 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import EmployeeWorkDayFormPage from "../../../../../pages/employee-work-day/form";
-import {Chip, makeStyles} from "@material-ui/core";
+import {Box, Chip, makeStyles} from "@material-ui/core";
 
 
 const localizer = momentLocalizer(moment)
@@ -59,7 +58,7 @@ const EmployeeWorkDayCalendar = ({events=[], handlerCreateUpdateWorkDay, handler
     }
 
     return (
-        <div>
+        <Box display={'flex'} justifyContent={'center'}>
             <Dialog
                 open={open}
                 onClose={()=>handleClose(false)}
@@ -106,7 +105,7 @@ const EmployeeWorkDayCalendar = ({events=[], handlerCreateUpdateWorkDay, handler
                     eventWrapper: (e) => Event(e, handleClickOpen),
                 }}
             />
-        </div>
+        </Box>
     )
 }
 

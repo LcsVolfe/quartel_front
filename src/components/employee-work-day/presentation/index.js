@@ -10,6 +10,8 @@ import PStypesEnum from "../../form-builder/enum/types.enum";
 import {FormBuilder} from "../../form-builder";
 import TableRender, {CurrencyColumn} from "../../table-render/presentation";
 import {FirstDayMonthDatePicker, LastDayMonthDatePicker} from "../../../utils/date";
+import TotalProfit from "../../shared/total-profit";
+import Budget from "../../shared/budget";
 
 
 const OrderEmployeeToolTip = (value) => (
@@ -62,10 +64,20 @@ const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCrea
 							{label: 'Funcionário', name: 'employee', type: PStypesEnum.AUTOCOMPLETE, path: 'employees-search-by-name'},
 						]}
 					/>
-					<div>
-						<p>Total geral: R$ {employeeWorkDayCalculate?.totalFilter || 0}</p>
-						<p>Qntd. obras: {Object.values(employeeWorkDayCalculate?.orders || {})?.length}</p>
-						<p>Qntd. funcionários: {Object.values(employeeWorkDayCalculate?.employees || {})?.length}</p>
+					<Box mt={3} mb={3}>
+						<Box mb={3}>
+							<Grid container spacing={3}>
+								<Grid item xs={4}>
+									<TotalProfit label={'Total geral'} value={employeeWorkDayCalculate?.totalFilter} />
+								</Grid>
+								<Grid item xs={4}>
+									<Budget label={'Qntd. obras'} footer={''} value={Object.values(employeeWorkDayCalculate?.orders || {})?.length} />
+								</Grid>
+								<Grid item xs={4}>
+									<Budget label={'Qntd. funcionários'} value={Object.values(employeeWorkDayCalculate?.employees || {})?.length} />
+								</Grid>
+							</Grid>
+						</Box>
 
 						{employeeWorkDayCalculate?.employees && <TableRender
 							onLoadTable={Object.values(employeeWorkDayCalculate?.employees || {})}
@@ -103,7 +115,7 @@ const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCrea
 						</Box>
 						}
 
-					</div>
+					</Box>
 				</Grid>
 			</Grid>
 		</Container>

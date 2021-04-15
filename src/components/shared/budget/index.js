@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const Budget = ({ className, value, ...rest }) => {
+const Budget = ({ className, value, label, valeu, footer, ...rest }) => {
 	const classes = useStyles();
 
 	return (
@@ -52,7 +52,7 @@ const Budget = ({ className, value, ...rest }) => {
 							gutterBottom
 							variant="h6"
 						>
-							Obras
+							{label}
 						</Typography>
 						<Typography
 							color="textPrimary"
@@ -61,11 +61,11 @@ const Budget = ({ className, value, ...rest }) => {
 							{value}
 						</Typography>
 					</Grid>
-					<Grid item>
-						<Avatar className={classes.avatar}>
-							<MoneyIcon />
-						</Avatar>
-					</Grid>
+					{/*<Grid item>*/}
+					{/*	<Avatar className={classes.avatar}>*/}
+					{/*		<MoneyIcon />*/}
+					{/*	</Avatar>*/}
+					{/*</Grid>*/}
 				</Grid>
 				<Box
 					mt={2}
@@ -76,7 +76,7 @@ const Budget = ({ className, value, ...rest }) => {
 						color="textSecondary"
 						variant="caption"
 					>
-						em andamento
+						{footer}
 					</Typography>
 				</Box>
 			</CardContent>

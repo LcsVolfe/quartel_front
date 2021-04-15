@@ -61,43 +61,6 @@ const Login = ({loading, onClick }) => {
 						btnText={'Login'}
 						submitFormByBtnClick={true}
 					/>
-					{/*<form className={classes.form} >*/}
-					{/*	<TextField*/}
-					{/*		variant="outlined"*/}
-					{/*		margin="normal"*/}
-					{/*		required*/}
-					{/*		fullWidth*/}
-					{/*		id="email"*/}
-					{/*		label="Email"*/}
-					{/*		name="email"*/}
-					{/*		autoComplete="email"*/}
-					{/*		autoFocus*/}
-					{/*	/>*/}
-					{/*	<TextField*/}
-					{/*		variant="outlined"*/}
-					{/*		margin="normal"*/}
-					{/*		required*/}
-					{/*		fullWidth*/}
-					{/*		name="password"*/}
-					{/*		label="Password"*/}
-					{/*		type="password"*/}
-					{/*		id="password"*/}
-					{/*		autoComplete="current-password"*/}
-					{/*	/>*/}
-					{/*	<FormControlLabel*/}
-					{/*		control={<Checkbox value="remember" color="primary" />}*/}
-					{/*		label="Remember me"*/}
-					{/*	/>*/}
-					{/*	<Button*/}
-					{/*		onClick={login}*/}
-					{/*		fullWidth*/}
-					{/*		variant="contained"*/}
-					{/*		color="primary"*/}
-					{/*		className={classes.submit}*/}
-					{/*	>*/}
-					{/*		Login*/}
-					{/*	</Button>*/}
-					{/*</form>*/}
 				</div>
 			</Grid>
 		</Grid>
@@ -137,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
 		height: '100vh',
 	},
 	image: {
-		backgroundImage: 'url(https://source.unsplash.com/random)',
+		backgroundImage: 'url(https://source.unsplash.com/collection/2342139/)',
 		backgroundRepeat: 'no-repeat',
 		backgroundColor:
 			theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],

@@ -7,10 +7,6 @@ import {
 } from "@material-ui/core";
 import LowStockProducts from "./components/low-stock-products";
 import DebtsCalendar from "./components/debts-calendar";
-import Budget from "./components/budget";
-import TasksProgress from "./components/task-progress";
-import TotalCustomers from "./components/total-customers";
-import TotalProfit from "./components/total-profit";
 
 const Dashborad = ({loading, onClick, dashboard, handlerDebtDatePay }) => {
 	return (
