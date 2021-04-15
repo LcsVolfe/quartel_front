@@ -27,8 +27,8 @@ const EmployeeWorkDayContainer = (props) => {
 
 	const executePaymentWorkDays = useCallback((data, filters) => {
 		dispatch(ExecutePaymentWorkDays(data));
-		dispatch(handlerCalculateEmployeeWorkDay(filters));
-		dispatch(fetchEmployeeWorkDay());
+		// dispatch(handlerCalculateEmployeeWorkDay(filters));
+		// dispatch(fetchEmployeeWorkDay());
 	}, []);
 
 	const handlerCalculateWorkDay = useCallback((data) => {

@@ -1,4 +1,5 @@
 import ApiService from "../../../service";
+import {finishOnPromisse, loadingOnPromisse} from "../../template/action-creators";
 
 export const setEmployeeWorkDay = (payload) => ({
 	type: 'EMPLOYEE_WORK_DAY_SET',
@@ -14,14 +15,17 @@ export const employeeWorkDayError = () => ({ type: 'EMPLOYEE_WORK_DAY_ERROR' });
 export const loadingEmployeeWorkDay = () => ({ type: 'EMPLOYEE_WORK_DAY_LOADING' });
 
 export const fetchEmployeeWorkDay = () => async (dispatch) => {
+	dispatch(loadingOnPromisse());
 	dispatch(loadingEmployeeWorkDay());
 	try {
 		const res = await ApiService.CustomRequest('employees-work-day-calendar','GET', {}, dispatch)
 		if(res.status != 200) return;
+		dispatch(finishOnPromisse());
 		dispatch(setEmployeeWorkDay(res.data));
 	} catch (err) {
 		dispatch(employeeWorkDayError());
 	}
+
 };
 
 export const createUpdateEmployeeWorkDay = (data) => async (dispatch) => {

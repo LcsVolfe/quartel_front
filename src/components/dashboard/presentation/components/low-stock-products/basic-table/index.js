@@ -45,10 +45,10 @@ export default function BasicTable({data, columns}) {
 
 const useStyles = makeStyles({
     table: {
-        // minWidth: 650,
+        // maxHeight: 650,
     },
     tableContainer: {
-        maxHeight: 600,
+        maxHeight: 400,
         overflow: 'auto'
     },
     bold:{

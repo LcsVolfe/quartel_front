@@ -30,8 +30,9 @@ const EmployeeWorkDay = ({employeeWorkDay, employeeWorkDayCalculate, handlerCrea
 	const [filters, setFilters] = useState();
 	const payEmployeeWorkDay = async (ids, selectedRows) =>{
 		for await (let row of selectedRows) {
-			executePaymentWorkDays(row.workDaysIds, filters)
+			executePaymentWorkDays(row.workDaysIds, filters);
 		}
+		handlerCalculateWorkDay(filters);
 	}
 
 	const calculateWorkDay = (data) => {

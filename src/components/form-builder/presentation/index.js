@@ -85,6 +85,7 @@ const FormBuilderPresentation = ({
 	}
 
 	const defineTypeAction = (action=1, event) => {
+		console.log('defineTypeAction')
 		action = 1;
 		if(TakeFormReference)
 			TakeFormReference({watchForm, state}, setFormState)
@@ -150,8 +151,8 @@ const FormBuilderPresentation = ({
 		// console.log(data)
 		if(onSubmit)
 			onSubmit(data, action);
-		if(onClick)
-			onClick(data);
+		// if(onClick)
+		// 	onClick(data);
 		return data
 	}
 	const updateAutoComplete = (open, loading= false, name) => setAutoCompleteOpen({
