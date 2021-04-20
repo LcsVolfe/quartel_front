@@ -1,13 +1,19 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import {ListToFormEdit} from "../../../../utils/navigation";
+import CustomDialog from "../../../shared/dialog";
 
 const CustomToolbarSelect = ({customActionLabel, selectedRows, data, deleteItem, history, editAction, customAction,
                                  customActionIcon,  canDelete=true}) => {
+
+    const [openDeletedDialog, setOpenDeletedDialog] = useState(false);
+    // const [confirmDeletItems, setConfirmDeletItems] = useState(false);
+    const [listIds, setListIds] = useState([]);
+
 
     const handleClick = async (type) => {
         let listIds = [];
@@ -15,11 +21,14 @@ const CustomToolbarSelect = ({customActionLabel, selectedRows, data, deleteItem,
         selectedRows.data.map((item, i) => {
         	listIds.push(data[item.dataIndex]?.id)
             values.push(data[item.dataIndex])
-        })
+        });
+        setListIds(listIds);
 
         switch (type){
             case 1: // DELETE
-                deleteItem(listIds);
+                setOpenDeletedDialog(true);
+                // if (confirmDeletItems)
+                //     deleteItem(listIds);
                 break;
 
             case 2: // EDIT
@@ -31,6 +40,11 @@ const CustomToolbarSelect = ({customActionLabel, selectedRows, data, deleteItem,
             default:
                 return
         }
+    }
+
+    const handlerDialog = (value) => {
+        if (value)
+            deleteItem(listIds);
     }
 
     return (
@@ -55,6 +69,12 @@ const CustomToolbarSelect = ({customActionLabel, selectedRows, data, deleteItem,
                 </Tooltip>
             )}
 
+            <CustomDialog
+                onAccept={handlerDialog}
+                setOpen={setOpenDeletedDialog}
+                open={openDeletedDialog}
+                title={'Deseja realmente excluir?'}
+            />
         </div>
     );
 
