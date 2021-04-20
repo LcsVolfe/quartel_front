@@ -18,14 +18,14 @@ const Dashborad = ({loading, onClick, dashboard, handlerDebtDatePay }) => {
 					<Budget label={'Orçamentos em aberto'} value={dashboard?.orders?.budget} />
 				</Grid>
 				<Grid item xs={4}>
-					<Budget label={'Orçamentos em aberto'} value={dashboard?.orders?.inProgress} />
+					<Budget label={'Obras em andamento'} value={dashboard?.orders?.inProgress} />
 				</Grid>
 			</Grid>
 			<Grid container spacing={3}>
 				<Grid item lg={12} sm={12} xl={9} xs={12}>
 					<DebtsCalendar handlerDebtDatePay={handlerDebtDatePay} events={dashboard?.debtPayments}/>
 				</Grid>
-				<Grid item lg={12} sm={12} xl={3} xs={12}>
+				<Grid item lg={6} sm={6} xl={3} xs={12}>
 					<LowStockProducts data={dashboard?.products}/>
 					{/*<Box mt={2}>*/}
 					{/*	<Budget label={'Obras em andamento'} value={3}/>*/}
